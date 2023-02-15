@@ -13,7 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
-
+import {ToastFunction} from '../components/Toast';
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
@@ -44,6 +44,8 @@ export default function AddReminder({ navigation }) {
       const alarms = await setupAlarms(title, date, Number(interval), Number(repeat));
       reminder = { ...reminder, alarms };
       await storeData(reminder);
+      ToastFunction("success","description");// add type in lower case only 
+                                          //add a container component as in homeScreen
       navigation.navigate('Home');
     } else {
       alert('Please enter a valid title!');

@@ -20,6 +20,7 @@ import {clearAll} from './api/storage';
 //for alarm
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 import {loadAlarmListeners} from './api/alarm';
+import ToastManager from 'toastify-react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,12 +41,13 @@ export default function App() {
     loadAlarmListeners();
   }, []);
 
-  //to delete all alarms
-  //   clearAll()
+  // to delete all alarms
+    // clearAll()
 
   
   return (
     <NavigationContainer>
+      <ToastManager/>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
