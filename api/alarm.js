@@ -5,7 +5,7 @@ import {
 import { getData } from './storage';
 import moment from 'moment';
 import {NativeEventEmitter, NativeModules} from 'react-native';
-
+import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 const {RNAlarmNotification} = NativeModules;
 const RNAlarmEmitter = new NativeEventEmitter(RNAlarmNotification);
 

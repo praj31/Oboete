@@ -12,6 +12,7 @@ export default function TodayReminderCard({ event, deleteEvent}) {
           {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}
         </Text>
       </View>
+      
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity
           onPress={() => deleteEvent(event.id)}
