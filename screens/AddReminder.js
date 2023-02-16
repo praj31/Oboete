@@ -41,6 +41,9 @@ export default function AddReminder({ navigation }) {
         title,
         datetime: moment(date).format('YYYY-MM-DD LT').toString(),
       };
+      if (moment(date) <= moment()) {
+        return alert("Cannot choose time of past!")
+      }
       const alarms = await setupAlarms(title, date, Number(interval), Number(repeat));
       reminder = { ...reminder, alarms };
       await storeData(reminder);
@@ -88,6 +91,7 @@ export default function AddReminder({ navigation }) {
         {showDatePicker && (
           <DateTimePicker
             mode={'date'}
+            minimumDate={new Date()}
             value={date}
             is24Hour={true}
             display="default"
@@ -105,6 +109,7 @@ export default function AddReminder({ navigation }) {
         {showTimePicker && (
           <DateTimePicker
             mode={'time'}
+            minimumDate={new Date()}
             value={date}
             is24Hour={false}
             display="default"
