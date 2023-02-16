@@ -13,7 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
-import {ToastFunction} from '../components/Toast';
+
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
@@ -44,28 +44,26 @@ export default function AddReminder({ navigation }) {
       const alarms = await setupAlarms(title, date, Number(interval), Number(repeat));
       reminder = { ...reminder, alarms };
       await storeData(reminder);
-      ToastFunction("success","description");// add type in lower case only 
-                                          //add a container component as in homeScreen
       navigation.navigate('Home');
     } else {
       alert('Please enter a valid title!');
     }
   };
 
-  const performTest = async () => {
-    const test_date = new Date(Date.now() + 60 * 1000)
-    const test_title = "Testing"
-    let reminder = {
-      title: test_title,
-      datetime: moment(test_date)
-        .format('YYYY-MM-DD LT')
-        .toString(),
-    };
-    const alarms = await setupAlarms(test_title, test_date, 0, 0);
-    reminder = { ...reminder, alarms };
-    await storeData(reminder);
-    navigation.navigate('Home');
-  };
+  // const performTest = async () => {
+  // const test_date = new Date(Date.now() + 60 * 1000)
+  // const test_title = "Testing"
+  // let reminder = {
+  // title: test_title,
+  // datetime: moment(test_date)
+  // .format('YYYY-MM-DD LT')
+  // .toString(),
+  // };
+  // const alarms = await setupAlarms(test_title, test_date, 0, 0);
+  // reminder = { ...reminder, alarms };
+  // await storeData(reminder);
+  // navigation.navigate('Home');
+  // };
 
   return (
     <View style={styles.container}>
@@ -134,7 +132,7 @@ export default function AddReminder({ navigation }) {
             />
           </View>
         </View>
-         {/* <Button title="Test" onPress={performTest} /> */}
+        {/* <Button title="Test" onPress={performTest} /> */}
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
@@ -168,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color:"#111"
+    color: "#111"
   },
   label: {
     color: '#666',

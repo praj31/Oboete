@@ -10,15 +10,15 @@ export const schedulePushNotification = async (title, date) => {
     message: title,
     channel: 'my_channel_id',
     small_icon: 'ic_launcher',
-    has_button:true,
-    data: {message: title || "test"},
+    has_button: true,
+    data: { message: title || "test" },
   };
   let alDate = ReactNativeAN.parseDate(trigger);
   const setAlarmData = await ReactNativeAN.scheduleAlarm({
     ...alarmNotifData,
     fire_date: alDate,
   });
- 
+
 
   return setAlarmData;
 };
