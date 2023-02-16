@@ -16,19 +16,16 @@ export const schedulePushNotification = async (title, date) => {
     channel: 'my_channel_id',
     small_icon: 'ic_launcher',
     has_button: true,
-    data: {message: title || 'test'},
+    data: { message: title || 'test' },
   };
   let alDate = ReactNativeAN.parseDate(trigger);
-  try {
-    const setAlarmData = await ReactNativeAN.scheduleAlarm({
-      ...alarmNotifData,
-      fire_date: alDate,
-    });
+  const setAlarmData = await ReactNativeAN.scheduleAlarm({
+    ...alarmNotifData,
+    fire_date: alDate,
+  });
 
-    return setAlarmData;
-  } catch (error) {
-    return;
-  }
+
+  return setAlarmData;
 };
 
 export const cancelScheduledPushNotification = async id => {

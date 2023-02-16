@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {storeData} from '../api/storage';
-import {setupAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
+import { storeData } from '../api/storage';
+import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
 
-export default function AddReminder({navigation}) {
+export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -45,13 +45,16 @@ export default function AddReminder({navigation}) {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
         };
+        if (moment(date) <= moment()) {
+          return alert("Cannot choose time of past!")
+        }
         const alarms = await setupAlarms(
           title,
           date,
           Number(interval),
           Number(repeat),
         );
-        reminder = {...reminder, alarms};
+        reminder = { ...reminder, alarms };
         await storeData(reminder);
         navigation.navigate('Home');
       } else {
@@ -61,18 +64,20 @@ export default function AddReminder({navigation}) {
     }
   };
 
-  const performTest = async () => {
-    const test_date = new Date(Date.now() + 60 * 1000);
-    const test_title = 'Testing';
-    let reminder = {
-      title: test_title,
-      datetime: moment(test_date).format('YYYY-MM-DD LT').toString(),
-    };
-    const alarms = await setupAlarms(test_title, test_date, 0, 0);
-    reminder = {...reminder, alarms};
-    await storeData(reminder);
-    navigation.navigate('Home');
-  };
+  // const performTest = async () => {
+  // const test_date = new Date(Date.now() + 60 * 1000)
+  // const test_title = "Testing"
+  // let reminder = {
+  // title: test_title,
+  // datetime: moment(test_date)
+  // .format('YYYY-MM-DD LT')
+  // .toString(),
+  // };
+  // const alarms = await setupAlarms(test_title, test_date, 0, 0);
+  // reminder = { ...reminder, alarms };
+  // await storeData(reminder);
+  // navigation.navigate('Home');
+  // };
 
   return (
     <View style={styles.container}>
@@ -97,6 +102,7 @@ export default function AddReminder({navigation}) {
         {showDatePicker && (
           <DateTimePicker
             mode={'date'}
+            minimumDate={new Date()}
             value={date}
             is24Hour={true}
             display="default"
@@ -114,14 +120,15 @@ export default function AddReminder({navigation}) {
         {showTimePicker && (
           <DateTimePicker
             mode={'time'}
+            minimumDate={new Date()}
             value={date}
             is24Hour={false}
             display="default"
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>Interval (in minutes)</Text>
             <TextInput
               value={interval}
@@ -130,7 +137,7 @@ export default function AddReminder({navigation}) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>Repeat</Text>
             <TextInput
               value={repeat}
@@ -148,14 +155,14 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>Add</Text>
+            <Text style={{ color: '#fff', fontSize: 16 }}>Add</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>Cancel</Text>
+            <Text style={{ fontSize: 16, color: '#111' }}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color: '#111',
+    color: "#111"
   },
   label: {
     color: '#666',
