@@ -13,6 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
 
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
@@ -20,8 +21,8 @@ export default function AddReminder({ navigation }) {
   const [date, setDate] = React.useState(moment().toDate());
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
-  const [interval, setInterval] = React.useState("0");
-  const [repeat, setRepeat] = React.useState("0");
+  const [interval, setInterval] = React.useState('0');
+  const [repeat, setRepeat] = React.useState('0');
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -36,20 +37,30 @@ export default function AddReminder({ navigation }) {
   };
 
   const addEventClicked = async () => {
-    if (title) {
-      let reminder = {
-        title,
-        datetime: moment(date).format('YYYY-MM-DD LT').toString(),
-      };
-      if (moment(date) <= moment()) {
-        return alert("Cannot choose time of past!")
+    let permission = await checkNotificationPermissionFunc();
+
+    if (permission === true) {
+      if (title) {
+        let reminder = {
+          title,
+          datetime: moment(date).format('YYYY-MM-DD LT').toString(),
+        };
+        if (moment(date) <= moment()) {
+          return alert("Cannot choose time of past!")
+        }
+        const alarms = await setupAlarms(
+          title,
+          date,
+          Number(interval),
+          Number(repeat),
+        );
+        reminder = { ...reminder, alarms };
+        await storeData(reminder);
+        navigation.navigate('Home');
+      } else {
+        alert('Please enter a valid title!');
       }
-      const alarms = await setupAlarms(title, date, Number(interval), Number(repeat));
-      reminder = { ...reminder, alarms };
-      await storeData(reminder);
-      navigation.navigate('Home');
     } else {
-      alert('Please enter a valid title!');
     }
   };
 
@@ -130,7 +141,7 @@ export default function AddReminder({ navigation }) {
             <Text style={styles.label}>Repeat</Text>
             <TextInput
               value={repeat}
-              inputMode='numeric'
+              inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
               onChangeText={setRepeat}
