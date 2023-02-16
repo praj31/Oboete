@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
+import Container from "toastify-react-native"
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TodayReminderCard from '../components/TodayReminderCard';
@@ -45,6 +46,7 @@ export default function HomeScreen({navigation}) {
     <GestureRecognizer
       style={styles.container}
       onSwipeLeft={() => navigation.navigate('Upcoming')}>
+       < Container position="top"/>
       <Text style={styles.h1}>Today</Text>
       {reminders.length !== 0 && (
         <ScrollView

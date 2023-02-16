@@ -50,20 +50,20 @@ export default function AddReminder({ navigation }) {
     }
   };
 
-  const performTest = async () => {
-    const test_date = new Date(Date.now() + 60 * 1000)
-    const test_title = "Testing"
-    let reminder = {
-      title: test_title,
-      datetime: moment(test_date)
-        .format('YYYY-MM-DD LT')
-        .toString(),
-    };
-    const alarms = await setupAlarms(test_title, test_date, 0, 0);
-    reminder = { ...reminder, alarms };
-    await storeData(reminder);
-    navigation.navigate('Home');
-  };
+  // const performTest = async () => {
+  // const test_date = new Date(Date.now() + 60 * 1000)
+  // const test_title = "Testing"
+  // let reminder = {
+  // title: test_title,
+  // datetime: moment(test_date)
+  // .format('YYYY-MM-DD LT')
+  // .toString(),
+  // };
+  // const alarms = await setupAlarms(test_title, test_date, 0, 0);
+  // reminder = { ...reminder, alarms };
+  // await storeData(reminder);
+  // navigation.navigate('Home');
+  // };
 
   return (
     <View style={styles.container}>
@@ -132,7 +132,7 @@ export default function AddReminder({ navigation }) {
             />
           </View>
         </View>
-         {/* <Button title="Test" onPress={performTest} /> */}
+        {/* <Button title="Test" onPress={performTest} /> */}
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color:"#111"
+    color: "#111"
   },
   label: {
     color: '#666',
