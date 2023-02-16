@@ -19,6 +19,7 @@
     "moment-timezone": "^0.5.40",
     "react": "17.0.2",
     "react-native": "0.66.5",
+    "react-native-check-notification-permission": "^1.0.5",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.19.0",
     "react-native-swipe-gestures": "*",
