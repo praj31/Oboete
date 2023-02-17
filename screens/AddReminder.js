@@ -15,6 +15,8 @@ import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
 import { checkNotificationPermissionFunc } from '../api/notification';
 
+import  {displayToast} from "../api/toast"
+
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
@@ -57,6 +59,8 @@ export default function AddReminder({ navigation }) {
         reminder = { ...reminder, alarms };
         await storeData(reminder);
         navigation.navigate('Home');
+        displayToast("success","Reminder added !")
+
       } else {
         alert('Please enter a valid title!');
       }
