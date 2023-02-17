@@ -88,6 +88,7 @@ export default function AddReminder({ navigation }) {
           value={title}
           style={styles.textinput}
           onChangeText={setTitle}
+          maxLength={40}
         />
         <Text style={styles.label}>Event date</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
