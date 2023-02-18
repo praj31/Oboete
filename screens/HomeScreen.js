@@ -41,7 +41,11 @@ export default function HomeScreen({navigation}) {
     await removeKey(id);
     setReminders(reminders => reminders.filter(item => item.id !== id));
   };
+  const onClickReminderCard =(id)=>{
 
+      navigation.navigate("ListReminder",{id:id});
+      
+  }
   return (
     <GestureRecognizer
       style={styles.container}
@@ -54,7 +58,7 @@ export default function HomeScreen({navigation}) {
           showsHorizontalScrollIndicator={false}
           style={{height: '100%'}}>
           {reminders.map(event => (
-            <TouchableOpacity key={event.id} onPress={()=> console.log("clicked")}>
+            <TouchableOpacity key={event.id} onPress={()=> onClickReminderCard(event.id)}>
               <TodayReminderCard
                 navigation={navigation}
                 key={event.id}

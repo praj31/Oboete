@@ -38,12 +38,15 @@ export default function AddReminder({ navigation }) {
 
   const addEventClicked = async () => {
     let permission = await checkNotificationPermissionFunc();
-
+  
     if (permission === true) {
       if (title) {
         let reminder = {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
+          interval:interval,
+          repeat:repeat
+
         };
         if (moment(date) <= moment()) {
           return alert("Cannot choose time of past!")

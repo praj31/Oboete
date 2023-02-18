@@ -8,6 +8,7 @@ export const storeData = async value => {
     let key = uuid.v4();
     key = key + '_' + value.datetime.substring(0, 10);
     const jsonValue = JSON.stringify(value);
+    // console.log("data to be saved in setItem",jsonValue);
     await AsyncStorage.setItem(key, jsonValue);
     return true;
   } catch (e) {
@@ -16,7 +17,7 @@ export const storeData = async value => {
 };
 
 export const getData = async key => {
-  try {
+    try {
     const jsonValue = await AsyncStorage.getItem(key);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
