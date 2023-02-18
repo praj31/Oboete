@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Button,
 } from 'react-native';
-import Container from "toastify-react-native"
+import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TodayReminderCard from '../components/TodayReminderCard';
 import {useIsFocused} from '@react-navigation/native';
 import {getAllToday, getData, removeKey} from '../api/storage';
 import {deleteAlarms} from '../api/alarm';
+import TabNavigation from '../components/TabNavigation';
 
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
@@ -46,15 +48,19 @@ export default function HomeScreen({navigation}) {
     <GestureRecognizer
       style={styles.container}
       onSwipeLeft={() => navigation.navigate('Upcoming')}>
-       < Container position="top"/>
-      <Text style={styles.h1}>Today</Text>
+      <Container position="top" />
+
+      <TabNavigation navigation={navigation} screenName={'today'} />
+
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           style={{height: '100%'}}>
           {reminders.map(event => (
-            <TouchableOpacity key={event.id} onPress={()=> console.log("clicked")}>
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => console.log('clicked')}>
               <TodayReminderCard
                 navigation={navigation}
                 key={event.id}

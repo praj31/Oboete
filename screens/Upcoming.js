@@ -5,15 +5,16 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
- import Icon from 'react-native-vector-icons/Ionicons';
-import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData, removeKey } from '../api/storage';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {useIsFocused} from '@react-navigation/native';
+import {getAllUpcoming, getData, removeKey} from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
+import TabNavigation from '../components/TabNavigation';
 
-export default function Upcoming({ navigation }) {
+export default function Upcoming({navigation}) {
   const [reminders, setReminders] = React.useState([]);
 
   const isFocused = useIsFocused();
@@ -25,7 +26,7 @@ export default function Upcoming({ navigation }) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item });
+          events.push({id: entry, ...item});
         }
       }
       console.log(events);
@@ -34,23 +35,28 @@ export default function Upcoming({ navigation }) {
     getUpcomingReminders();
   }, [isFocused]);
 
-  const deleteEvent = async (id) => {
+  const deleteEvent = async id => {
     await removeKey(id);
-    setReminders((reminders) => reminders.filter((item) => item.id !== id));
+    setReminders(reminders => reminders.filter(item => item.id !== id));
   };
 
   return (
     <GestureRecognizer
       style={styles.container}
       onSwipeRight={() => navigation.navigate('Home')}>
-      <Text style={styles.h1}>Upcoming</Text>
+      {/* <Text style={styles.h1}>Upcoming</Text> */}
+      <TabNavigation navigation={navigation} screenName={'upcoming'} />
       {reminders.length !== 0 && (
         <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
-          {reminders.map((event) => (
-            <UpcomingReminderCard event={event} key={event.id} deleteEvent={deleteEvent} />
+          showsVerticalScrollIndicator={true}
+          showsHorizontalScrollIndicator={true}
+          style={{height: '100%'}}>
+          {reminders.map(event => (
+            <UpcomingReminderCard
+              event={event}
+              key={event.id}
+              deleteEvent={deleteEvent}
+            />
           ))}
         </ScrollView>
       )}
@@ -59,7 +65,7 @@ export default function Upcoming({ navigation }) {
           <Image
             style={styles.image}
             source={require('../assets/checklist.png')}
-            placeholder={"Relaxing"}
+            placeholder={'Relaxing'}
             contentFit="cover"
           />
           <Text style={styles.prompt}>Woohoo! You are all caught up!</Text>
@@ -71,7 +77,6 @@ export default function Upcoming({ navigation }) {
           onPress={() => navigation.navigate('AddReminder')}>
           <Text>
             <Icon name="add-outline" size={36} color="#fff" />
-        
           </Text>
         </TouchableOpacity>
       </View>
@@ -107,21 +112,21 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color: '#111'
+    color: '#111',
   },
   imgContainer: {
     width: '100%',
     height: '70%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   image: {
     width: 256,
-    height: 256
+    height: 256,
   },
   prompt: {
     fontSize: 16,
     fontStyle: 'italic',
-    color: '#111'
-  }
+    color: '#111',
+  },
 });
