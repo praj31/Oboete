@@ -1,24 +1,24 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
- import Icon from 'react-native-vector-icons/Ionicons';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import * as React from 'react'
+import * as React from 'react';
 
-export default function TodayReminderCard({ event, deleteEvent}) {
+export default function TodayReminderCard({event, deleteEvent}) {
   return (
-    <View style={styles.r_card} >
-      <View style={{ flex: 4 }} >
+    <View style={styles.r_card}>
+      <View style={{flex: 4}}>
         <Text style={styles.r_title}>{event.title}</Text>
         <Text style={styles.r_datetime}>
           {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}
         </Text>
       </View>
-      
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => deleteEvent(event.id)}
           style={styles.r_deleteEvent}>
           <Text>
-            <Icon name="trash-outline" size={24} color="#fff" />          
+            <Icon name="trash-outline" size={24} color="#fff" />
           </Text>
         </TouchableOpacity>
       </View>
