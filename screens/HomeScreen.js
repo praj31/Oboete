@@ -17,10 +17,29 @@ import { getAllToday, getData, removeKey } from '../api/storage';
 import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import Modal from 'react-native-modal';
+
 export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
 
   const isFocused = useIsFocused();
+
+  const [isLoading, setIsLoading] = useState(true);
+    const [isModalVisible, setModalVisible] = useState(false);
+  
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
+
+  useEffect(() => {
+    // Simulate data fetching
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
+
 
   React.useEffect(() => {
     async function getTodayReminders() {
@@ -70,6 +89,19 @@ export default function HomeScreen({ navigation }) {
           ))}
         </ScrollView>
       )}
+
+          <View style={{ flex: 1 }}>
+      <Button title="Show modal" onPress={toggleModal} />
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{ flex: 1 }}>
+          <Text>Hello!</Text>
+
+          <Button title="Hide modal" onPress={toggleModal} />
+        </View>
+      </Modal>
+    </View>
+
       {reminders.length == 0 && (
         <View style={styles.imgContainer}>
           <Image
@@ -93,7 +125,6 @@ export default function HomeScreen({ navigation }) {
     </GestureRecognizer>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

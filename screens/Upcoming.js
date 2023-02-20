@@ -13,11 +13,29 @@ import {useIsFocused} from '@react-navigation/native';
 import {getAllUpcoming, getData, removeKey} from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
 import TabNavigation from '../components/TabNavigation';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import Modal from 'react-native-modal';
+
 
 export default function Upcoming({navigation}) {
   const [reminders, setReminders] = React.useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
+
 
   React.useEffect(() => {
     async function getUpcomingReminders() {
@@ -60,6 +78,18 @@ export default function Upcoming({navigation}) {
           ))}
         </ScrollView>
       )}
+      <View style={{ flex: 1 }}>
+      <Button title="Show modal" onPress={toggleModal} />
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{ flex: 1 }}>
+          <Text>Hello!</Text>
+
+          <Button title="Hide modal" onPress={toggleModal} />
+        </View>
+      </Modal>
+    </View>
+
       {reminders.length == 0 && (
         <View style={styles.imgContainer}>
           <Image
