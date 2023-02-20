@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test: Form should be empty after clicking cancelling 1`] = `
+<View>
+  <TextInput
+    maxLength={40}
+    onChangeText={[Function]}
+    testID="reminder-title"
+    value=""
+  />
+  <TextInput
+    onChangeText={[Function]}
+    testID="reminder-date"
+    value=""
+  />
+  <TextInput
+    onChangeText={[Function]}
+    testID="reminder-time"
+    value=""
+  />
+  <TextInput
+    onChangeText={[Function]}
+    testID="reminder-interval"
+    value=""
+  />
+  <TextInput
+    onChangeText={[Function]}
+    testID="reminder-repeat"
+    value=""
+  />
+  <View
+    accessibilityRole="button"
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        [
+          {},
+        ]
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "color": "#007AFF",
+              "fontSize": 18,
+              "margin": 8,
+              "textAlign": "center",
+            },
+          ]
+        }
+      >
+        Cancel
+      </Text>
+    </View>
+  </View>
+  <Text
+    testID="printed-test"
+  >
+    Pass
+  </Text>
+</View>
+`;
