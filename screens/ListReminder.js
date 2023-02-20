@@ -80,43 +80,46 @@ const ListReminder = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },
   reminderCard:{
+    paddingTop:10,
     padding:20,
     flex:1,
     flexDirection:"row",
-    maxHeight:100,    
+    maxHeight:80,    
   },
   detailsCard:{
     padding:30,
-    paddingTop:0,    
+    paddingTop:0,
+    paddingBottom:0,    
   },
 
   h1:{
     color:"#111",
-    fontSize: 32,
+    fontSize: 28,
     flex:2,    
-    fontWeight:'500',
-    paddingTop:5
+    fontWeight:'bold',
+    paddingTop:10,
+    justifyContent:"center",
   },
   backBtn: {
     width: 60,
     height: 60,    
     borderRadius: 8,
-    flex:0.25,
+    flex:0.35,
     justifyContent:"center",
+    
   },
   title: {
-    fontSize: 20,
-    color: '#333',
+    fontSize: 15,
+    color: '#808080',
     marginBottom:5,
-    fontWeight:'bold'
+    fontWeight: '500'  
   },
   value:{
-    fontSize: 14,
+    fontSize: 17,
     color: '#111',
     fontWeight:"500",
     marginBottom:20

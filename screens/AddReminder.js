@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
 import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
 
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
@@ -59,6 +61,7 @@ export default function AddReminder({ navigation }) {
         );
         reminder = { ...reminder, alarms };
         await storeData(reminder);
+        displayToast("success","Priyanshu Shah")
         navigation.navigate('Home');
       } else {
         alert('Please enter a valid title!');

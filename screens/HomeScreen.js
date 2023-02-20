@@ -15,6 +15,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {getAllToday, getData, removeKey} from '../api/storage';
 import {deleteAlarms} from '../api/alarm';
 
+import Modal from 'react-native-modal';
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
 
@@ -23,9 +24,11 @@ export default function HomeScreen({navigation}) {
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
+      
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
+        console.log("alarm of today: ",item);
         if (item) {
           events.push({id: entry, ...item});
         }
