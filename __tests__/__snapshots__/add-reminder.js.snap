@@ -1,32 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test: Form should be empty after clicking cancelling 1`] = `
+exports[`Test: All input fields are not null 1`] = `
 <View>
   <TextInput
     maxLength={40}
     onChangeText={[Function]}
     testID="reminder-title"
-    value=""
+    value="Reminder 1"
   />
   <TextInput
     onChangeText={[Function]}
     testID="reminder-date"
-    value=""
+    value="Tue Feb 21 2023 12:14:37 GMT-0500 (Eastern Standard Time)"
   />
   <TextInput
     onChangeText={[Function]}
     testID="reminder-time"
-    value=""
+    value="12:14"
   />
   <TextInput
     onChangeText={[Function]}
     testID="reminder-interval"
-    value=""
+    value="3"
   />
   <TextInput
     onChangeText={[Function]}
     testID="reminder-repeat"
-    value=""
+    value="2"
   />
   <View
     accessibilityRole="button"
@@ -64,14 +64,14 @@ exports[`Test: Form should be empty after clicking cancelling 1`] = `
           ]
         }
       >
-        Cancel
+        Submit Details
       </Text>
     </View>
   </View>
   <Text
-    testID="printed-test"
+    testID="printed-username"
   >
-    Pass
+    Reminder 1
   </Text>
 </View>
 `;
