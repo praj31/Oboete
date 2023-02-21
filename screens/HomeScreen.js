@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
           events.push({ id: entry, ...item });
         }
       }
-      console.log(events);
+      // console.log(events);
       setReminders(events);
     }
     getTodayReminders();
