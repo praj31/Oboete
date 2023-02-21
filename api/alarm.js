@@ -4,9 +4,9 @@ import {
 } from './notification';
 import { getData } from './storage';
 import moment from 'moment';
-import {NativeEventEmitter, NativeModules} from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
-const {RNAlarmNotification} = NativeModules;
+const { RNAlarmNotification } = NativeModules;
 const RNAlarmEmitter = new NativeEventEmitter(RNAlarmNotification);
 
 export const loadAlarmListeners = async () => {
@@ -25,19 +25,24 @@ export const loadAlarmListeners = async () => {
 
 export const setupAlarms = async (title, date, interval, repeat) => {
   let alarms = [];
-  for (let i = 0; i <= repeat; i++) {
-    const identifier = await schedulePushNotification(
-      title,
-      moment(date)
-        .subtract(i * interval, 'minutes')
-        .toDate()
-    );
-
-    
-    alarms.push(identifier.id);
+  if (interval === 0) repeat = 0
+  try {
+    for (let i = 0; i <= repeat; i++) {
+      const identifier = await schedulePushNotification(
+        title,
+        moment(date)
+          .subtract(i * interval, 'minutes')
+          .toDate()
+      );
+      alarms.push(identifier.id);
+    }
+    return alarms;
+  } catch (err) {
+    for (let alarm of alarms) {
+      await cancelScheduledPushNotification(alarm);
+    }
+    return [];
   }
-  
-  return alarms;
 };
 
 export const deleteAlarms = async (id) => {

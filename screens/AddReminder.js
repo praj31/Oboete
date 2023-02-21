@@ -46,26 +46,30 @@ export default function AddReminder({ navigation }) {
         let reminder = {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
-          interval,
-          repeat
+          interval: Number(interval) ?? 0,
+          repeat: Number(repeat) ?? 0
         };
-        if (moment(date) <= moment()) {
-          return alert("Cannot choose time of past!")
+        if (moment(date).format('YYYY-MM-DD LT') <= moment().format('YYYY-MM-DD LT')) {
+          return alert('Cannot choose current or past time!');
         }
-        const alarms = await setupAlarms(
-          title,
-          date,
-          Number(interval),
-          Number(repeat),
-        );
-        reminder = { ...reminder, alarms };
-        await storeData(reminder);
-        displayToast("success", "Reminder added!")
-        navigation.goBack();
+        try {
+          const alarms = await setupAlarms(
+            title,
+            date,
+            Number(interval),
+            Number(repeat),
+          );
+          if (alarms.length === 0) return alert("The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.")
+          reminder = { ...reminder, alarms };
+          await storeData(reminder);
+          displayToast("success", "Reminder added!")
+          navigation.goBack();
+        } catch (err) {
+          alert(err)
+        }
       } else {
-        alert('Please enter a valid title!');
+        alert('Please fill all the fields!');
       }
-    } else {
     }
   };
 
@@ -187,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color: "#111"
+    color: '#111',
   },
   label: {
     color: '#666',

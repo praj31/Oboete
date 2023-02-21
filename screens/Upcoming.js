@@ -5,13 +5,14 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import { getAllUpcoming, getData, removeKey } from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
+import TabNavigation from '../components/TabNavigation';
 
 export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
@@ -42,7 +43,8 @@ export default function Upcoming({ navigation }) {
     <GestureRecognizer
       style={styles.container}
       onSwipeRight={() => navigation.navigate('Home')}>
-      <Text style={styles.h1}>Upcoming</Text>
+      {/* <Text style={styles.h1}>Upcoming</Text> */}
+      <TabNavigation navigation={navigation} screenName={'upcoming'} />
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -61,7 +63,7 @@ export default function Upcoming({ navigation }) {
           <Image
             style={styles.image}
             source={require('../assets/checklist.png')}
-            placeholder={"Relaxing"}
+            placeholder={'Relaxing'}
             contentFit="cover"
           />
           <Text style={styles.prompt}>Woohoo! You are all caught up!</Text>
@@ -108,21 +110,21 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     paddingBottom: 16,
-    color: '#111'
+    color: '#111',
   },
   imgContainer: {
     width: '100%',
     height: '70%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   image: {
     width: 256,
-    height: 256
+    height: 256,
   },
   prompt: {
     fontSize: 16,
     fontStyle: 'italic',
-    color: '#111'
-  }
+    color: '#111',
+  },
 });
