@@ -1,28 +1,25 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
- import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment'
 import * as React from 'react'
-export default function UpcomingReminderCard({ event, deleteEvent }) {
+
+export default function UpcomingReminderCard({ event }) {
   return (
     <View style={styles.r_card}>
       <View style={{ flex: 4 }}>
         <Text style={styles.r_title}>{event.title}</Text>
         <Text style={styles.r_datetime}>
-          {moment(event.datetime.substring(0,10),'YYYY-MM-DD').calendar()}
+          {moment(event.datetime.substring(0, 10), 'YYYY-MM-DD').calendar()}
         </Text>
         <Text style={styles.r_datetime}>
           {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}
         </Text>
       </View>
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-          onPress={() => deleteEvent(event.id)}
-          style={styles.r_deleteEvent}>
-          <Text>
-             <Icon name="trash-outline" size={24} color="#fff" /> 
-            
-          </Text>
-        </TouchableOpacity>
+        <Text>
+          <Icon name="chevron-forward" size={24} color="#111" />
+        </Text>
       </View>
     </View>
   );
@@ -38,20 +35,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7'
   },
   r_title: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#333',
     paddingBottom: 2,
   },
   r_datetime: {
     fontSize: 14,
     color: '#666',
-  },
-  r_deleteEvent: {
-    width: 48,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ff3344ee',
-    borderRadius: 8,
   },
 });

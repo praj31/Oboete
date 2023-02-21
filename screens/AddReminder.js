@@ -40,15 +40,14 @@ export default function AddReminder({ navigation }) {
 
   const addEventClicked = async () => {
     let permission = await checkNotificationPermissionFunc();
-  
+
     if (permission === true) {
       if (title) {
         let reminder = {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
-          interval:interval,
-          repeat:repeat
-
+          interval,
+          repeat
         };
         if (moment(date) <= moment()) {
           return alert("Cannot choose time of past!")
@@ -61,8 +60,8 @@ export default function AddReminder({ navigation }) {
         );
         reminder = { ...reminder, alarms };
         await storeData(reminder);
-        displayToast("success","Priyanshu Shah")
-        navigation.navigate('Home');
+        displayToast("success", "Reminder added!")
+        navigation.goBack();
       } else {
         alert('Please enter a valid title!');
       }
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },

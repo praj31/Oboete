@@ -8,7 +8,7 @@ import {
   Image
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
- import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import { getAllUpcoming, getData, removeKey } from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
@@ -34,10 +34,9 @@ export default function Upcoming({ navigation }) {
     getUpcomingReminders();
   }, [isFocused]);
 
-  const deleteEvent = async (id) => {
-    await removeKey(id);
-    setReminders((reminders) => reminders.filter((item) => item.id !== id));
-  };
+  const onClickReminderCard = (id) => {
+    navigation.navigate("ListReminder", { id: id });
+  }
 
   return (
     <GestureRecognizer
@@ -49,8 +48,11 @@ export default function Upcoming({ navigation }) {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           style={{ height: '100%' }}>
+
           {reminders.map((event) => (
-            <UpcomingReminderCard event={event} key={event.id} deleteEvent={deleteEvent} />
+            <TouchableOpacity key={event.id} onPress={() => onClickReminderCard(event.id)}>
+              <UpcomingReminderCard event={event} key={event.id} />
+            </TouchableOpacity>
           ))}
         </ScrollView>
       )}
@@ -71,7 +73,7 @@ export default function Upcoming({ navigation }) {
           onPress={() => navigation.navigate('AddReminder')}>
           <Text>
             <Icon name="add-outline" size={36} color="#fff" />
-        
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },

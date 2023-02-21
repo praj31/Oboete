@@ -11,12 +11,10 @@ import Container from "toastify-react-native"
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TodayReminderCard from '../components/TodayReminderCard';
-import {useIsFocused} from '@react-navigation/native';
-import {getAllToday, getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
+import { useIsFocused } from '@react-navigation/native';
+import { getAllToday, getData, removeKey } from '../api/storage';
 
-import Modal from 'react-native-modal';
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
 
   const isFocused = useIsFocused();
@@ -24,13 +22,13 @@ export default function HomeScreen({navigation}) {
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
-      
+
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
-        console.log("alarm of today: ",item);
+        console.log("alarm of today: ", item);
         if (item) {
-          events.push({id: entry, ...item});
+          events.push({ id: entry, ...item });
         }
       }
       console.log(events);
@@ -39,34 +37,27 @@ export default function HomeScreen({navigation}) {
     getTodayReminders();
   }, [isFocused]);
 
-  const deleteEvent = async id => {
-    await deleteAlarms(id);
-    await removeKey(id);
-    setReminders(reminders => reminders.filter(item => item.id !== id));
-  };
-  const onClickReminderCard =(id)=>{
-
-      navigation.navigate("ListReminder",{id:id});
-      
+  const onClickReminderCard = (id) => {
+    navigation.navigate("ListReminder", { id: id });
   }
+
   return (
     <GestureRecognizer
       style={styles.container}
       onSwipeLeft={() => navigation.navigate('Upcoming')}>
-       < Container position="top"/>
+      < Container position="top" />
       <Text style={styles.h1}>Today</Text>
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{height: '100%'}}>
+          style={{ height: '100%' }}>
           {reminders.map(event => (
-            <TouchableOpacity key={event.id} onPress={()=> onClickReminderCard(event.id)}>
+            <TouchableOpacity key={event.id} onPress={() => onClickReminderCard(event.id)}>
               <TodayReminderCard
                 navigation={navigation}
                 key={event.id}
                 event={event}
-                deleteEvent={deleteEvent}
               />
             </TouchableOpacity>
           ))}
@@ -100,7 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },
