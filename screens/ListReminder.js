@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getData, removeKey } from '../api/storage';
 import { deleteAlarms } from '../api/alarm';
+import { displayToast } from '../api/toast'
 import moment from 'moment';
 
 const ListReminder = (props) => {
@@ -10,7 +11,7 @@ const ListReminder = (props) => {
   const navigation = props.navigation;
   const id = props.route.params.id
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
       if (reminder) {
@@ -26,6 +27,7 @@ const ListReminder = (props) => {
   const deleteEvent = async id => {
     await deleteAlarms(id);
     await removeKey(id);
+    displayToast("success", "Reminder deleted!")
     navigation.navigate("Home")
   };
 
