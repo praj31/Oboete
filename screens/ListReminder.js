@@ -1,35 +1,36 @@
-import React, {useEffect, useState} from 'react'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
+import { getData, removeKey } from '../api/storage';
+import { deleteAlarms } from '../api/alarm';
+import { displayToast } from '../api/toast'
 import moment from 'moment';
 
 const ListReminder = (props) => {
     const [reminder,
         setReminder] = useState({});
-        const [alarms,setAlarms] = useState([]);
+    const [alarms, setAlarms] = useState([]);
     const navigation = props.navigation;
     const id = props.route.params.id
     React.useEffect(() => {
         async function fetchData() {
             let reminder = await getData(id);
-            var allAlarms =[]
-            if(reminder.repeat>0)
-            {for(var i=1;i<=reminder.repeat;i++){
-              setAlarms([...alarms,])
-              allAlarms.push(moment(reminder.datetime, "YYYY-MM-DD LT").subtract(reminder.interval*i,"minutes").format("LT"))              
+            var allAlarms = []
+            if (reminder.repeat > 0) {
+                for (var i = 1; i <= reminder.repeat; i++) {
+                    setAlarms([...alarms,])
+                    allAlarms.push(moment(reminder.datetime, "YYYY-MM-DD LT").subtract(reminder.interval * i, "minutes").format("LT"))
+                }
+
+                setAlarms(allAlarms)
             }
-            
-            setAlarms(allAlarms)
-          }
             if (reminder) {
                 setReminder(reminder);
             } else {
                 alert("Error in fetching the event data")
                 navigation.goBack()
             }
-            
+
         }
         fetchData();
     }, [])
@@ -37,14 +38,15 @@ const ListReminder = (props) => {
     const deleteEvent = async id => {
         await deleteAlarms(id);
         await removeKey(id);
+        displayToast("success", "Reminder deleted!")
         navigation.navigate("Home")
     };
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-                    <Icon name="arrow-back" size={30} color="#111"/>
+                <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()} >
+                    <Icon name="arrow-back" size={30} color="#111" />
                 </TouchableOpacity>
                 <Text style={styles.h1}>Reminder Details</Text>
             </View>
@@ -57,44 +59,25 @@ const ListReminder = (props) => {
                     <Text style={styles.title}>Time</Text>
                     <Text style={styles.value}>{moment(reminder.datetime, "YYYY-MM-DD LT").format("LT")}</Text>
                     <Text style={styles.title}>Interval</Text>
-                    <Text style={styles.value}>{reminder.interval}
-                        minute(s)</Text>
+                    <Text style={styles.value}>{reminder.interval}{' '}minute(s)</Text>
                     <Text style={styles.title}>Repeat</Text>
-                    <Text style={styles.value}>{reminder.repeat}
-                        time(s)</Text>
+                    <Text style={styles.value}>{reminder.repeat}{' '}time(s)</Text>
                 </View>
             )}
-            {reminder.repeat>0 &&<View style={styles.alarms}>
-            <Text style={styles.alarmTitle}>Alarms</Text>
-            {alarms?.map((item,i)=>(<View key={i} style={styles.alarmTab}>
-              <Text style = {styles.alarmTime}>{item}</Text>
-            </View>))}
-            
-            </View>}
-            
-             
-            
             <View style={styles.footer}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.actionBtn, styles.deleteBtn]}
-                        onPress={() => {
-                        deleteEvent(id)
-                    }}>
-                        <Text
-                            style={{
-                            color: '#fff',
-                            fontSize: 16
-                        }}>Delete</Text>
+                        onPress={() => { deleteEvent(id) }}
+                    >
+                        <Text style={{ color: '#fff', fontSize: 16 }}>Delete</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={[styles.actionBtn, styles.editBtn]}>
-                        <Text
-                            style={{
-                            fontSize: 16,
-                            color: '#111'
-                        }}>Edit</Text>
+                    <TouchableOpacity
+                        style={[styles.actionBtn, styles.editBtn]}
+                    >
+                        <Text style={{ fontSize: 16, color: '#111' }}>Edit</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -143,30 +126,30 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 4
     },
-    alarms:{
-      color:"#111",
-      paddingTop:10
+    alarms: {
+        color: "#111",
+        paddingTop: 10
     },
-    alarmTitle:{
-      fontSize:20,
-      color:"#111",
-      fontWeight:"900",
-      marginBottom:10
+    alarmTitle: {
+        fontSize: 20,
+        color: "#111",
+        fontWeight: "900",
+        marginBottom: 10
     },
-    alarmTab:{
-      height:36,
-      backgroundColor:"#f2f2f2",
-      marginBottom:8,
-      justifyContent:'center',
-      borderRadius: 5
+    alarmTab: {
+        height: 36,
+        backgroundColor: "#f2f2f2",
+        marginBottom: 8,
+        justifyContent: 'center',
+        borderRadius: 5
     },
-    alarmTime:{
-      color:"#111",
-      justifyContent:'center',
-      alignContent:"center",
-      fontSize:15,
-      paddingLeft:10,
-      fontWeight:'500'
+    alarmTime: {
+        color: "#111",
+        justifyContent: 'center',
+        alignContent: "center",
+        fontSize: 15,
+        paddingLeft: 10,
+        fontWeight: '500'
     },
     actionBtn: {
         padding: 12,
