@@ -23,7 +23,7 @@ export default function App() {
       sameDay: '[Today]',
       nextDay: '[Tomorrow]',
       lastWeek: '[Last] dddd',
-      nextWeek: '[Next] dddd',
+      nextWeek: 'dddd',
       sameElse: 'LL',
     },
   });
@@ -31,10 +31,10 @@ export default function App() {
   React.useEffect(() => {
     ReactNativeAN.stopAlarmSound();
     loadAlarmListeners();
-    (async () => {
-      const all = await ReactNativeAN.getScheduledAlarms()
-      console.log("+++", all);
-    })()
+    // (async () => {
+    //   const all = await ReactNativeAN.getScheduledAlarms()
+    //   console.log("+++", all);
+    // })()
   }, []);
 
   // to delete all alarms

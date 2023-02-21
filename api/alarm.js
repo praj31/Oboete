@@ -46,7 +46,7 @@ export const setupAlarms = async (title, date, interval, repeat) => {
 };
 
 export const deleteAlarms = async (id) => {
-  let reminder = await getData(id);
+  let reminder = await getData(id);  
   let { alarms } = reminder;
   for (let alarm of alarms) {
     await cancelScheduledPushNotification(alarm);

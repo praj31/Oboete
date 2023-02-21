@@ -25,6 +25,7 @@ export default function HomeScreen({ navigation }) {
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
+
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
@@ -38,11 +39,9 @@ export default function HomeScreen({ navigation }) {
     getTodayReminders();
   }, [isFocused]);
 
-  const deleteEvent = async id => {
-    await deleteAlarms(id);
-    await removeKey(id);
-    setReminders(reminders => reminders.filter(item => item.id !== id));
-  };
+  const onClickReminderCard = (id) => {
+    navigation.navigate("ListReminder", { id: id });
+  }
 
   return (
     <GestureRecognizer
@@ -58,13 +57,11 @@ export default function HomeScreen({ navigation }) {
           showsHorizontalScrollIndicator={false}
           style={{ height: '100%' }}>
           {reminders.map(event => (
-            <TouchableOpacity
-              key={event.id}>
+            <TouchableOpacity key={event.id} onPress={() => onClickReminderCard(event.id)}>
               <TodayReminderCard
                 navigation={navigation}
                 key={event.id}
                 event={event}
-                deleteEvent={deleteEvent}
               />
             </TouchableOpacity>
           ))}
@@ -98,7 +95,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },

@@ -9,12 +9,13 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import { storeData } from '../api/storage';
 import { setupAlarms } from '../api/alarm';
 import { checkNotificationPermissionFunc } from '../api/notification';
-import { displayToast } from "../api/toast"
+import { displayToast } from '../api/toast';
 
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
@@ -45,6 +46,8 @@ export default function AddReminder({ navigation }) {
         let reminder = {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
+          interval: Number(interval) ?? 0,
+          repeat: Number(repeat) ?? 0
         };
         if (moment(date).format('YYYY-MM-DD LT') <= moment().format('YYYY-MM-DD LT')) {
           return alert('Cannot choose current or past time!');
@@ -60,7 +63,7 @@ export default function AddReminder({ navigation }) {
           reminder = { ...reminder, alarms };
           await storeData(reminder);
           displayToast("success", "Reminder added!")
-          navigation.navigate('Home');
+          navigation.goBack();
         } catch (err) {
           alert(err)
         }
@@ -181,7 +184,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 48,
     backgroundColor: '#fff',
     padding: 24,
   },
