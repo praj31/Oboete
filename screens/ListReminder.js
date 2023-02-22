@@ -64,6 +64,14 @@ const ListReminder = (props) => {
                     <Text style={styles.value}>{reminder.repeat}{' '}time(s)</Text>
                 </View>
             )}
+                 {reminder.repeat>0 &&<View style={styles.alarms}>
+            <Text style={styles.alarmTitle}>Alarms</Text>
+            {alarms?.map((item,i)=>(<View key={i} style={styles.alarmTab}>
+              <Text style = {styles.alarmTime}>{item}</Text>
+            </View>))}
+
+            </View>}
+
             <View style={styles.footer}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
