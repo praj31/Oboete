@@ -16,14 +16,17 @@ import { useIsFocused } from '@react-navigation/native';
 import { getAllToday, getData, removeKey } from '../api/storage';
 import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
-
+import { useState, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
 export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
-
   const isFocused = useIsFocused();
-
+  const [isLoading,setIsLoading] = React.useState(false);
+  
   React.useEffect(() => {
     async function getTodayReminders() {
+      setIsLoading(true)
+      console.log("loading",isLoading);
       const data = await getAllToday();
 
       let events = [];
@@ -33,7 +36,8 @@ export default function HomeScreen({ navigation }) {
           events.push({ id: entry, ...item });
         }
       }
-      console.log(events);
+      // console.log(events);
+      setIsLoading(false)
       setReminders(events);
     }
     getTodayReminders();
@@ -48,7 +52,7 @@ export default function HomeScreen({ navigation }) {
       style={styles.container}
       onSwipeLeft={() => navigation.navigate('Upcoming')}>
       <Container position="top" />
-
+      
       <TabNavigation navigation={navigation} screenName={'today'} />
 
       {reminders.length !== 0 && (
@@ -65,6 +69,9 @@ export default function HomeScreen({ navigation }) {
               />
             </TouchableOpacity>
           ))}
+          {isLoading ?<View style={styles.horizontal}>
+    <ActivityIndicator size="large" color="#333" />
+  </View>: null}
         </ScrollView>
       )}
       {reminders.length == 0 && (
@@ -135,4 +142,11 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#111',
   },
+  horizontal:
+  {flexDirection: 'row',
+  justifyContent: 'space-around',
+  padding: 10,
+  height:50
+
+  }
 });
