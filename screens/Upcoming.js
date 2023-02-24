@@ -13,14 +13,16 @@ import { useIsFocused } from '@react-navigation/native';
 import { getAllUpcoming, getData, removeKey } from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
 import TabNavigation from '../components/TabNavigation';
+import { ActivityIndicator } from 'react-native';
 
 export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
-
+  const [isLoading,setIsLoading] = React.useState(false);
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
     async function getUpcomingReminders() {
+      setIsLoading(true)
       const data = await getAllUpcoming();
       let events = [];
       for (let entry of data) {
@@ -30,6 +32,7 @@ export default function Upcoming({ navigation }) {
         }
       }
       console.log(events);
+      setIsLoading(false)
       setReminders(events);
     }
     getUpcomingReminders();
@@ -56,8 +59,12 @@ export default function Upcoming({ navigation }) {
               <UpcomingReminderCard event={event} key={event.id} />
             </TouchableOpacity>
           ))}
+          {isLoading ?<View style={styles.horizontal}>
+    <ActivityIndicator size="large" color="#333" />
+  </View>: null}
         </ScrollView>
       )}
+      
       {reminders.length == 0 && (
         <View style={styles.imgContainer}>
           <Image
@@ -127,4 +134,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#111',
   },
+  horizontal:
+  {flexDirection: 'row',
+  justifyContent: 'space-around',
+  padding: 10,
+  height:50
+  }
 });

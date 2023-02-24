@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getData, removeKey} from '../api/storage';
 import {deleteAlarms} from '../api/alarm';
@@ -11,8 +17,10 @@ const ListReminder = props => {
   const [alarms, setAlarms] = useState([]);
   const navigation = props.navigation;
   const id = props.route.params.id;
+  const [isLoading, setIsLoading] = React.useState(false);
   React.useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       let reminder = await getData(id);
       var allAlarms = [];
       if (reminder.repeat > 0) {
@@ -33,6 +41,7 @@ const ListReminder = props => {
         alert('Error in fetching the event data');
         navigation.goBack();
       }
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -72,6 +81,11 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.repeat} time(s)</Text>
         </View>
       )}
+      {isLoading ? (
+        <View style={styles.horizontal}>
+          <ActivityIndicator size="large" color="#333" />
+        </View>
+      ) : null}
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -170,6 +184,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
     backgroundColor: 'white',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    height: 50,
   },
 });
 export default ListReminder;
