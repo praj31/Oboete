@@ -22,13 +22,14 @@ export const loadAlarmListeners = async () => {
 };
 
 export const setupAlarms = async (title, date, interval, repeat) => {
+  console.log('uihiuhihihi', date);
   let alarms = [];
   if (interval === 0) repeat = 0;
   try {
     for (let i = 0; i <= repeat; i++) {
       const identifier = await schedulePushNotification(
         title,
-        interval*i,
+        interval * i,
         moment(date)
           .subtract(i * interval, 'minutes')
           .toDate(),
@@ -44,8 +45,13 @@ export const setupAlarms = async (title, date, interval, repeat) => {
   }
 };
 
+export const checkAlarmValidity = async (date, interval, repeat) =>
+  moment() <= moment(date).subtract(interval * repeat, 'minutes');
+
 export const deleteAlarms = async id => {
   let reminder = await getData(id);
+
+  // console.log('test data', reminder);
   let {alarms} = reminder;
   for (let alarm of alarms) {
     await cancelScheduledPushNotification(alarm);
@@ -53,16 +59,17 @@ export const deleteAlarms = async id => {
 };
 
 export const updateAlarms = async (title, date, interval, repeat, id) => {
-  await deleteAlarms(id);
-  await removeKey(id);
-
+  console.log('update', date);
   let alarms = [];
   if (interval === 0) repeat = 0;
 
   try {
+    await deleteAlarms(id);
+    await removeKey(id);
     for (let i = 0; i <= repeat; i++) {
       const identifier = await schedulePushNotification(
         title,
+        interval * i,
         moment(date)
           .subtract(i * interval, 'minutes')
           .toDate(),
@@ -74,6 +81,7 @@ export const updateAlarms = async (title, date, interval, repeat, id) => {
     for (let alarm of alarms) {
       await cancelScheduledPushNotification(alarm);
     }
+
     return [];
   }
 };

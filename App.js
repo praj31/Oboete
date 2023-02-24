@@ -35,7 +35,7 @@ export default function App() {
   }, []);
 
   // to delete all alarms
-  // clearAll()
+  // clearAll();
 
   return (
     <NavigationContainer>

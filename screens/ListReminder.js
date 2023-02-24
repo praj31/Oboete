@@ -17,10 +17,9 @@ const ListReminder = props => {
   const [alarms, setAlarms] = useState([]);
   const navigation = props.navigation;
   const id = props.route.params.id;
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   React.useEffect(() => {
     async function fetchData() {
-      setIsLoading(true);
       let reminder = await getData(id);
       var allAlarms = [];
       if (reminder.repeat > 0) {
@@ -52,7 +51,13 @@ const ListReminder = props => {
     displayToast('success', 'Reminder deleted!');
     navigation.navigate('Home');
   };
-
+  if (isLoading) {
+    return (
+      <View style={styles.horizontal}>
+        <ActivityIndicator size="large" color="#333" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -81,11 +86,7 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.repeat} time(s)</Text>
         </View>
       )}
-      {isLoading ? (
-        <View style={styles.horizontal}>
-          <ActivityIndicator size="large" color="#333" />
-        </View>
-      ) : null}
+
       {reminder.repeat > 0 && (
         <View style={styles.alarms}>
           <Text style={styles.alarmTitle}>Alarms</Text>
@@ -108,7 +109,9 @@ const ListReminder = props => {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.actionBtn, styles.editBtn]}>
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.editBtn]}
+            onPress={() => navigation.navigate('EditReminder', {id: id})}>
             <Text style={{fontSize: 16, color: '#111'}}>Edit</Text>
           </TouchableOpacity>
         </View>
