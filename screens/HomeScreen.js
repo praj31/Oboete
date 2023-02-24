@@ -12,12 +12,12 @@ import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TodayReminderCard from '../components/TodayReminderCard';
-import { useIsFocused } from '@react-navigation/native';
-import { getAllToday, getData, removeKey } from '../api/storage';
-import { deleteAlarms } from '../api/alarm';
+import {useIsFocused} from '@react-navigation/native';
+import {getAllToday, getData, removeKey} from '../api/storage';
+import {deleteAlarms} from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
 
   const isFocused = useIsFocused();
@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item });
+          events.push({id: entry, ...item});
         }
       }
       // console.log(events);
@@ -39,9 +39,9 @@ export default function HomeScreen({ navigation }) {
     getTodayReminders();
   }, [isFocused]);
 
-  const onClickReminderCard = (id) => {
-    navigation.navigate("ListReminder", { id: id });
-  }
+  const onClickReminderCard = id => {
+    navigation.navigate('ListReminder', {id: id});
+  };
 
   return (
     <GestureRecognizer
@@ -55,9 +55,11 @@ export default function HomeScreen({ navigation }) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
+          style={{height: '100%'}}>
           {reminders.map(event => (
-            <TouchableOpacity key={event.id} onPress={() => onClickReminderCard(event.id)}>
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => onClickReminderCard(event.id)}>
               <TodayReminderCard
                 navigation={navigation}
                 key={event.id}
