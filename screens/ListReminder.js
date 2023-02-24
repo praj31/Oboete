@@ -1,40 +1,64 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity,ActivityIndicator } from 'react-native'
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getData, removeKey } from '../api/storage';
-import { deleteAlarms } from '../api/alarm';
+import {getData, removeKey} from '../api/storage';
+import {deleteAlarms} from '../api/alarm';
+import {displayToast} from '../api/toast';
 import moment from 'moment';
 
-const ListReminder = (props) => {
+const ListReminder = props => {
   const [reminder, setReminder] = useState({});
+  const [alarms, setAlarms] = useState([]);
   const navigation = props.navigation;
-  const id = props.route.params.id
-  const [isLoading,setIsLoading] = React.useState(false);
+  const id = props.route.params.id;
+  const [isLoading, setIsLoading] = React.useState(false);
   React.useEffect(() => {
     async function fetchData() {
-      setIsLoading(true)
+      setIsLoading(true);
       let reminder = await getData(id);
+      var allAlarms = [];
+      if (reminder.repeat > 0) {
+        for (var i = 1; i <= reminder.repeat; i++) {
+          setAlarms([...alarms]);
+          allAlarms.push(
+            moment(reminder.datetime, 'YYYY-MM-DD LT')
+              .subtract(reminder.interval * i, 'minutes')
+              .format('LT'),
+          );
+        }
+
+        setAlarms(allAlarms);
+      }
       if (reminder) {
         setReminder(reminder);
       } else {
-        alert("Error in fetching the event data")
-        navigation.goBack()
+        alert('Error in fetching the event data');
+        navigation.goBack();
       }
-      setIsLoading(false)
+      setIsLoading(false);
     }
     fetchData();
-  }, [])
+  }, []);
 
   const deleteEvent = async id => {
     await deleteAlarms(id);
     await removeKey(id);
-    navigation.navigate("Home")
+    displayToast('success', 'Reminder deleted!');
+    navigation.navigate('Home');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()} >
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={30} color="#111" />
         </TouchableOpacity>
         <Text style={styles.h1}>Reminder Details</Text>
@@ -44,38 +68,43 @@ const ListReminder = (props) => {
           <Text style={styles.title}>Title</Text>
           <Text style={styles.value}>{reminder.title}</Text>
           <Text style={styles.title}>Date</Text>
-          <Text style={styles.value}>{moment(reminder.datetime, "YYYY-MM-DD LT").format("LL")}</Text>
+          <Text style={styles.value}>
+            {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LL')}
+          </Text>
           <Text style={styles.title}>Time</Text>
-          <Text style={styles.value}>{moment(reminder.datetime, "YYYY-MM-DD LT").format("LT")}</Text>
+          <Text style={styles.value}>
+            {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LT')}
+          </Text>
           <Text style={styles.title}>Interval</Text>
           <Text style={styles.value}>{reminder.interval} minute(s)</Text>
           <Text style={styles.title}>Repeat</Text>
           <Text style={styles.value}>{reminder.repeat} time(s)</Text>
         </View>
       )}
-      {isLoading ?<View style={styles.horizontal}>
-    <ActivityIndicator size="large" color="#333" />
-  </View>: null}
+      {isLoading ? (
+        <View style={styles.horizontal}>
+          <ActivityIndicator size="large" color="#333" />
+        </View>
+      ) : null}
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.deleteBtn]}
-            onPress={() => { deleteEvent(id) }}
-          >
-            <Text style={{ color: '#fff', fontSize: 16 }}>Delete</Text>
+            onPress={() => {
+              deleteEvent(id);
+            }}>
+            <Text style={{color: '#fff', fontSize: 16}}>Delete</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.editBtn]}
-          >
-            <Text style={{ fontSize: 16, color: '#111' }}>Edit</Text>
+          <TouchableOpacity style={[styles.actionBtn, styles.editBtn]}>
+            <Text style={{fontSize: 16, color: '#111'}}>Edit</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -84,14 +113,14 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   h1: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: "#111",
+    color: '#111',
   },
   backBtn: {
     marginRight: 8,
@@ -103,7 +132,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 18,
     color: '#111',
-    marginBottom: 12
+    marginBottom: 12,
   },
   footer: {
     position: 'absolute',
@@ -118,6 +147,31 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 4,
   },
+  alarms: {
+    color: '#111',
+    paddingTop: 10,
+  },
+  alarmTitle: {
+    fontSize: 20,
+    color: '#111',
+    fontWeight: '900',
+    marginBottom: 10,
+  },
+  alarmTab: {
+    height: 36,
+    backgroundColor: '#f2f2f2',
+    marginBottom: 8,
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  alarmTime: {
+    color: '#111',
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontSize: 15,
+    paddingLeft: 10,
+    fontWeight: '500',
+  },
   actionBtn: {
     padding: 12,
     alignItems: 'center',
@@ -131,11 +185,11 @@ const styles = StyleSheet.create({
     borderColor: '#333',
     backgroundColor: 'white',
   },
-  horizontal:
-  {flexDirection: 'row',
-  justifyContent: 'space-around',
-  padding: 10,
-  height:50
-  }
-})
-export default ListReminder
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    height: 50,
+  },
+});
+export default ListReminder;
