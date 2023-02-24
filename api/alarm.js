@@ -28,6 +28,7 @@ export const setupAlarms = async (title, date, interval, repeat) => {
     for (let i = 0; i <= repeat; i++) {
       const identifier = await schedulePushNotification(
         title,
+        interval*i,
         moment(date)
           .subtract(i * interval, 'minutes')
           .toDate(),

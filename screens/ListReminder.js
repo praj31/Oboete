@@ -86,6 +86,17 @@ const ListReminder = props => {
           <ActivityIndicator size="large" color="#333" />
         </View>
       ) : null}
+      {reminder.repeat > 0 && (
+        <View style={styles.alarms}>
+          <Text style={styles.alarmTitle}>Alarms</Text>
+          {alarms?.map((item, i) => (
+            <View key={i} style={styles.alarmTab}>
+              <Text style={styles.alarmTime}>{item}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity

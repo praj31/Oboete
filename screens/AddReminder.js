@@ -59,6 +59,7 @@ export default function AddReminder({ navigation }) {
             Number(interval),
             Number(repeat),
           );
+          console.log("alarms length in add reminder");
           if (alarms.length === 0) return alert("The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.")
           reminder = { ...reminder, alarms };
           await storeData(reminder);

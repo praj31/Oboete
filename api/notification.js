@@ -5,13 +5,15 @@ import {
   checkNotificationPermission,
 } from 'react-native-check-notification-permission';
 
-export const schedulePushNotification = async (title, date) => {
+export const schedulePushNotification = async (title, minutes,date) => {
+
+
   const trigger = new Date(date);
   trigger.setMilliseconds(0);
   trigger.setSeconds(0);
-
+  const reminderMessage = minutes==0?"A gentle reminder 🔔":`Your event is in ${minutes} minutes`
   const alarmNotifData = {
-    title: 'A gentle reminder 🔔',
+    title: reminderMessage,
     message: title,
     channel: 'my_channel_id',
     small_icon: 'ic_launcher',
