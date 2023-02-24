@@ -12,12 +12,12 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import { storeData } from '../api/storage';
-import { setupAlarms } from '../api/alarm';
-import { checkNotificationPermissionFunc } from '../api/notification';
-import { displayToast } from '../api/toast';
+import {storeData} from '../api/storage';
+import {setupAlarms} from '../api/alarm';
+import {checkNotificationPermissionFunc} from '../api/notification';
+import {displayToast} from '../api/toast';
 
-export default function AddReminder({ navigation }) {
+export default function AddReminder({navigation}) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -47,9 +47,12 @@ export default function AddReminder({ navigation }) {
           title,
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
-          repeat: Number(repeat) ?? 0
+          repeat: Number(repeat) ?? 0,
         };
-        if (moment(date).format('YYYY-MM-DD LT') <= moment().format('YYYY-MM-DD LT')) {
+        if (
+          moment(date).format('YYYY-MM-DD LT') <=
+          moment().format('YYYY-MM-DD LT')
+        ) {
           return alert('Cannot choose current or past time!');
         }
         try {
@@ -59,14 +62,17 @@ export default function AddReminder({ navigation }) {
             Number(interval),
             Number(repeat),
           );
-          console.log("alarms length in add reminder");
-          if (alarms.length === 0) return alert("The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.")
-          reminder = { ...reminder, alarms };
+
+          if (alarms.length === 0)
+            return alert(
+              'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
+            );
+          reminder = {...reminder, alarms};
           await storeData(reminder);
-          displayToast("success", "Reminder added!")
+          displayToast('success', 'Reminder added!');
           navigation.goBack();
         } catch (err) {
-          alert(err)
+          alert(err);
         }
       } else {
         alert('Please fill all the fields!');
@@ -138,8 +144,8 @@ export default function AddReminder({ navigation }) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flex: 1, marginRight: 4 }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flex: 1, marginRight: 4}}>
             <Text style={styles.label}>Interval (in minutes)</Text>
             <TextInput
               value={interval}
@@ -148,7 +154,7 @@ export default function AddReminder({ navigation }) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{ flex: 1, marginLeft: 4 }}>
+          <View style={{flex: 1, marginLeft: 4}}>
             <Text style={styles.label}>Repeat</Text>
             <TextInput
               value={repeat}
@@ -166,14 +172,14 @@ export default function AddReminder({ navigation }) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>Add</Text>
+            <Text style={{color: '#fff', fontSize: 16}}>Add</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{ fontSize: 16, color: '#111' }}>Cancel</Text>
+            <Text style={{fontSize: 16, color: '#111'}}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>

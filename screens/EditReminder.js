@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import {getData, storeData} from '../api/storage';
-import {setupAlarms, updateAlarms} from '../api/alarm';
+import {checkAlarmValidity, setupAlarms, updateAlarms} from '../api/alarm';
 import {checkNotificationPermissionFunc} from '../api/notification';
 import {displayToast} from '../api/toast';
 import {getAllKeys} from '../api/storage';
@@ -30,7 +30,7 @@ export default function EditReminder(props) {
   const [reminder, setReminder] = React.useState({});
   const navigation = props.navigation;
   const id = props.route.params.id;
-  // console.log(id);
+  console.log('id:---', id);
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
@@ -78,24 +78,30 @@ export default function EditReminder(props) {
         ) {
           return alert('Cannot choose current or past time!');
         }
-        try {
-          const alarms = await updateAlarms(
-            title,
-            date,
-            Number(interval),
-            Number(repeat),
-            id,
-          );
-          if (alarms.length === 0)
-            return alert(
-              'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
+        let status = await checkAlarmValidity(moment(date), interval, repeat);
+
+        if (status) {
+          try {
+            const alarms = await updateAlarms(
+              title,
+              date,
+              Number(interval),
+              Number(repeat),
+              id,
             );
-          reminder = {...reminder, alarms};
-          await storeData(reminder);
-          displayToast('success', 'Reminder Modified!');
-          navigation.navigate('Home');
-        } catch (err) {
-          alert(err);
+
+            reminder = {...reminder, alarms};
+            await storeData(reminder);
+            displayToast('success', 'Reminder Modified!');
+            navigation.navigate('Home');
+          } catch (err) {
+            console.log(err);
+            alert(err);
+          }
+        } else {
+          return alert(
+            'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
+          );
         }
       } else {
         alert('Please fill all the fields!');

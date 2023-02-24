@@ -21,12 +21,10 @@ import {ActivityIndicator} from 'react-native';
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function getTodayReminders() {
-      setIsLoading(true);
-      console.log('loading', isLoading);
       const data = await getAllToday();
 
       let events = [];
@@ -36,9 +34,9 @@ export default function HomeScreen({navigation}) {
           events.push({id: entry, ...item});
         }
       }
-      // console.log(events);
-      setIsLoading(false);
+
       setReminders(events);
+      setIsLoading(false);
     }
     getTodayReminders();
   }, [isFocused]);
@@ -46,6 +44,14 @@ export default function HomeScreen({navigation}) {
   const onClickReminderCard = id => {
     navigation.navigate('ListReminder', {id: id});
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.horizontal}>
+        <ActivityIndicator size="large" color="#333" />
+      </View>
+    );
+  }
 
   return (
     <GestureRecognizer
@@ -71,11 +77,6 @@ export default function HomeScreen({navigation}) {
               />
             </TouchableOpacity>
           ))}
-          {isLoading ? (
-            <View style={styles.horizontal}>
-              <ActivityIndicator size="large" color="#333" />
-            </View>
-          ) : null}
         </ScrollView>
       )}
       {reminders.length == 0 && (

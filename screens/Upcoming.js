@@ -9,37 +9,42 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData, removeKey } from '../api/storage';
+import {useIsFocused} from '@react-navigation/native';
+import {getAllUpcoming, getData, removeKey} from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
 import TabNavigation from '../components/TabNavigation';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
 
-export default function Upcoming({ navigation }) {
+export default function Upcoming({navigation}) {
   const [reminders, setReminders] = React.useState([]);
-  const [isLoading,setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
     async function getUpcomingReminders() {
-      setIsLoading(true)
       const data = await getAllUpcoming();
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item });
+          events.push({id: entry, ...item});
         }
       }
-      console.log(events);
-      setIsLoading(false)
+
       setReminders(events);
+      setIsLoading(false);
     }
     getUpcomingReminders();
   }, [isFocused]);
 
-  const onClickReminderCard = (id) => {
-    navigation.navigate("ListReminder", { id: id });
+  const onClickReminderCard = id => {
+    navigation.navigate('ListReminder', {id: id});
+  };
+
+  if (isLoading) {
+    <View style={styles.horizontal}>
+      <ActivityIndicator size="large" color="#333" />
+    </View>;
   }
 
   return (
@@ -52,19 +57,17 @@ export default function Upcoming({ navigation }) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
-
-          {reminders.map((event) => (
-            <TouchableOpacity key={event.id} onPress={() => onClickReminderCard(event.id)}>
+          style={{height: '100%'}}>
+          {reminders.map(event => (
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => onClickReminderCard(event.id)}>
               <UpcomingReminderCard event={event} key={event.id} />
             </TouchableOpacity>
           ))}
-          {isLoading ?<View style={styles.horizontal}>
-    <ActivityIndicator size="large" color="#333" />
-  </View>: null}
         </ScrollView>
       )}
-      
+
       {reminders.length == 0 && (
         <View style={styles.imgContainer}>
           <Image
@@ -82,7 +85,6 @@ export default function Upcoming({ navigation }) {
           onPress={() => navigation.navigate('AddReminder')}>
           <Text>
             <Icon name="add-outline" size={36} color="#fff" />
-
           </Text>
         </TouchableOpacity>
       </View>
@@ -134,10 +136,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#111',
   },
-  horizontal:
-  {flexDirection: 'row',
-  justifyContent: 'space-around',
-  padding: 10,
-  height:50
-  }
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    height: 50,
+  },
 });
