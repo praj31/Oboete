@@ -3,16 +3,30 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getData, removeKey} from '../api/storage';
 import {deleteAlarms} from '../api/alarm';
+import {displayToast} from '../api/toast';
 import moment from 'moment';
 
 const ListReminder = props => {
   const [reminder, setReminder] = useState({});
+  const [alarms, setAlarms] = useState([]);
   const navigation = props.navigation;
   const id = props.route.params.id;
-
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
+      var allAlarms = [];
+      if (reminder.repeat > 0) {
+        for (var i = 1; i <= reminder.repeat; i++) {
+          setAlarms([...alarms]);
+          allAlarms.push(
+            moment(reminder.datetime, 'YYYY-MM-DD LT')
+              .subtract(reminder.interval * i, 'minutes')
+              .format('LT'),
+          );
+        }
+
+        setAlarms(allAlarms);
+      }
       if (reminder) {
         setReminder(reminder);
       } else {
@@ -26,6 +40,7 @@ const ListReminder = props => {
   const deleteEvent = async id => {
     await deleteAlarms(id);
     await removeKey(id);
+    displayToast('success', 'Reminder deleted!');
     navigation.navigate('Home');
   };
 
@@ -68,9 +83,7 @@ const ListReminder = props => {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.editBtn]}
-            onPress={() => navigation.navigate('EditReminder', {id: id})}>
+          <TouchableOpacity style={[styles.actionBtn, styles.editBtn]}>
             <Text style={{fontSize: 16, color: '#111'}}>Edit</Text>
           </TouchableOpacity>
         </View>
@@ -119,6 +132,31 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     padding: 4,
+  },
+  alarms: {
+    color: '#111',
+    paddingTop: 10,
+  },
+  alarmTitle: {
+    fontSize: 20,
+    color: '#111',
+    fontWeight: '900',
+    marginBottom: 10,
+  },
+  alarmTab: {
+    height: 36,
+    backgroundColor: '#f2f2f2',
+    marginBottom: 8,
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  alarmTime: {
+    color: '#111',
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontSize: 15,
+    paddingLeft: 10,
+    fontWeight: '500',
   },
   actionBtn: {
     padding: 12,
