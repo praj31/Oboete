@@ -14,6 +14,7 @@ import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 import {loadAlarmListeners} from './api/alarm';
 import ToastManager from 'toastify-react-native';
 import EditReminder from './screens/EditReminder';
+import { WithSplashScreen } from './screens/Splash';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,16 +29,28 @@ export default function App() {
       sameElse: 'LL',
     },
   });
-
+  const [isAppReady, setIsAppReady] = React.useState(false);
   React.useEffect(() => {
     ReactNativeAN.stopAlarmSound();
     loadAlarmListeners();
+    setIsAppReady(true);
   }, []);
+  
+
+  // React.useEffect(() => {
+  //   initialize().then((context) => {
+  //     store.current = context.store;
+  //     queryClient.current = context.queryClient;
+
+  //     setIsAppReady(true);
+  //   });
+  // }, []);
 
   // to delete all alarms
   // clearAll();
 
   return (
+    <WithSplashScreen isAppReady={isAppReady}>
     <NavigationContainer>
       <ToastManager position="bottom" />
       <Stack.Navigator>
@@ -70,5 +83,6 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </WithSplashScreen>
   );
 }
