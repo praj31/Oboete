@@ -22,7 +22,6 @@ export const loadAlarmListeners = async () => {
 };
 
 export const setupAlarms = async (title, date, interval, repeat) => {
-  console.log('uihiuhihihi', date);
   let alarms = [];
   if (interval === 0) repeat = 0;
   try {
@@ -51,7 +50,6 @@ export const checkAlarmValidity = async (date, interval, repeat) =>
 export const deleteAlarms = async id => {
   let reminder = await getData(id);
 
-  // console.log('test data', reminder);
   let {alarms} = reminder;
   for (let alarm of alarms) {
     await cancelScheduledPushNotification(alarm);
@@ -59,7 +57,6 @@ export const deleteAlarms = async id => {
 };
 
 export const updateAlarms = async (title, date, interval, repeat, id) => {
-  console.log('update', date);
   let alarms = [];
   if (interval === 0) repeat = 0;
 
