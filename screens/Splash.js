@@ -68,7 +68,7 @@ const HIDDEN = "Hidden";
       style={[style.container, { opacity: containerOpacity }]}
     >
       <Animated.Image
-        source={require("./ic_launcher_round.png")}
+        source={require("./Oboete_Logo_Black.png")}
         fadeDuration={0}
         onLoad={() => {
           setState(FADE_IN_IMAGE);
@@ -88,7 +88,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 170,
   },
 });
