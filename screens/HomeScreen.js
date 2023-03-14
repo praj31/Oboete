@@ -12,13 +12,14 @@ import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TodayReminderCard from '../components/TodayReminderCard';
-import {useIsFocused} from '@react-navigation/native';
-import {getAllToday, getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
+import { useIsFocused } from '@react-navigation/native';
+import { getAllToday, getData, removeKey } from '../api/storage';
+import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
-import {useState, useEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
-export default function HomeScreen({navigation}) {
+import { useState, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import moment from 'moment';
+export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -31,10 +32,10 @@ export default function HomeScreen({navigation}) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({id: entry, ...item});
+          events.push({ id: entry, ...item });
         }
       }
-
+      events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
       setReminders(events);
       setIsLoading(false);
     }
@@ -42,7 +43,7 @@ export default function HomeScreen({navigation}) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', {id: id});
+    navigation.navigate('ListReminder', { id: id });
   };
 
   if (isLoading) {
@@ -65,7 +66,7 @@ export default function HomeScreen({navigation}) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{height: '100%'}}>
+          style={{ height: '100%' }}>
           {reminders.map(event => (
             <TouchableOpacity
               key={event.id}
