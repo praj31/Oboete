@@ -20,7 +20,7 @@ import { displayToast } from '../api/toast';
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('Test Title');
-  const [date, setDate] = React.useState(moment().add(1, 'day').toDate());
+  const [date, setDate] = React.useState(moment().toDate());
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
   const [interval, setInterval] = React.useState('0');
@@ -40,7 +40,6 @@ export default function AddReminder({ navigation }) {
 
   const addEventClicked = async () => {
     let permission = await checkNotificationPermissionFunc();
-
     if (permission === true) {
       if (title) {
         let reminder = {
@@ -63,7 +62,6 @@ export default function AddReminder({ navigation }) {
             Number(interval),
             Number(repeat),
           );
-
           if (alarms.length === 0)
             return alert(
               'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
