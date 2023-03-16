@@ -6,8 +6,8 @@ import {
   TextInput,
   Pressable,
   ScrollView,
+  Modal,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -25,6 +25,8 @@ export default function AddReminder({ navigation }) {
   const [showTimePicker, setShowTimePicker] = React.useState(false);
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
+  const [alarmType, setAlarmType] = React.useState('One-time');
+  const [showAlarmTypePicker, setShowAlarmTypePicker] = React.useState(false);
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -164,6 +166,30 @@ export default function AddReminder({ navigation }) {
             />
           </View>
         </View>
+        <Text style={styles.label}>Alarm Type</Text>
+        <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
+          <TextInput
+            value={alarmType}
+            style={styles.textinput}
+            editable={false}
+          />
+        </Pressable>
+        {showAlarmTypePicker &&
+          <Modal
+            visible={showAlarmTypePicker}
+            onRequestClose={() => {
+              setShowAlarmTypePicker(!showAlarmTypePicker);
+            }}>
+            <View style={{ padding: 24, marginTop: 32, width: '100%', backgroundColor: '#f6f6f6' }}>
+              <Text style={{ fontSize: 20 }}>Select alarm type</Text>
+              <Pressable
+                style={[styles.actionBtn, styles.primaryBtn]}
+                onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
+                <Text style={{ color: '#fff', fontSize: 16 }}>Add</Text>
+              </Pressable>
+            </View>
+          </Modal>
+        }
         {/* <Button title="Test" onPress={performTest} /> */}
       </ScrollView>
       <View style={styles.footer}>
