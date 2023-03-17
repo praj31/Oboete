@@ -147,7 +147,8 @@ export default function AddReminder({ navigation }) {
           <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>Interval (in minutes)</Text>
             <TextInput
-              value={interval}
+              value={alarmType === "Meta" ? "0" : interval}
+              editable={alarmType === "One-time"}
               style={styles.textinput}
               keyboardType="numeric"
               onChangeText={setInterval}
@@ -156,7 +157,8 @@ export default function AddReminder({ navigation }) {
           <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>Repeat</Text>
             <TextInput
-              value={repeat}
+              value={alarmType === "Meta" ? "0" : repeat}
+              editable={alarmType === "One-time"}
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
