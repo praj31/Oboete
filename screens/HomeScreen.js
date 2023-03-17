@@ -8,6 +8,7 @@ import {
   Image,
   Button,
 } from 'react-native';
+
 import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,23 +17,32 @@ import {useIsFocused} from '@react-navigation/native';
 import {getAllToday, getData, removeKey} from '../api/storage';
 import {deleteAlarms} from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
-import {useState, useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
+import moment from 'moment';
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
-
   React.useEffect(() => {
     async function getTodayReminders() {
-      const data = await getAllToday();
-
+      const data = await getAllToday();      
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
+          console.log("inside item",item);
+          var beforeTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if(beforeTime.isAfter(new Date()))
+          {
+          console.log("all alarms are: ",item);
           events.push({id: entry, ...item});
+          }
+          else{
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
         }
+        
       }
 
       setReminders(events);
@@ -52,6 +62,7 @@ export default function HomeScreen({navigation}) {
       </View>
     );
   }
+  
 
   return (
     <GestureRecognizer
@@ -60,18 +71,16 @@ export default function HomeScreen({navigation}) {
       <Container position="top" />
 
       <TabNavigation navigation={navigation} screenName={'today'} />
-
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{height: '100%'}}>
+          style={{ height: '100%' }}>
           {reminders.map(event => (
             <TouchableOpacity
               key={event.id}
               onPress={() => onClickReminderCard(event.id)}>
               <TodayReminderCard
-                navigation={navigation}
                 key={event.id}
                 event={event}
               />
@@ -80,16 +89,17 @@ export default function HomeScreen({navigation}) {
         </ScrollView>
       )}
       {reminders.length == 0 && (
-        <View style={styles.imgContainer}>
-          <Image
-            style={styles.image}
-            source={require('../assets/relaxing.png')}
-            placeholder={'Relaxing'}
-            contentFit="cover"
-          />
-          <Text style={styles.prompt}>No events today. Take your day off!</Text>
-        </View>
-      )}
+          <View style={styles.imgContainer}>
+            <Image
+              style={styles.image}
+              source={require('../assets/relaxing.png')}
+              placeholder={'Relaxing'}
+              contentFit="cover"
+            />
+            <Text style={styles.prompt}>No events today. Take your day off!</Text>
+          </View>
+        )}
+      
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.addBtn}

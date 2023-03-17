@@ -14,6 +14,7 @@ import {getAllUpcoming, getData, removeKey} from '../api/storage';
 import UpcomingReminderCard from '../components/UpcomingReminderCard';
 import TabNavigation from '../components/TabNavigation';
 import {ActivityIndicator} from 'react-native';
+import moment from 'moment';
 
 export default function Upcoming({navigation}) {
   const [reminders, setReminders] = React.useState([]);
@@ -27,8 +28,19 @@ export default function Upcoming({navigation}) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
+          console.log("inside item",item);
+          var beforeTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if(beforeTime.isAfter(new Date()))
+          {
+          console.log("all alarms are: ",item);
           events.push({id: entry, ...item});
+          }
+          else{
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
         }
+        
       }
 
       setReminders(events);
