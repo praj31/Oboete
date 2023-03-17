@@ -7,14 +7,12 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-
 import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
-import TodayReminderCard from '../components/TodayReminderCard';
+import ReminderCard from '../components/ReminderCard';
 import { useIsFocused } from '@react-navigation/native';
 import { getAllToday, getData, removeKey } from '../api/storage';
-import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
@@ -42,7 +40,7 @@ export default function HomeScreen({ navigation }) {
           }
         }
       }
-
+      events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
       setReminders(events);
       setIsLoading(false);
     }
@@ -78,7 +76,7 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity
               key={event.id}
               onPress={() => onClickReminderCard(event.id)}>
-              <TodayReminderCard
+              <ReminderCard
                 key={event.id}
                 event={event}
               />

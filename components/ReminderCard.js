@@ -1,16 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import moment from 'moment'
 import * as React from 'react'
 
-export default function UpcomingReminderCard({ event }) {
+export default function ReminderCard({ event }) {
   return (
     <View style={styles.r_card}>
       <View style={{ flex: 4 }}>
         <Text style={styles.r_title}>{event.title}</Text>
-        <Text style={styles.r_datetime}>
-          {moment(event.datetime.substring(0, 10), 'YYYY-MM-DD').calendar()}
-        </Text>
         <Text style={styles.r_datetime}>
           {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}
         </Text>

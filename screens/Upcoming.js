@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment'
 import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData, removeKey } from '../api/storage';
-import UpcomingReminderCard from '../components/UpcomingReminderCard';
+import { getAllUpcoming, getData } from '../api/storage';
+import ReminderCard from '../components/ReminderCard';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
-import moment from 'moment';
 
 export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
@@ -59,12 +59,15 @@ export default function Upcoming({ navigation }) {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           style={{ height: '100%' }}>
-          {reminders.map(event => (
-            <TouchableOpacity
-              key={event.id}
-              onPress={() => onClickReminderCard(event.id)}>
-              <UpcomingReminderCard event={event} key={event.id} />
-            </TouchableOpacity>
+          {reminders.map((event, idx) => (
+            <View key={idx}>
+              {(idx == 0 || reminders[idx].occurs !== reminders[idx - 1].occurs) && <Text style={{ marginVertical: 8, marginLeft: 4, color: '#666' }} key={idx}>{moment(event.datetime, 'YYYY-MM-DD LT').calendar()}</Text>}
+              <TouchableOpacity
+                key={event.id}
+                onPress={() => onClickReminderCard(event.id)}>
+                <ReminderCard event={event} key={event.id} />
+              </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       )}
