@@ -20,6 +20,7 @@ import { displayToast } from '../api/toast';
 export default function EditReminder(props) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
+  const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
@@ -36,7 +37,9 @@ export default function EditReminder(props) {
     async function fetchData() {
       let reminder = await getData(id);
       if (reminder) {
+        // // console.log("edit reminder is: ",reminder);
         setTitle(reminder.title);
+        setNote(reminder.note)
         setInterval(reminder.interval.toString());
         setRepeat(reminder.repeat.toString());
         setDate(new Date(moment(reminder.datetime, 'YYYY-MM-DD LT')));
@@ -72,6 +75,7 @@ export default function EditReminder(props) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          note: note,
           alarmType
         };
         if (
@@ -93,7 +97,7 @@ export default function EditReminder(props) {
             reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', 'Reminder Modified!');
-            navigation.navigate('Home');
+            navigation.goBack();
           } catch (err) {
             console.log(err);
             alert(err);
@@ -119,6 +123,13 @@ export default function EditReminder(props) {
           style={styles.textinput}
           onChangeText={setTitle}
           maxLength={40}
+        />
+        <Text style={styles.label}>Event Description (optional)</Text>
+        <TextInput
+          value={note}
+          style={styles.textinput}
+          onChangeText={setNote}
+          maxLength={140}
         />
         <Text style={styles.label}>Event date</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>

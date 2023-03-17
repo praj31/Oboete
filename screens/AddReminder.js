@@ -20,6 +20,7 @@ import { displayToast } from '../api/toast';
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
+  const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
@@ -49,6 +50,7 @@ export default function AddReminder({ navigation }) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          note: note,
           alarmType,
         };
         console.log(reminder);
@@ -104,6 +106,13 @@ export default function AddReminder({ navigation }) {
           style={styles.textinput}
           onChangeText={setTitle}
           maxLength={40}
+        />
+        <Text style={styles.label}>Event Description (optional)</Text>
+        <TextInput
+          value={note}
+          style={styles.textinput}
+          onChangeText={setNote}
+          maxLength={140}
         />
         <Text style={styles.label}>Event date</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
@@ -277,6 +286,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     margin: 24,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

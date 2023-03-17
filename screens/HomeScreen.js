@@ -12,7 +12,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReminderCard from '../components/ReminderCard';
 import { useIsFocused } from '@react-navigation/native';
-import { getAllToday, getData } from '../api/storage';
+import { getAllToday, getData, removeKey } from '../api/storage';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
@@ -21,16 +21,23 @@ export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
-
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
-
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item });
+          // console.log("inside item",item);
+          let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if (eventTime.isAfter(moment())) {
+            // console.log("all alarms are: ", item);
+            events.push({ id: entry, ...item });
+          }
+          else {
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
         }
       }
       events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
@@ -52,6 +59,7 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
+
   return (
     <GestureRecognizer
       style={styles.container}
@@ -59,7 +67,6 @@ export default function HomeScreen({ navigation }) {
       <Container position="top" />
 
       <TabNavigation navigation={navigation} screenName={'today'} />
-
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -88,6 +95,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.prompt}>No events today. Take your day off!</Text>
         </View>
       )}
+
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.addBtn}

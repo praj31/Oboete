@@ -21,6 +21,7 @@ const ListReminder = props => {
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
+      
       var allAlarms = [];
       if (reminder.repeat > 0) {
         for (var i = 1; i <= reminder.repeat; i++) {
@@ -72,6 +73,10 @@ const ListReminder = props => {
         <View style={styles.detailsCard}>
           <Text style={styles.title}>Title</Text>
           <Text style={styles.value}>{reminder.title}</Text>
+          {reminder.note && reminder.note.length>0&& <View>
+          <Text style={styles.title}>Description</Text>
+          <Text style={styles.value}>{reminder.note}</Text>
+          </View>}
           <Text style={styles.title}>Date</Text>
           <Text style={styles.value}>
             {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LL')}
