@@ -12,12 +12,12 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {storeData} from '../api/storage';
-import {setupAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
+import { storeData } from '../api/storage';
+import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
 
-export default function AddReminder({navigation}) {
+export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
@@ -49,7 +49,7 @@ export default function AddReminder({navigation}) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
-          note:note
+          note: note
         };
         if (
           moment(date).format('YYYY-MM-DD LT') <=
@@ -62,14 +62,14 @@ export default function AddReminder({navigation}) {
             title,
             date,
             Number(interval),
-            Number(repeat),      
+            Number(repeat),
           );
 
           if (alarms.length === 0)
             return alert(
               'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
             );
-          reminder = {...reminder, alarms};
+          reminder = { ...reminder, alarms };
           await storeData(reminder);
           displayToast('success', 'Reminder added!');
           navigation.goBack();
@@ -108,12 +108,12 @@ export default function AddReminder({navigation}) {
           onChangeText={setTitle}
           maxLength={40}
         />
-        <Text style={styles.label}>Event Description</Text>
+        <Text style={styles.label}>Event Description (optional)</Text>
         <TextInput
           value={note}
           style={styles.textinput}
           onChangeText={setNote}
-          maxLength={40}
+          maxLength={140}
         />
         <Text style={styles.label}>Event date</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
@@ -153,8 +153,8 @@ export default function AddReminder({navigation}) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>Interval (in minutes)</Text>
             <TextInput
               value={interval}
@@ -163,7 +163,7 @@ export default function AddReminder({navigation}) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>Repeat</Text>
             <TextInput
               value={repeat}
@@ -181,14 +181,14 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>Add</Text>
+            <Text style={{ color: '#fff', fontSize: 16 }}>Add</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>Cancel</Text>
+            <Text style={{ fontSize: 16, color: '#111' }}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     margin: 24,
-    marginTop:50,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
