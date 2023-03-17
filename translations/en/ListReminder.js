@@ -8,4 +8,6 @@ export default {
   alarms: 'Alarms',
   delete: 'Delete',
   edit: 'Edit',
+  alarmSound: 'Alarm Sound',
+  description: 'Description',
 };

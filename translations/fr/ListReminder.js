@@ -8,4 +8,6 @@ export default {
   alarms: 'Alarmes',
   delete: 'Supprimer',
   edit: 'Modifier',
+  alarmSound: "Bruit d'alarme",
+  description: 'Description',
 };

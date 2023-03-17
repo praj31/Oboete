@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getData, removeKey } from '../api/storage';
-import { deleteAlarms } from '../api/alarm';
-import { displayToast } from '../api/toast';
+import {getData, removeKey} from '../api/storage';
+import {deleteAlarms} from '../api/alarm';
+import {displayToast} from '../api/toast';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const ListReminder = props => {
   const [reminder, setReminder] = useState({});
@@ -20,7 +20,7 @@ const ListReminder = props => {
   const id = props.route.params.id;
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
@@ -76,10 +76,12 @@ const ListReminder = props => {
         <View style={styles.detailsCard}>
           <Text style={styles.title}>{t('ListReminder:title')}</Text>
           <Text style={styles.value}>{reminder.title}</Text>
-          {reminder.note && reminder.note.length > 0 && <View>
-            <Text style={styles.title}>Description</Text>
-            <Text style={styles.value}>{reminder.note}</Text>
-          </View>}
+          {reminder.note && reminder.note.length > 0 && (
+            <View>
+              <Text style={styles.title}>{t('ListReminder:description')}</Text>
+              <Text style={styles.value}>{reminder.note}</Text>
+            </View>
+          )}
           <Text style={styles.title}>{t('ListReminder:date')}</Text>
           <Text style={styles.value}>
             {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LL')}
@@ -92,6 +94,9 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.interval} minute(s)</Text>
           <Text style={styles.title}>{t('ListReminder:repeat')}</Text>
           <Text style={styles.value}>{reminder.repeat} time(s)</Text>
+
+          <Text style={styles.title}>{t('ListReminder:alarmSound')}</Text>
+          <Text style={styles.value}>{reminder.sound_name}</Text>
         </View>
       )}
 
@@ -113,7 +118,7 @@ const ListReminder = props => {
             onPress={() => {
               deleteEvent(id);
             }}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>
+            <Text style={{color: '#fff', fontSize: 16}}>
               {t('ListReminder:delete')}
             </Text>
           </TouchableOpacity>
@@ -121,8 +126,8 @@ const ListReminder = props => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.editBtn]}
-            onPress={() => navigation.navigate('EditReminder', { id: id })}>
-            <Text style={{ fontSize: 16, color: '#111' }}>
+            onPress={() => navigation.navigate('EditReminder', {id: id})}>
+            <Text style={{fontSize: 16, color: '#111'}}>
               {t('ListReminder:edit')}
             </Text>
           </TouchableOpacity>
