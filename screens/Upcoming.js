@@ -15,12 +15,14 @@ import { getAllUpcoming, getData } from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const isFocused = useIsFocused();
 
+  const { t } = useTranslation();
   React.useEffect(() => {
     async function getUpcomingReminders() {
       const data = await getAllUpcoming();
@@ -80,7 +82,7 @@ export default function Upcoming({ navigation }) {
             placeholder={'Relaxing'}
             contentFit="cover"
           />
-          <Text style={styles.prompt}>Woohoo! You are all caught up!</Text>
+          <Text style={styles.prompt}>{t('HomeScreen:noEventsUpcoming')}</Text>
         </View>
       )}
       <View style={styles.footer}>

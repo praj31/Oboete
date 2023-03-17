@@ -7,6 +7,10 @@ import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
 import moment from 'moment';
 
+import { clearAll } from './api/storage';
+
+import './constants/DCSLocalize';
+
 //for alarm
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 import { loadAlarmListeners } from './api/alarm';
