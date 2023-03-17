@@ -92,7 +92,7 @@ export default function EditReminder(props) {
             reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', 'Reminder Modified!');
-            navigation.navigate('Home');
+            navigation.goBack();
           } catch (err) {
             console.log(err);
             alert(err);
@@ -119,12 +119,12 @@ export default function EditReminder(props) {
           onChangeText={setTitle}
           maxLength={40}
         />
-        <Text style={styles.label}>Event Description</Text>
+        <Text style={styles.label}>Event Description (optional)</Text>
         <TextInput
           value={note}
           style={styles.textinput}
           onChangeText={setNote}
-          maxLength={40}
+          maxLength={140}
         />
         <Text style={styles.label}>Event date</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
