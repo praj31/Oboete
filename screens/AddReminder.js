@@ -81,6 +81,13 @@ export default function AddReminder({ navigation }) {
     }
   };
 
+  React.useEffect(() => {
+    if (alarmType === "Meta") {
+      setInterval(0);
+      setRepeat(0);
+    }
+  }, [alarmType])
+
   // const performTest = async () => {
   // const test_date = new Date(Date.now() + 60 * 1000)
   // const test_title = "Testing"

@@ -12,7 +12,8 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReminderCard from '../components/ReminderCard';
 import { useIsFocused } from '@react-navigation/native';
-import { getAllToday, getData, removeKey } from '../api/storage';
+import { getAllToday, getData, removeKey, storeData } from '../api/storage';
+import { updateAlarms, deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
@@ -21,6 +22,7 @@ export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
+
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
@@ -35,8 +37,22 @@ export default function HomeScreen({ navigation }) {
             events.push({ id: entry, ...item });
           }
           else {
-            await deleteAlarms(entry);
-            await removeKey(entry);
+            if (item.alarmType === "Meta") {
+              console.log(moment(item.datetime, 'YYYY-MM-DD LT').add(1, 'day').toString())
+              let updatedReminder = { ...item, datetime: moment(item.datetime, 'YYYY-MM-DD LT').add(1, 'day').format('YYYY-MM-DD LT').toString() }
+              const alarms = await updateAlarms(
+                updatedReminder.title,
+                moment(updatedReminder.datetime, 'YYYY-MM-DD LT').toDate(),
+                Number(updatedReminder.interval),
+                Number(updatedReminder.repeat),
+                entry,
+              );
+              updatedReminder = { ...updatedReminder, alarms };
+              await storeData(updatedReminder);
+            } else {
+              await deleteAlarms(entry);
+              await removeKey(entry);
+            }
           }
         }
       }

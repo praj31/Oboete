@@ -97,7 +97,7 @@ export default function EditReminder(props) {
             reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', 'Reminder Modified!');
-            navigation.goBack();
+            navigation.navigate("Home");
           } catch (err) {
             console.log(err);
             alert(err);
