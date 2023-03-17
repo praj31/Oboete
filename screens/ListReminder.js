@@ -84,6 +84,8 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.interval} minute(s)</Text>
           <Text style={styles.title}>Repeat</Text>
           <Text style={styles.value}>{reminder.repeat} time(s)</Text>
+          <Text style={styles.title}>Alarm Type</Text>
+          <Text style={styles.value}>{reminder.alarmType}</Text>
         </View>
       )}
 

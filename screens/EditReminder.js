@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -24,6 +25,8 @@ export default function EditReminder(props) {
   const [showTimePicker, setShowTimePicker] = React.useState(false);
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
+  const [alarmType, setAlarmType] = React.useState('');
+  const [showAlarmTypePicker, setShowAlarmTypePicker] = React.useState(false);
 
   const [_, setReminder] = React.useState({});
   const navigation = props.navigation;
@@ -33,11 +36,11 @@ export default function EditReminder(props) {
     async function fetchData() {
       let reminder = await getData(id);
       if (reminder) {
-        // console.log(reminder);
         setTitle(reminder.title);
         setInterval(reminder.interval.toString());
         setRepeat(reminder.repeat.toString());
         setDate(new Date(moment(reminder.datetime, 'YYYY-MM-DD LT')));
+        setAlarmType(reminder.alarmType);
         setReminder(reminder);
       } else {
         alert('Error in fetching the event data');
@@ -45,7 +48,7 @@ export default function EditReminder(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -69,6 +72,7 @@ export default function EditReminder(props) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          alarmType
         };
         if (
           moment(date) <=
@@ -175,6 +179,62 @@ export default function EditReminder(props) {
             />
           </View>
         </View>
+        <Text style={styles.label}>Alarm Type</Text>
+        <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
+          <TextInput
+            value={alarmType}
+            style={[styles.textinput, styles.whiteSpace]}
+            editable={false}
+          />
+        </Pressable>
+        {showAlarmTypePicker && (
+          <Modal
+            visible={showAlarmTypePicker}
+            onRequestClose={() => {
+              setShowAlarmTypePicker(!showAlarmTypePicker);
+            }}>
+            <ScrollView
+              style={{
+                padding: 24,
+                marginTop: 32,
+                width: '100%',
+              }}>
+              <Text style={{ fontSize: 18, marginBottom: 20 }}>Select an alarm type</Text>
+              <Pressable
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'One-time'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('One-time');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "One-time" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>One-time</Text>
+                <Text style={[alarmType === "One-time" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>Reminder which does not repeat regularly</Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'Meta'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('Meta');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "Meta" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>Meta</Text>
+                <Text style={[alarmType === "Meta" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>
+                  Reminder whose purpose is to remind you about adding reminders
+                </Text>
+              </Pressable>
+            </ScrollView>
+          </Modal>
+        )}
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
@@ -249,4 +309,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
+  selectBtn: {
+    marginVertical: 12,
+    alignItems: 'flex-start',
+  },
+  baseFont: {
+    fontSize: 16
+  },
+  smallFont: {
+    marginVertical: 6,
+    fontSize: 12,
+  },
+  fontWhite: {
+    color: '#fff'
+  },
+  fontBlack: {
+    color: '#333'
+  },
+  whiteSpace: {
+    marginBottom: 60
+  }
 });

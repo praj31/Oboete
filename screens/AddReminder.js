@@ -49,12 +49,10 @@ export default function AddReminder({ navigation }) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          alarmType,
         };
-        console.log(reminder)
-        if (
-          moment(date) <=
-          moment()
-        ) {
+        console.log(reminder);
+        if (moment(date) <= moment()) {
           return alert('Cannot choose current or past time!');
         }
         try {
@@ -170,26 +168,58 @@ export default function AddReminder({ navigation }) {
         <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
           <TextInput
             value={alarmType}
-            style={styles.textinput}
+            style={[styles.textinput, styles.whiteSpace]}
             editable={false}
           />
         </Pressable>
-        {showAlarmTypePicker &&
+        {showAlarmTypePicker && (
           <Modal
             visible={showAlarmTypePicker}
             onRequestClose={() => {
               setShowAlarmTypePicker(!showAlarmTypePicker);
             }}>
-            <View style={{ padding: 24, marginTop: 32, width: '100%', backgroundColor: '#f6f6f6' }}>
-              <Text style={{ fontSize: 20 }}>Select alarm type</Text>
+            <ScrollView
+              style={{
+                padding: 24,
+                marginTop: 32,
+                width: '100%',
+              }}>
+              <Text style={{ fontSize: 18, marginBottom: 20 }}>Select an alarm type</Text>
               <Pressable
-                style={[styles.actionBtn, styles.primaryBtn]}
-                onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
-                <Text style={{ color: '#fff', fontSize: 16 }}>Add</Text>
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'One-time'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('One-time');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "One-time" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>One-time</Text>
+                <Text style={[alarmType === "One-time" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>Reminder which does not repeat regularly</Text>
               </Pressable>
-            </View>
+              <Pressable
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'Meta'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('Meta');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "Meta" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>Meta</Text>
+                <Text style={[alarmType === "Meta" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>
+                  Reminder whose purpose is to remind you about adding reminders
+                </Text>
+              </Pressable>
+            </ScrollView>
           </Modal>
-        }
+        )}
         {/* <Button title="Test" onPress={performTest} /> */}
       </ScrollView>
       <View style={styles.footer}>
@@ -265,4 +295,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
+  selectBtn: {
+    marginVertical: 12,
+    alignItems: 'flex-start',
+  },
+  baseFont: {
+    fontSize: 16
+  },
+  smallFont: {
+    marginVertical: 6,
+    fontSize: 12,
+  },
+  fontWhite: {
+    color: '#fff'
+  },
+  fontBlack: {
+    color: '#333'
+  },
+  whiteSpace: {
+    marginBottom: 60
+  }
 });
