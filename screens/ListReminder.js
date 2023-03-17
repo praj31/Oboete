@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getData, removeKey } from '../api/storage';
-import { deleteAlarms } from '../api/alarm';
-import { displayToast } from '../api/toast';
+import {getData, removeKey} from '../api/storage';
+import {deleteAlarms} from '../api/alarm';
+import {displayToast} from '../api/toast';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
-import { useIsFocused } from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import {useIsFocused} from '@react-navigation/native';
 
 const ListReminder = props => {
   const [reminder, setReminder] = useState({});
@@ -22,7 +22,7 @@ const ListReminder = props => {
   const id = props.route.params.id;
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
@@ -97,11 +97,10 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.interval ?? 0} minute(s)</Text>
           <Text style={styles.title}>{t('ListReminder:repeat')}</Text>
           <Text style={styles.value}>{reminder.repeat ?? 0} time(s)</Text>
-          <Text style={styles.title}>Alarm Type</Text>
+          <Text style={styles.title}>{t('ListReminder:alarmType')}</Text>
           <Text style={styles.value}>{reminder.alarmType}</Text>
           <Text style={styles.title}>{t('ListReminder:alarmSound')}</Text>
           <Text style={styles.value}>{reminder.sound_name}</Text>
-
 
           {reminder.repeat > 0 && (
             <View style={styles.alarms}>
@@ -123,7 +122,7 @@ const ListReminder = props => {
             onPress={() => {
               deleteEvent(id);
             }}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>
+            <Text style={{color: '#fff', fontSize: 16}}>
               {t('ListReminder:delete')}
             </Text>
           </TouchableOpacity>
@@ -131,8 +130,8 @@ const ListReminder = props => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.editBtn]}
-            onPress={() => navigation.navigate('EditReminder', { id: id })}>
-            <Text style={{ fontSize: 16, color: '#111' }}>
+            onPress={() => navigation.navigate('EditReminder', {id: id})}>
+            <Text style={{fontSize: 16, color: '#111'}}>
               {t('ListReminder:edit')}
             </Text>
           </TouchableOpacity>
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
   alarms: {
     color: '#111',
     paddingTop: 10,
-    marginBottom: 64
+    marginBottom: 64,
   },
   alarmTitle: {
     fontSize: 20,
