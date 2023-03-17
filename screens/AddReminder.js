@@ -91,11 +91,11 @@ export default function AddReminder({navigation}) {
   };
 
   React.useEffect(() => {
-    if (alarmType === "Meta") {
+    if (alarmType === 'Meta') {
       setInterval(0);
       setRepeat(0);
     }
-  }, [alarmType])
+  }, [alarmType]);
 
   // const performTest = async () => {
   // const test_date = new Date(Date.now() + 60 * 1000)
@@ -172,8 +172,8 @@ export default function AddReminder({navigation}) {
           <View style={{flex: 1, marginRight: 4}}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
-              value={alarmType === "Meta" ? "0" : interval}
-              editable={alarmType === "One-time"}
+              value={alarmType === 'Meta' ? '0' : interval}
+              editable={alarmType === 'One-time'}
               style={styles.textinput}
               keyboardType="numeric"
               onChangeText={setInterval}
@@ -182,8 +182,8 @@ export default function AddReminder({navigation}) {
           <View style={{flex: 1, marginLeft: 4}}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
-              value={alarmType === "Meta" ? "0" : repeat}
-              editable={alarmType === "One-time"}
+              value={alarmType === 'Meta' ? '0' : repeat}
+              editable={alarmType === 'One-time'}
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
@@ -191,7 +191,7 @@ export default function AddReminder({navigation}) {
             />
           </View>
         </View>
-        <Text style={styles.label}>Alarm Type</Text>
+        <Text style={styles.label}>{t('AddReminder:alarmType')}</Text>
         <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
           <TextInput
             value={alarmType}
@@ -211,7 +211,9 @@ export default function AddReminder({navigation}) {
                 marginTop: 32,
                 width: '100%',
               }}>
-              <Text style={{ fontSize: 18, marginBottom: 20 }}>Select an alarm type</Text>
+              <Text style={{fontSize: 18, marginBottom: 20}}>
+                {t('AddReminder:selectAlarmType')}
+              </Text>
               <Pressable
                 style={[
                   styles.actionBtn,
@@ -224,8 +226,22 @@ export default function AddReminder({navigation}) {
                   setAlarmType('One-time');
                   setShowAlarmTypePicker(!showAlarmTypePicker);
                 }}>
-                <Text style={[alarmType === "One-time" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>One-time</Text>
-                <Text style={[alarmType === "One-time" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>Reminder which does not repeat regularly</Text>
+                <Text
+                  style={[
+                    alarmType === 'One-time'
+                      ? [styles.baseFont, styles.fontWhite]
+                      : [styles.baseFont, styles.fontBlack],
+                  ]}>
+                  {t('AddReminder:oneTime')}
+                </Text>
+                <Text
+                  style={[
+                    alarmType === 'One-time'
+                      ? [styles.smallFont, styles.fontWhite]
+                      : [styles.smallFont, styles.fontBlack],
+                  ]}>
+                  {t('AddReminder:oneTimeDescription')}
+                </Text>
               </Pressable>
               <Pressable
                 style={[
@@ -239,9 +255,21 @@ export default function AddReminder({navigation}) {
                   setAlarmType('Meta');
                   setShowAlarmTypePicker(!showAlarmTypePicker);
                 }}>
-                <Text style={[alarmType === "Meta" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>Meta</Text>
-                <Text style={[alarmType === "Meta" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>
-                  Reminder whose purpose is to remind you about adding reminders
+                <Text
+                  style={[
+                    alarmType === 'Meta'
+                      ? [styles.baseFont, styles.fontWhite]
+                      : [styles.baseFont, styles.fontBlack],
+                  ]}>
+                  {t('AddReminder:meta')}
+                </Text>
+                <Text
+                  style={[
+                    alarmType === 'Meta'
+                      ? [styles.smallFont, styles.fontWhite]
+                      : [styles.smallFont, styles.fontBlack],
+                  ]}>
+                  {t('AddReminder:metaDescription')}
                 </Text>
               </Pressable>
             </ScrollView>
@@ -339,19 +367,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   baseFont: {
-    fontSize: 16
+    fontSize: 16,
   },
   smallFont: {
     marginVertical: 6,
     fontSize: 12,
   },
   fontWhite: {
-    color: '#fff'
+    color: '#fff',
   },
   fontBlack: {
-    color: '#333'
+    color: '#333',
   },
   whiteSpace: {
-    marginBottom: 60
-  }
+    marginBottom: 60,
+  },
 });

@@ -6,7 +6,14 @@ export default {
   eventTime: 'Event Time',
   interval: 'Interval (in minutes)',
   alarmSound: 'Alarm Sound',
+  alarmType: 'Alarm Type',
   repeat: 'Repeat',
+  selectAlarmType: 'Select an alarm type',
+  oneTime: 'One-time',
+  oneTimeDescription: 'Reminder which does not repeat regularly',
+  meta: 'Meta',
+  metaDescription:
+    'Reminder whose purpose is to remind you about adding reminders',
   add: 'Add',
   cancel: 'Cancel',
 
