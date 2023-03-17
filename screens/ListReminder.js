@@ -21,6 +21,7 @@ const ListReminder = props => {
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
+      
       var allAlarms = [];
       if (reminder.repeat > 0) {
         for (var i = 1; i <= reminder.repeat; i++) {
