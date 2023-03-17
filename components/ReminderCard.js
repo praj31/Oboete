@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 4,
     padding: 16,
-    backgroundColor: '#f7f7f7'
+    backgroundColor: '#f7f7f7',
   },
   r_title: {
     fontSize: 18,

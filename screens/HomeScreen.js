@@ -17,11 +17,17 @@ import { updateAlarms, deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
+import LanguageModal from '../components/LanguageModal';
+import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 
 export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
+  const { i18n } = useTranslation();
+
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     async function getTodayReminders() {
@@ -75,6 +81,9 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
+  const languageChange = lang => {
+    i18n.changeLanguage(lang);
+  };
 
   return (
     <GestureRecognizer
@@ -108,10 +117,11 @@ export default function HomeScreen({ navigation }) {
             placeholder={'Relaxing'}
             contentFit="cover"
           />
-          <Text style={styles.prompt}>No events today. Take your day off!</Text>
+          <Text style={styles.prompt}>{t('HomeScreen:noEventsToday')}</Text>
         </View>
       )}
 
+      <LanguageModal languageChange={languageChange} />
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.addBtn}

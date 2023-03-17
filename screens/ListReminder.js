@@ -12,6 +12,7 @@ import { getData, removeKey } from '../api/storage';
 import { deleteAlarms } from '../api/alarm';
 import { displayToast } from '../api/toast';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { useIsFocused } from '@react-navigation/native';
 
 const ListReminder = props => {
@@ -20,6 +21,8 @@ const ListReminder = props => {
   const navigation = props.navigation;
   const id = props.route.params.id;
   const [isLoading, setIsLoading] = React.useState(true);
+
+  const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
@@ -52,7 +55,7 @@ const ListReminder = props => {
   const deleteEvent = async id => {
     await deleteAlarms(id);
     await removeKey(id);
-    displayToast('success', 'Reminder deleted!');
+    displayToast('success', t('Global:reminderDeleted'));
     navigation.goBack();
   };
   if (isLoading) {
@@ -70,36 +73,34 @@ const ListReminder = props => {
           onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={30} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.h1}>Reminder Details</Text>
+        <Text style={styles.h1}>{t('ListReminder:reminderDetail')}</Text>
       </View>
       {reminder && (
         <ScrollView style={styles.detailsCard}>
-          <Text style={styles.title}>Title</Text>
+          <Text style={styles.title}>{t('ListReminder:title')}</Text>
           <Text style={styles.value}>{reminder.title}</Text>
-          {reminder.note.length > 0 && (
-            <>
-              <Text style={styles.title}>Description</Text>
-              <Text style={styles.value}>{reminder.note}</Text>
-            </>
-          )}
-          <Text style={styles.title}>Date</Text>
+          {reminder.note && reminder.note.length > 0 && <View>
+            <Text style={styles.title}>Description</Text>
+            <Text style={styles.value}>{reminder.note}</Text>
+          </View>}
+          <Text style={styles.title}>{t('ListReminder:date')}</Text>
           <Text style={styles.value}>
             {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LL')}
           </Text>
-          <Text style={styles.title}>Time</Text>
+          <Text style={styles.title}>{t('ListReminder:time')}</Text>
           <Text style={styles.value}>
             {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LT')}
           </Text>
-          <Text style={styles.title}>Interval</Text>
+          <Text style={styles.title}>{t('ListReminder:interval')}</Text>
           <Text style={styles.value}>{reminder.interval ?? 0} minute(s)</Text>
-          <Text style={styles.title}>Repeat</Text>
+          <Text style={styles.title}>{t('ListReminder:repeat')}</Text>
           <Text style={styles.value}>{reminder.repeat ?? 0} time(s)</Text>
           <Text style={styles.title}>Alarm Type</Text>
           <Text style={styles.value}>{reminder.alarmType}</Text>
 
           {reminder.repeat > 0 && (
             <View style={styles.alarms}>
-              <Text style={styles.alarmTitle}>Alarms</Text>
+              <Text style={styles.alarmTitle}>{t('ListReminder:alarms')}</Text>
               {alarms?.map((item, i) => (
                 <View key={i} style={styles.alarmTab}>
                   <Text style={styles.alarmTime}>{item}</Text>
@@ -117,14 +118,18 @@ const ListReminder = props => {
             onPress={() => {
               deleteEvent(id);
             }}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>Delete</Text>
+            <Text style={{ color: '#fff', fontSize: 16 }}>
+              {t('ListReminder:delete')}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.editBtn]}
             onPress={() => navigation.navigate('EditReminder', { id: id })}>
-            <Text style={{ fontSize: 16, color: '#111' }}>Edit</Text>
+            <Text style={{ fontSize: 16, color: '#111' }}>
+              {t('ListReminder:edit')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
