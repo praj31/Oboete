@@ -41,7 +41,6 @@ export default function AddReminder({ navigation }) {
 
   const addEventClicked = async () => {
     let permission = await checkNotificationPermissionFunc();
-
     if (permission === true) {
       if (title) {
         let reminder = {
@@ -51,9 +50,10 @@ export default function AddReminder({ navigation }) {
           repeat: Number(repeat) ?? 0,
           note: note
         };
+        console.log(reminder)
         if (
-          moment(date).format('YYYY-MM-DD LT') <=
-          moment().format('YYYY-MM-DD LT')
+          moment(date) <=
+          moment()
         ) {
           return alert('Cannot choose current or past time!');
         }
@@ -64,7 +64,6 @@ export default function AddReminder({ navigation }) {
             Number(interval),
             Number(repeat),
           );
-
           if (alarms.length === 0)
             return alert(
               'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',

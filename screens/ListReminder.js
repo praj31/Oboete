@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
-import {displayToast} from '../api/toast';
+import { getData, removeKey } from '../api/storage';
+import { deleteAlarms } from '../api/alarm';
+import { displayToast } from '../api/toast';
 import moment from 'moment';
 
 const ListReminder = props => {
@@ -49,7 +49,7 @@ const ListReminder = props => {
     await deleteAlarms(id);
     await removeKey(id);
     displayToast('success', 'Reminder deleted!');
-    navigation.navigate('Home');
+    navigation.goBack();
   };
   if (isLoading) {
     return (
@@ -109,14 +109,14 @@ const ListReminder = props => {
             onPress={() => {
               deleteEvent(id);
             }}>
-            <Text style={{color: '#fff', fontSize: 16}}>Delete</Text>
+            <Text style={{ color: '#fff', fontSize: 16 }}>Delete</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.editBtn]}
-            onPress={() => navigation.navigate('EditReminder', {id: id})}>
-            <Text style={{fontSize: 16, color: '#111'}}>Edit</Text>
+            onPress={() => navigation.navigate('EditReminder', { id: id })}>
+            <Text style={{ fontSize: 16, color: '#111' }}>Edit</Text>
           </TouchableOpacity>
         </View>
       </View>

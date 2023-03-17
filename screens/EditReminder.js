@@ -7,16 +7,14 @@ import {
   Pressable,
   ScrollView,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {getData, storeData} from '../api/storage';
-import {checkAlarmValidity, setupAlarms, updateAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
-import {getAllKeys} from '../api/storage';
+import { getData, storeData } from '../api/storage';
+import { checkAlarmValidity, updateAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
@@ -28,15 +26,15 @@ export default function EditReminder(props) {
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
 
-  const [reminder, setReminder] = React.useState({});
+  const [_, setReminder] = React.useState({});
   const navigation = props.navigation;
   const id = props.route.params.id;
-  console.log('id:---', id);
+
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
       if (reminder) {
-        // console.log("edit reminder is: ",reminder);
+        // // console.log("edit reminder is: ",reminder);
         setTitle(reminder.title);
         setNote(reminder.note)
         setInterval(reminder.interval.toString());
@@ -73,16 +71,15 @@ export default function EditReminder(props) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
-          note:note
+          note: note
         };
         if (
-          moment(date).format('YYYY-MM-DD LT') <=
-          moment().format('YYYY-MM-DD LT')
+          moment(date) <=
+          moment()
         ) {
           return alert('Cannot choose current or past time!');
         }
         let status = await checkAlarmValidity(moment(date), interval, repeat);
-
         if (status) {
           try {
             const alarms = await updateAlarms(
@@ -92,8 +89,7 @@ export default function EditReminder(props) {
               Number(repeat),
               id,
             );
-
-            reminder = {...reminder, alarms};
+            reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', 'Reminder Modified!');
             navigation.navigate('Home');
@@ -168,8 +164,8 @@ export default function EditReminder(props) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>Interval (in minutes)</Text>
             <TextInput
               value={interval}
@@ -178,7 +174,7 @@ export default function EditReminder(props) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>Repeat</Text>
             <TextInput
               value={repeat}
@@ -195,14 +191,14 @@ export default function EditReminder(props) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={editButtonClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>Update</Text>
+            <Text style={{ color: '#fff', fontSize: 16 }}>Update</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>Cancel</Text>
+            <Text style={{ fontSize: 16, color: '#111' }}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
