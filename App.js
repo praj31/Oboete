@@ -6,6 +6,7 @@ import AddReminder from './screens/AddReminder';
 import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
 import moment from 'moment';
+import { getAllKeys } from './api/storage';
 
 import { clearAll } from './api/storage';
 
@@ -36,6 +37,12 @@ export default function App() {
     ReactNativeAN.stopAlarmSound();
     loadAlarmListeners();
     setIsAppReady(true);
+    async function getAll() {
+      const all = ReactNativeAN.getScheduledAlarms()
+      // const all = await getAllKeys()
+      console.log("All--", all);
+    }
+    getAll()
   }, []);
 
 

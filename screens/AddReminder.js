@@ -6,8 +6,8 @@ import {
   TextInput,
   Pressable,
   ScrollView,
+  Modal,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -28,6 +28,8 @@ export default function AddReminder({ navigation }) {
   const [showTimePicker, setShowTimePicker] = React.useState(false);
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
+  const [alarmType, setAlarmType] = React.useState('One-time');
+  const [showAlarmTypePicker, setShowAlarmTypePicker] = React.useState(false);
 
   const [selectedSound, setSelectedSound] = React.useState('sound1.mp3');
   const [chosenSound, setChosenSound] = React.useState(
@@ -59,12 +61,10 @@ export default function AddReminder({ navigation }) {
           repeat: Number(repeat) ?? 0,
           note: note,
           sound_name: selectedSound,
+          alarmType,
         };
-        console.log(reminder)
-        if (
-          moment(date) <=
-          moment()
-        ) {
+        console.log(reminder);
+        if (moment(date) <= moment()) {
           return alert(t('AddReminder:pastTimeAlert'));
         }
         try {
@@ -89,6 +89,13 @@ export default function AddReminder({ navigation }) {
       }
     }
   };
+
+  React.useEffect(() => {
+    if (alarmType === "Meta") {
+      setInterval(0);
+      setRepeat(0);
+    }
+  }, [alarmType])
 
   // const performTest = async () => {
   // const test_date = new Date(Date.now() + 60 * 1000)
@@ -165,7 +172,8 @@ export default function AddReminder({ navigation }) {
           <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
-              value={interval}
+              value={alarmType === "Meta" ? "0" : interval}
+              editable={alarmType === "One-time"}
               style={styles.textinput}
               keyboardType="numeric"
               onChangeText={setInterval}
@@ -174,7 +182,8 @@ export default function AddReminder({ navigation }) {
           <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
-              value={repeat}
+              value={alarmType === "Meta" ? "0" : repeat}
+              editable={alarmType === "One-time"}
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
@@ -182,6 +191,62 @@ export default function AddReminder({ navigation }) {
             />
           </View>
         </View>
+        <Text style={styles.label}>Alarm Type</Text>
+        <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
+          <TextInput
+            value={alarmType}
+            style={[styles.textinput, styles.whiteSpace]}
+            editable={false}
+          />
+        </Pressable>
+        {showAlarmTypePicker && (
+          <Modal
+            visible={showAlarmTypePicker}
+            onRequestClose={() => {
+              setShowAlarmTypePicker(!showAlarmTypePicker);
+            }}>
+            <ScrollView
+              style={{
+                padding: 24,
+                marginTop: 32,
+                width: '100%',
+              }}>
+              <Text style={{ fontSize: 18, marginBottom: 20 }}>Select an alarm type</Text>
+              <Pressable
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'One-time'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('One-time');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "One-time" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>One-time</Text>
+                <Text style={[alarmType === "One-time" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>Reminder which does not repeat regularly</Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.actionBtn,
+                  alarmType === 'Meta'
+                    ? styles.primaryBtn
+                    : styles.secondaryBtn,
+                  styles.selectBtn,
+                ]}
+                onPress={() => {
+                  setAlarmType('Meta');
+                  setShowAlarmTypePicker(!showAlarmTypePicker);
+                }}>
+                <Text style={[alarmType === "Meta" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>Meta</Text>
+                <Text style={[alarmType === "Meta" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>
+                  Reminder whose purpose is to remind you about adding reminders
+                </Text>
+              </Pressable>
+            </ScrollView>
+          </Modal>
+        )}
         <SoundModal
           chosenSound={chosenSound}
           setChosenSound={setChosenSound}
@@ -269,4 +334,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
+  selectBtn: {
+    marginVertical: 12,
+    alignItems: 'flex-start',
+  },
+  baseFont: {
+    fontSize: 16
+  },
+  smallFont: {
+    marginVertical: 6,
+    fontSize: 12,
+  },
+  fontWhite: {
+    color: '#fff'
+  },
+  fontBlack: {
+    color: '#333'
+  },
+  whiteSpace: {
+    marginBottom: 60
+  }
 });
