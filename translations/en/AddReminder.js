@@ -1,6 +1,7 @@
 export default {
   newReminder: 'New Reminder',
   eventTitle: 'Event Title',
+  eventDescription: 'Event Description (optional)',
   eventDate: 'Event Date',
   eventTime: 'Event Time',
   interval: 'Interval (in minutes)',

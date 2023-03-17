@@ -79,10 +79,12 @@ const ListReminder = props => {
         <ScrollView style={styles.detailsCard}>
           <Text style={styles.title}>{t('ListReminder:title')}</Text>
           <Text style={styles.value}>{reminder.title}</Text>
-          {reminder.note && reminder.note.length > 0 && <View>
-            <Text style={styles.title}>Description</Text>
-            <Text style={styles.value}>{reminder.note}</Text>
-          </View>}
+          {reminder.note && reminder.note.length > 0 && (
+            <View>
+              <Text style={styles.title}>{t('ListReminder:description')}</Text>
+              <Text style={styles.value}>{reminder.note}</Text>
+            </View>
+          )}
           <Text style={styles.title}>{t('ListReminder:date')}</Text>
           <Text style={styles.value}>
             {moment(reminder.datetime, 'YYYY-MM-DD LT').format('LL')}
@@ -97,6 +99,9 @@ const ListReminder = props => {
           <Text style={styles.value}>{reminder.repeat ?? 0} time(s)</Text>
           <Text style={styles.title}>Alarm Type</Text>
           <Text style={styles.value}>{reminder.alarmType}</Text>
+          <Text style={styles.title}>{t('ListReminder:alarmSound')}</Text>
+          <Text style={styles.value}>{reminder.sound_name}</Text>
+
 
           {reminder.repeat > 0 && (
             <View style={styles.alarms}>
