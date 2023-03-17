@@ -16,6 +16,8 @@ import {storeData} from '../api/storage';
 import {setupAlarms} from '../api/alarm';
 import {checkNotificationPermissionFunc} from '../api/notification';
 import {displayToast} from '../api/toast';
+import {useTranslation} from 'react-i18next';
+import SoundModal from '../components/SoundModal';
 
 export default function AddReminder({navigation}) {
   moment.tz.setDefault();
@@ -25,6 +27,13 @@ export default function AddReminder({navigation}) {
   const [showTimePicker, setShowTimePicker] = React.useState(false);
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
+
+  const [selectedSound, setSelectedSound] = React.useState('sound1.mp3');
+  const [chosenSound, setChosenSound] = React.useState(
+    selectedSound || 'sound1.mp3',
+  );
+
+  const {t} = useTranslation();
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -48,12 +57,13 @@ export default function AddReminder({navigation}) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          sound_name: selectedSound,
         };
         if (
           moment(date).format('YYYY-MM-DD LT') <=
           moment().format('YYYY-MM-DD LT')
         ) {
-          return alert('Cannot choose current or past time!');
+          return alert(t('AddReminder:pastTimeAlert'));
         }
         try {
           const alarms = await setupAlarms(
@@ -61,21 +71,20 @@ export default function AddReminder({navigation}) {
             date,
             Number(interval),
             Number(repeat),
+            selectedSound,
           );
 
           if (alarms.length === 0)
-            return alert(
-              'The alarm(s) you are trying to set is/are already set for another reminder or are of a time in past. Please check.',
-            );
+            return alert(t('AddReminder:alarmConflictAlert'));
           reminder = {...reminder, alarms};
           await storeData(reminder);
-          displayToast('success', 'Reminder added!');
+          displayToast('success', t('Global:reminderAdded'));
           navigation.goBack();
         } catch (err) {
           alert(err);
         }
       } else {
-        alert('Please fill all the fields!');
+        alert(t('AddReminder:allFieldError'));
       }
     }
   };
@@ -97,16 +106,16 @@ export default function AddReminder({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>New Reminder</Text>
+      <Text style={styles.h1}>{t('AddReminder:newReminder')}</Text>
       <ScrollView>
-        <Text style={styles.label}>Event Title</Text>
+        <Text style={styles.label}>{t('AddReminder:eventTitle')}</Text>
         <TextInput
           value={title}
           style={styles.textinput}
           onChangeText={setTitle}
           maxLength={40}
         />
-        <Text style={styles.label}>Event date</Text>
+        <Text style={styles.label}>{t('AddReminder:eventDate')}</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
           <TextInput
             autoFocus={true}
@@ -126,7 +135,7 @@ export default function AddReminder({navigation}) {
             onChange={onChangeDate}
           />
         )}
-        <Text style={styles.label}>Event time</Text>
+        <Text style={styles.label}>{t('AddReminder:eventTime')}</Text>
         <Pressable onPress={() => setShowTimePicker(!showTimePicker)}>
           <TextInput
             style={styles.textinput}
@@ -146,7 +155,7 @@ export default function AddReminder({navigation}) {
         )}
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flex: 1, marginRight: 4}}>
-            <Text style={styles.label}>Interval (in minutes)</Text>
+            <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
               value={interval}
               style={styles.textinput}
@@ -155,7 +164,7 @@ export default function AddReminder({navigation}) {
             />
           </View>
           <View style={{flex: 1, marginLeft: 4}}>
-            <Text style={styles.label}>Repeat</Text>
+            <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
               value={repeat}
               inputMode="numeric"
@@ -165,6 +174,13 @@ export default function AddReminder({navigation}) {
             />
           </View>
         </View>
+        <SoundModal
+          chosenSound={chosenSound}
+          setChosenSound={setChosenSound}
+          selectedSound={selectedSound}
+          setSelectedSound={setSelectedSound}
+        />
+
         {/* <Button title="Test" onPress={performTest} /> */}
       </ScrollView>
       <View style={styles.footer}>
@@ -172,14 +188,18 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>Add</Text>
+            <Text style={{color: '#fff', fontSize: 16}}>
+              {t('AddReminder:add')}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>Cancel</Text>
+            <Text style={{fontSize: 16, color: '#111'}}>
+              {t('AddReminder:cancel')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,7 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 export default function TabNavigation({navigation, screenName}) {
+  const {t} = useTranslation();
+
   return (
     <View style={styles.buttonContainer}>
       <TouchableOpacity
@@ -13,7 +16,7 @@ export default function TabNavigation({navigation, screenName}) {
           style={
             screenName === 'today' ? styles.activeButtonText : styles.buttonText
           }>
-          Today
+          {t('HomeScreen:today')}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -27,7 +30,7 @@ export default function TabNavigation({navigation, screenName}) {
               ? styles.activeButtonText
               : styles.buttonText
           }>
-          Upcoming
+          {t('HomeScreen:upcoming')}
         </Text>
       </TouchableOpacity>
     </View>

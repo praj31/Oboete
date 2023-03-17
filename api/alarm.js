@@ -21,7 +21,13 @@ export const loadAlarmListeners = async () => {
   });
 };
 
-export const setupAlarms = async (title, date, interval, repeat) => {
+export const setupAlarms = async (
+  title,
+  date,
+  interval,
+  repeat,
+  selectedSound,
+) => {
   let alarms = [];
   if (interval === 0) repeat = 0;
   try {
@@ -32,11 +38,19 @@ export const setupAlarms = async (title, date, interval, repeat) => {
         moment(date)
           .subtract(i * interval, 'minutes')
           .toDate(),
+        selectedSound,
       );
       alarms.push(identifier.id);
     }
+
+    console.log('====================================');
+    console.log(alarms);
+    console.log('====================================');
     return alarms;
   } catch (err) {
+    console.log('====================================');
+    console.log(err);
+    console.log('====================================');
     for (let alarm of alarms) {
       await cancelScheduledPushNotification(alarm);
     }
@@ -56,7 +70,14 @@ export const deleteAlarms = async id => {
   }
 };
 
-export const updateAlarms = async (title, date, interval, repeat, id) => {
+export const updateAlarms = async (
+  title,
+  date,
+  interval,
+  repeat,
+  id,
+  selectedSound,
+) => {
   let alarms = [];
   if (interval === 0) repeat = 0;
 
@@ -70,9 +91,11 @@ export const updateAlarms = async (title, date, interval, repeat, id) => {
         moment(date)
           .subtract(i * interval, 'minutes')
           .toDate(),
+        selectedSound,
       );
       alarms.push(identifier.id);
     }
+
     return alarms;
   } catch (err) {
     for (let alarm of alarms) {

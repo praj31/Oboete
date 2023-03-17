@@ -5,7 +5,12 @@ import {
   checkNotificationPermission,
 } from 'react-native-check-notification-permission';
 
-export const schedulePushNotification = async (title, minutes, date) => {
+export const schedulePushNotification = async (
+  title,
+  minutes,
+  date,
+  selectedSound,
+) => {
   const trigger = new Date(date);
   trigger.setMilliseconds(0);
   trigger.setSeconds(0);
@@ -16,6 +21,7 @@ export const schedulePushNotification = async (title, minutes, date) => {
   const alarmNotifData = {
     title: reminderMessage,
     message: title,
+    sound_name: selectedSound || 'sound1.mp3',
     channel: 'my_channel_id',
     small_icon: 'ic_launcher',
     has_button: true,
