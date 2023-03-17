@@ -6,44 +6,48 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  Button,
 } from 'react-native';
 import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
-import TodayReminderCard from '../components/TodayReminderCard';
-import {useIsFocused} from '@react-navigation/native';
-import {getAllToday, getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
+import ReminderCard from '../components/ReminderCard';
+import { useIsFocused } from '@react-navigation/native';
+import { getAllToday, getData, removeKey } from '../api/storage';
 import TabNavigation from '../components/TabNavigation';
-import {useState, useEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
-
-import {useTranslation} from 'react-i18next';
+import { ActivityIndicator } from 'react-native';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import LanguageModal from '../components/LanguageModal';
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
+  const { i18n } = useTranslation();
 
-  const {i18n} = useTranslation();
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     async function getTodayReminders() {
       const data = await getAllToday();
-
       let events = [];
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({id: entry, ...item});
+          // console.log("inside item",item);
+          let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if (eventTime.isAfter(moment())) {
+            // console.log("all alarms are: ", item);
+            events.push({ id: entry, ...item });
+          }
+          else {
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
         }
       }
-
+      events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
       setReminders(events);
       setIsLoading(false);
     }
@@ -51,7 +55,7 @@ export default function HomeScreen({navigation}) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', {id: id});
+    navigation.navigate('ListReminder', { id: id });
   };
 
   if (isLoading) {
@@ -73,18 +77,16 @@ export default function HomeScreen({navigation}) {
       <Container position="top" />
 
       <TabNavigation navigation={navigation} screenName={'today'} />
-
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{height: '100%'}}>
+          style={{ height: '100%' }}>
           {reminders.map(event => (
             <TouchableOpacity
               key={event.id}
               onPress={() => onClickReminderCard(event.id)}>
-              <TodayReminderCard
-                navigation={navigation}
+              <ReminderCard
                 key={event.id}
                 event={event}
               />

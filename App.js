@@ -1,22 +1,22 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import AddReminder from './screens/AddReminder';
 import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
 import moment from 'moment';
 
-import {clearAll} from './api/storage';
+import { clearAll } from './api/storage';
 
 import './constants/DCSLocalize';
 
 //for alarm
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
-import {loadAlarmListeners} from './api/alarm';
+import { loadAlarmListeners } from './api/alarm';
 import ToastManager from 'toastify-react-native';
 import EditReminder from './screens/EditReminder';
-import {WithSplashScreen} from './screens/Splash';
+import { WithSplashScreen } from './screens/Splash';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +37,7 @@ export default function App() {
     loadAlarmListeners();
     setIsAppReady(true);
   }, []);
+
 
   // React.useEffect(() => {
   //   initialize().then((context) => {
@@ -65,22 +66,22 @@ export default function App() {
           <Stack.Screen
             name="AddReminder"
             component={AddReminder}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="EditReminder"
             component={EditReminder}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Upcoming"
             component={Upcoming}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="ListReminder"
             component={ListReminder}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

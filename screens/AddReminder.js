@@ -12,16 +12,17 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {storeData} from '../api/storage';
-import {setupAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { storeData } from '../api/storage';
+import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 
-export default function AddReminder({navigation}) {
+export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
+  const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
@@ -33,7 +34,7 @@ export default function AddReminder({navigation}) {
     selectedSound || 'sound1.mp3',
   );
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -49,7 +50,6 @@ export default function AddReminder({navigation}) {
 
   const addEventClicked = async () => {
     let permission = await checkNotificationPermissionFunc();
-
     if (permission === true) {
       if (title) {
         let reminder = {
@@ -57,11 +57,13 @@ export default function AddReminder({navigation}) {
           datetime: moment(date).format('YYYY-MM-DD LT').toString(),
           interval: Number(interval) ?? 0,
           repeat: Number(repeat) ?? 0,
+          note: note,
           sound_name: selectedSound,
         };
+        console.log(reminder)
         if (
-          moment(date).format('YYYY-MM-DD LT') <=
-          moment().format('YYYY-MM-DD LT')
+          moment(date) <=
+          moment()
         ) {
           return alert(t('AddReminder:pastTimeAlert'));
         }
@@ -73,10 +75,9 @@ export default function AddReminder({navigation}) {
             Number(repeat),
             selectedSound,
           );
-
           if (alarms.length === 0)
             return alert(t('AddReminder:alarmConflictAlert'));
-          reminder = {...reminder, alarms};
+          reminder = { ...reminder, alarms };
           await storeData(reminder);
           displayToast('success', t('Global:reminderAdded'));
           navigation.goBack();
@@ -114,6 +115,13 @@ export default function AddReminder({navigation}) {
           style={styles.textinput}
           onChangeText={setTitle}
           maxLength={40}
+        />
+        <Text style={styles.label}>Event Description (optional)</Text>
+        <TextInput
+          value={note}
+          style={styles.textinput}
+          onChangeText={setNote}
+          maxLength={140}
         />
         <Text style={styles.label}>{t('AddReminder:eventDate')}</Text>
         <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
@@ -153,8 +161,8 @@ export default function AddReminder({navigation}) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
               value={interval}
@@ -163,7 +171,7 @@ export default function AddReminder({navigation}) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
               value={repeat}
@@ -188,7 +196,7 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>
+            <Text style={{ color: '#fff', fontSize: 16 }}>
               {t('AddReminder:add')}
             </Text>
           </TouchableOpacity>
@@ -197,7 +205,7 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>
+            <Text style={{ fontSize: 16, color: '#111' }}>
               {t('AddReminder:cancel')}
             </Text>
           </TouchableOpacity>
@@ -240,6 +248,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     margin: 24,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
