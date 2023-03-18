@@ -3,12 +3,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as React from 'react'
 
 export default function ReminderCard({ event }) {
+  // console.log("event details: ",event);
+  const repeat = event.repeat;
   return (
     <View style={styles.r_card}>
       <View style={{ flex: 4 }}>
         <Text style={styles.r_title}>{event.title}</Text>
         <Text style={styles.r_datetime}>
-          {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}
+          {event.datetime.split(' ')[1]} {event.datetime.split(' ')[2]}&nbsp;&nbsp;{repeat!=0&&`•  ${repeat+1} Alarm(s)`}
         </Text>
       </View>
 

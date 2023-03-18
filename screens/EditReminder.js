@@ -107,7 +107,7 @@ export default function EditReminder(props) {
             reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', t('Global:reminderModified'));
-            navigation.goBack();
+            navigation.navigate("Home")
           } catch (err) {
             console.log(err);
             alert(err);
@@ -184,7 +184,9 @@ export default function EditReminder(props) {
               value={interval}
               style={styles.textinput}
               keyboardType="numeric"
-              onChangeText={setInterval}
+              onChangeText={(i)=>{
+                i<=60&&setInterval(i);
+              }}
             />
           </View>
           <View style={{ flex: 1, marginLeft: 4 }}>
@@ -194,7 +196,9 @@ export default function EditReminder(props) {
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
-              onChangeText={setRepeat}
+              onChangeText={(i)=>{
+                i<=10&&setRepeat(i);
+              }}
             />
           </View>
         </View>

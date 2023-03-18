@@ -176,7 +176,9 @@ export default function AddReminder({ navigation }) {
               editable={alarmType === 'One-time'}
               style={styles.textinput}
               keyboardType="numeric"
-              onChangeText={setInterval}
+              onChangeText={(i)=>{
+                i<=60&&setInterval(i);
+              }}
             />
           </View>
           <View style={{ flex: 1, marginLeft: 4 }}>
@@ -187,7 +189,9 @@ export default function AddReminder({ navigation }) {
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
-              onChangeText={setRepeat}
+              onChangeText={(i)=>{
+                i<=10&&setRepeat(i);
+              }}
             />
           </View>
         </View>
