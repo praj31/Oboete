@@ -1,6 +1,6 @@
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'react-native';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import SoundCard from './SoundCard';
 
 const Sound = require('react-native-sound');
@@ -24,7 +24,7 @@ function SoundModal({
   selectedSound,
   setSelectedSound,
 }) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   // const [selectedSound, setSelectedSound] = useState('sound1');
   // const [chosenSound, setChosenSound] = useState(selectedSound || 'sound1');
@@ -77,7 +77,7 @@ function SoundModal({
   // });
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Pressable onPress={toggleModal}>
         <Text style={styles.label}>{t('AddReminder:alarmSound')}</Text>
         <TextInput
@@ -102,7 +102,7 @@ function SoundModal({
           <ScrollView
             showsVerticalScrollIndicator={true}
             showsHorizontalScrollIndicator={true}
-            style={{height: '80%', padding: 12}}>
+            style={{ height: '80%', padding: 12 }}>
             {soundList.map((sound, index) => {
               return (
                 <TouchableOpacity key={sound.id}>
@@ -113,7 +113,7 @@ function SoundModal({
                     setSelectedSound={setSelectedSound}
                     chosenSound={chosenSound}
                     setChosenSound={setChosenSound}
-                    // audioArray={audioArray}
+                  // audioArray={audioArray}
                   />
                 </TouchableOpacity>
               );
@@ -124,7 +124,7 @@ function SoundModal({
               <TouchableOpacity
                 style={[styles.actionBtn, styles.primaryBtn]}
                 onPress={saveButtonClick}>
-                <Text style={{color: '#fff', fontSize: 16}}>
+                <Text style={{ color: '#fff', fontSize: 16 }}>
                   {t('Global:save')}
                 </Text>
               </TouchableOpacity>
@@ -133,7 +133,7 @@ function SoundModal({
               <TouchableOpacity
                 style={[styles.actionBtn, styles.secondaryBtn]}
                 onPress={cancelButtonClick}>
-                <Text style={{fontSize: 16, color: '#111'}}>
+                <Text style={{ fontSize: 16, color: '#111' }}>
                   {t('Global:cancel')}
                 </Text>
               </TouchableOpacity>

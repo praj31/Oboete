@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
-import {displayToast} from '../api/toast';
+import { getData, removeKey } from '../api/storage';
+import { deleteAlarms } from '../api/alarm';
+import { displayToast } from '../api/toast';
 import moment from 'moment';
-import {useTranslation} from 'react-i18next';
-import {useIsFocused} from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useIsFocused } from '@react-navigation/native';
 
 const ListReminder = props => {
   const [reminder, setReminder] = useState({});
@@ -22,7 +22,7 @@ const ListReminder = props => {
   const id = props.route.params.id;
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
@@ -79,7 +79,7 @@ const ListReminder = props => {
         <ScrollView style={styles.detailsCard}>
           <Text style={styles.title}>{t('ListReminder:title')}</Text>
           <Text style={styles.value}>{reminder.title}</Text>
-          {reminder.note && reminder.note.length > 0 && (
+          {reminder.note.length > 0 && (
             <View>
               <Text style={styles.title}>{t('ListReminder:description')}</Text>
               <Text style={styles.value}>{reminder.note}</Text>
@@ -122,7 +122,7 @@ const ListReminder = props => {
             onPress={() => {
               deleteEvent(id);
             }}>
-            <Text style={{color: '#fff', fontSize: 16}}>
+            <Text style={{ color: '#fff', fontSize: 16 }}>
               {t('ListReminder:delete')}
             </Text>
           </TouchableOpacity>
@@ -130,8 +130,8 @@ const ListReminder = props => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.editBtn]}
-            onPress={() => navigation.navigate('EditReminder', {id: id})}>
-            <Text style={{fontSize: 16, color: '#111'}}>
+            onPress={() => navigation.navigate('EditReminder', { id: id })}>
+            <Text style={{ fontSize: 16, color: '#111' }}>
               {t('ListReminder:edit')}
             </Text>
           </TouchableOpacity>

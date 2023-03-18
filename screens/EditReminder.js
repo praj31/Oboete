@@ -12,17 +12,17 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {getData, storeData} from '../api/storage';
-import {checkAlarmValidity, updateAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { getData, storeData } from '../api/storage';
+import { checkAlarmValidity, updateAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -104,7 +104,7 @@ export default function EditReminder(props) {
               id,
               selectedSound,
             );
-            reminder = {...reminder, alarms};
+            reminder = { ...reminder, alarms };
             await storeData(reminder);
             displayToast('success', t('Global:reminderModified'));
             navigation.goBack();
@@ -177,8 +177,8 @@ export default function EditReminder(props) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
               value={interval}
@@ -187,7 +187,7 @@ export default function EditReminder(props) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
               value={repeat}
@@ -202,10 +202,16 @@ export default function EditReminder(props) {
         <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
           <TextInput
             value={alarmType}
-            style={[styles.textinput, styles.whiteSpace]}
+            style={styles.textinput}
             editable={false}
           />
         </Pressable>
+        <SoundModal
+          chosenSound={chosenSound}
+          setChosenSound={setChosenSound}
+          selectedSound={selectedSound}
+          setSelectedSound={setSelectedSound}
+        />
         {showAlarmTypePicker && (
           <Modal
             visible={showAlarmTypePicker}
@@ -254,19 +260,13 @@ export default function EditReminder(props) {
             </ScrollView>
           </Modal>
         )}
-        <SoundModal
-          chosenSound={chosenSound}
-          setChosenSound={setChosenSound}
-          selectedSound={selectedSound}
-          setSelectedSound={setSelectedSound}
-        />
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={editButtonClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>
+            <Text style={{ color: '#fff', fontSize: 16 }}>
               {t('AddReminder:update')}
             </Text>
           </TouchableOpacity>
@@ -275,7 +275,7 @@ export default function EditReminder(props) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>
+            <Text style={{ fontSize: 16, color: '#111' }}>
               {t('AddReminder:cancel')}
             </Text>
           </TouchableOpacity>

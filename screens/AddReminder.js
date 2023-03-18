@@ -12,14 +12,14 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {storeData} from '../api/storage';
-import {setupAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { storeData } from '../api/storage';
+import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 
-export default function AddReminder({navigation}) {
+export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
@@ -36,7 +36,7 @@ export default function AddReminder({navigation}) {
     selectedSound || 'sound1.mp3',
   );
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -77,7 +77,7 @@ export default function AddReminder({navigation}) {
           );
           if (alarms.length === 0)
             return alert(t('AddReminder:alarmConflictAlert'));
-          reminder = {...reminder, alarms};
+          reminder = { ...reminder, alarms };
           await storeData(reminder);
           displayToast('success', t('Global:reminderAdded'));
           navigation.goBack();
@@ -168,8 +168,8 @@ export default function AddReminder({navigation}) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, marginRight: 4 }}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
               value={alarmType === 'Meta' ? '0' : interval}
@@ -179,7 +179,7 @@ export default function AddReminder({navigation}) {
               onChangeText={setInterval}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 4}}>
+          <View style={{ flex: 1, marginLeft: 4 }}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
               value={alarmType === 'Meta' ? '0' : repeat}
@@ -195,7 +195,7 @@ export default function AddReminder({navigation}) {
         <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
           <TextInput
             value={alarmType}
-            style={[styles.textinput, styles.whiteSpace]}
+            style={styles.textinput}
             editable={false}
           />
         </Pressable>
@@ -211,7 +211,7 @@ export default function AddReminder({navigation}) {
                 marginTop: 32,
                 width: '100%',
               }}>
-              <Text style={{fontSize: 18, marginBottom: 20}}>
+              <Text style={{ fontSize: 18, marginBottom: 20 }}>
                 {t('AddReminder:selectAlarmType')}
               </Text>
               <Pressable
@@ -289,7 +289,7 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={addEventClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>
+            <Text style={{ color: '#fff', fontSize: 16 }}>
               {t('AddReminder:add')}
             </Text>
           </TouchableOpacity>
@@ -298,7 +298,7 @@ export default function AddReminder({navigation}) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>
+            <Text style={{ fontSize: 16, color: '#111' }}>
               {t('AddReminder:cancel')}
             </Text>
           </TouchableOpacity>
