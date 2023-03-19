@@ -9,4 +9,6 @@ export default {
   selectSound: 'Select Sound :',
   save: 'Save',
   cancel: 'Cancel',
+
+  changeLanguage: 'Change Language',
 };

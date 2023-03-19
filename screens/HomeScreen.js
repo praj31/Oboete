@@ -11,23 +11,23 @@ import Container from 'toastify-react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReminderCard from '../components/ReminderCard';
-import { useIsFocused } from '@react-navigation/native';
-import { getAllToday, getData, removeKey, storeData } from '../api/storage';
-import { updateAlarms, deleteAlarms } from '../api/alarm';
+import {useIsFocused} from '@react-navigation/native';
+import {getAllToday, getData, removeKey, storeData} from '../api/storage';
+import {updateAlarms, deleteAlarms} from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import LanguageModal from '../components/LanguageModal';
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
-  const { i18n } = useTranslation();
+  const {i18n} = useTranslation();
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   React.useEffect(() => {
     async function getTodayReminders() {
@@ -40,12 +40,19 @@ export default function HomeScreen({ navigation }) {
           let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
           if (eventTime.isAfter(moment())) {
             // console.log("all alarms are: ", item);
-            events.push({ id: entry, ...item });
-          }
-          else {
-            if (item.alarmType === "Meta") {
-              console.log(moment(item.datetime, 'YYYY-MM-DD LT').add(1, 'day').toString())
-              let updatedReminder = { ...item, datetime: moment(item.datetime, 'YYYY-MM-DD LT').add(1, 'day').format('YYYY-MM-DD LT').toString() }
+            events.push({id: entry, ...item});
+          } else {
+            if (item.alarmType === 'Meta') {
+              console.log(
+                moment(item.datetime, 'YYYY-MM-DD LT').add(1, 'day').toString(),
+              );
+              let updatedReminder = {
+                ...item,
+                datetime: moment(item.datetime, 'YYYY-MM-DD LT')
+                  .add(1, 'day')
+                  .format('YYYY-MM-DD LT')
+                  .toString(),
+              };
               const alarms = await updateAlarms(
                 updatedReminder.title,
                 moment(updatedReminder.datetime, 'YYYY-MM-DD LT').toDate(),
@@ -53,7 +60,7 @@ export default function HomeScreen({ navigation }) {
                 Number(updatedReminder.repeat),
                 entry,
               );
-              updatedReminder = { ...updatedReminder, alarms };
+              updatedReminder = {...updatedReminder, alarms};
               await storeData(updatedReminder);
             } else {
               await deleteAlarms(entry);
@@ -62,7 +69,11 @@ export default function HomeScreen({ navigation }) {
           }
         }
       }
-      events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
+      events.sort(
+        (a, b) =>
+          moment(a.datetime, 'YYYY-MM-DD LT') -
+          moment(b.datetime, 'YYYY-MM-DD LT'),
+      );
       setReminders(events);
       setIsLoading(false);
     }
@@ -70,7 +81,7 @@ export default function HomeScreen({ navigation }) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', { id: id });
+    navigation.navigate('ListReminder', {id: id});
   };
 
   if (isLoading) {
@@ -96,15 +107,12 @@ export default function HomeScreen({ navigation }) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
+          style={{height: '100%'}}>
           {reminders.map(event => (
             <TouchableOpacity
               key={event.id}
               onPress={() => onClickReminderCard(event.id)}>
-              <ReminderCard
-                key={event.id}
-                event={event}
-              />
+              <ReminderCard key={event.id} event={event} />
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -121,8 +129,8 @@ export default function HomeScreen({ navigation }) {
         </View>
       )}
 
-      <LanguageModal languageChange={languageChange} />
       <View style={styles.footer}>
+        <LanguageModal languageChange={languageChange} />
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => navigation.navigate('AddReminder')}>
@@ -153,6 +161,7 @@ const styles = StyleSheet.create({
   addBtn: {
     width: 60,
     height: 60,
+    top: 9,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#333',

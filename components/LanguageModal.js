@@ -15,6 +15,7 @@ import EnglishContent from '../translations/en/LanguageSelectionScreen';
 import FrenchContent from '../translations/fr/LanguageSelectionScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTranslation} from 'react-i18next';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 function LanguageModal({languageChange}) {
   const {i18n} = useTranslation();
@@ -77,9 +78,17 @@ function LanguageModal({languageChange}) {
     setModalVisible(!isModalVisible);
   };
 
+  const {t} = useTranslation();
+
   return (
     <View style={{flex: 1}}>
-      <Button title="Change Language" onPress={toggleModal} />
+      <Pressable>
+        <TouchableOpacity
+          style={{backgroundColor: '#333', padding: 10, borderRadius: 8}}
+          onPress={toggleModal}>
+          <Text style={{color: '#fff'}}>{t('Global:changeLanguage')}</Text>
+        </TouchableOpacity>
+      </Pressable>
 
       <Modal
         isVisible={isModalVisible}
