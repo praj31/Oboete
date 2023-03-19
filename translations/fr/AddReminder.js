@@ -5,11 +5,11 @@ export default {
   eventDate: "Date de l'événement",
   eventTime: "Heure de l'évènement",
   interval: 'Intervalle (en minutes)',
-  alarmType: "Type d'alarme",
+  alarmType: 'Type de rappel',
   alarmSound: "Bruit d'alarme",
 
   repeat: 'Répéter',
-  selectAlarmType: "Sélectionnez un type d'alarme",
+  selectAlarmType: 'Sélectionnez un type de rappel',
   oneTime: 'Une fois',
   oneTimeDescription: 'Rappel qui ne se répète pas régulièrement',
   meta: 'Méta',

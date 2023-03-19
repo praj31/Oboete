@@ -9,6 +9,6 @@ export default {
   delete: 'Delete',
   edit: 'Edit',
   alarmSound: 'Alarm Sound',
-  alarmType: 'Alarm Type',
+  alarmType: 'Reminder Type',
   description: 'Description',
 };
