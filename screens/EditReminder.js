@@ -7,22 +7,22 @@ import {
   Pressable,
   ScrollView,
   TouchableOpacity,
-  Modal
+  Modal,
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import { getData, storeData } from '../api/storage';
-import { checkAlarmValidity, updateAlarms } from '../api/alarm';
-import { checkNotificationPermissionFunc } from '../api/notification';
-import { displayToast } from '../api/toast';
-import { useTranslation } from 'react-i18next';
+import {getData, storeData} from '../api/storage';
+import {checkAlarmValidity, updateAlarms} from '../api/alarm';
+import {checkNotificationPermissionFunc} from '../api/notification';
+import {displayToast} from '../api/toast';
+import {useTranslation} from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -104,10 +104,10 @@ export default function EditReminder(props) {
               id,
               selectedSound,
             );
-            reminder = { ...reminder, alarms };
+            reminder = {...reminder, alarms};
             await storeData(reminder);
             displayToast('success', t('Global:reminderModified'));
-            navigation.goBack();
+            navigation.navigate('Home');
           } catch (err) {
             console.log(err);
             alert(err);
@@ -120,6 +120,13 @@ export default function EditReminder(props) {
       }
     }
   };
+
+  React.useEffect(() => {
+    if (alarmType === 'Meta') {
+      setInterval('0');
+      setRepeat('0');
+    }
+  }, [alarmType]);
 
   return (
     <View style={styles.container}>
@@ -177,20 +184,22 @@ export default function EditReminder(props) {
             onChange={onChangeTime}
           />
         )}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flex: 1, marginRight: 4 }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flex: 1, marginRight: 4}}>
             <Text style={styles.label}>{t('AddReminder:interval')}</Text>
             <TextInput
-              value={interval}
+              value={alarmType === 'Meta' ? '0' : interval}
+              editable={alarmType === 'One-time'}
               style={styles.textinput}
               keyboardType="numeric"
               onChangeText={setInterval}
             />
           </View>
-          <View style={{ flex: 1, marginLeft: 4 }}>
+          <View style={{flex: 1, marginLeft: 4}}>
             <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
             <TextInput
-              value={repeat}
+              value={alarmType === 'Meta' ? '0' : repeat}
+              editable={alarmType === 'One-time'}
               inputMode="numeric"
               style={styles.textinput}
               keyboardType="numeric"
@@ -224,7 +233,9 @@ export default function EditReminder(props) {
                 marginTop: 32,
                 width: '100%',
               }}>
-              <Text style={{ fontSize: 18, marginBottom: 20 }}>Select an alarm type</Text>
+              <Text style={{fontSize: 18, marginBottom: 20}}>
+                Select an alarm type
+              </Text>
               <Pressable
                 style={[
                   styles.actionBtn,
@@ -237,8 +248,22 @@ export default function EditReminder(props) {
                   setAlarmType('One-time');
                   setShowAlarmTypePicker(!showAlarmTypePicker);
                 }}>
-                <Text style={[alarmType === "One-time" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>One-time</Text>
-                <Text style={[alarmType === "One-time" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>Reminder which does not repeat regularly</Text>
+                <Text
+                  style={[
+                    alarmType === 'One-time'
+                      ? [styles.baseFont, styles.fontWhite]
+                      : [styles.baseFont, styles.fontBlack],
+                  ]}>
+                  One-time
+                </Text>
+                <Text
+                  style={[
+                    alarmType === 'One-time'
+                      ? [styles.smallFont, styles.fontWhite]
+                      : [styles.smallFont, styles.fontBlack],
+                  ]}>
+                  Reminder which does not repeat regularly
+                </Text>
               </Pressable>
               <Pressable
                 style={[
@@ -252,8 +277,20 @@ export default function EditReminder(props) {
                   setAlarmType('Meta');
                   setShowAlarmTypePicker(!showAlarmTypePicker);
                 }}>
-                <Text style={[alarmType === "Meta" ? [styles.baseFont, styles.fontWhite] : [styles.baseFont, styles.fontBlack]]}>Meta</Text>
-                <Text style={[alarmType === "Meta" ? [styles.smallFont, styles.fontWhite] : [styles.smallFont, styles.fontBlack]]}>
+                <Text
+                  style={[
+                    alarmType === 'Meta'
+                      ? [styles.baseFont, styles.fontWhite]
+                      : [styles.baseFont, styles.fontBlack],
+                  ]}>
+                  Meta
+                </Text>
+                <Text
+                  style={[
+                    alarmType === 'Meta'
+                      ? [styles.smallFont, styles.fontWhite]
+                      : [styles.smallFont, styles.fontBlack],
+                  ]}>
                   Reminder whose purpose is to remind you about adding reminders
                 </Text>
               </Pressable>
@@ -266,7 +303,7 @@ export default function EditReminder(props) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.primaryBtn]}
             onPress={editButtonClicked}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>
+            <Text style={{color: '#fff', fontSize: 16}}>
               {t('AddReminder:update')}
             </Text>
           </TouchableOpacity>
@@ -275,7 +312,7 @@ export default function EditReminder(props) {
           <TouchableOpacity
             style={[styles.actionBtn, styles.secondaryBtn]}
             onPress={() => navigation.goBack()}>
-            <Text style={{ fontSize: 16, color: '#111' }}>
+            <Text style={{fontSize: 16, color: '#111'}}>
               {t('AddReminder:cancel')}
             </Text>
           </TouchableOpacity>
@@ -343,19 +380,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   baseFont: {
-    fontSize: 16
+    fontSize: 16,
   },
   smallFont: {
     marginVertical: 6,
     fontSize: 12,
   },
   fontWhite: {
-    color: '#fff'
+    color: '#fff',
   },
   fontBlack: {
-    color: '#333'
+    color: '#333',
   },
   whiteSpace: {
-    marginBottom: 60
-  }
+    marginBottom: 60,
+  },
 });
