@@ -99,10 +99,10 @@ export default function HomeScreen({navigation}) {
   return (
     <GestureRecognizer
       style={styles.container}
-      onSwipeLeft={() => navigation.navigate('Upcoming')}>
+      onSwipeLeft={() => navigation.navigate('UpcomingScreen')}>
       <Container position="top" />
 
-      <TabNavigation navigation={navigation} screenName={'today'} />
+      {/* <TabNavigation navigation={navigation} screenName={'today'} /> */}
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -129,7 +129,7 @@ export default function HomeScreen({navigation}) {
         </View>
       )}
 
-      <View style={styles.footer}>
+      {/* <View style={styles.footer}>
         <LanguageModal languageChange={languageChange} />
         <TouchableOpacity
           style={styles.addBtn}
@@ -138,7 +138,7 @@ export default function HomeScreen({navigation}) {
             <Icon name="add-outline" size={36} color="#fff" />
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </GestureRecognizer>
   );
 }
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   addBtn: {
     width: 60,
     height: 60,
-    top: 9,
+
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#333',

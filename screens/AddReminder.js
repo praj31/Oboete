@@ -18,6 +18,7 @@ import {checkNotificationPermissionFunc} from '../api/notification';
 import {displayToast} from '../api/toast';
 import {useTranslation} from 'react-i18next';
 import SoundModal from '../components/SoundModal';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function AddReminder({navigation}) {
   moment.tz.setDefault();
@@ -37,6 +38,20 @@ export default function AddReminder({navigation}) {
   );
 
   const {t} = useTranslation();
+
+  const isFocused = useIsFocused();
+
+  React.useEffect(() => {
+    setTitle('');
+    setNote('');
+    setDate(moment().toDate());
+    setShowDatePicker(false);
+    setShowTimePicker(false);
+    setInterval('0');
+    setRepeat('0');
+    setAlarmType('One-time');
+    setShowAlarmTypePicker(false);
+  }, [isFocused]);
 
   const onChangeDate = (_, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -114,7 +129,7 @@ export default function AddReminder({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>{t('AddReminder:newReminder')}</Text>
+      {/* <Text style={styles.h1}>{t('AddReminder:newReminder')}</Text> */}
       <ScrollView>
         <Text style={styles.label}>{t('AddReminder:eventTitle')}</Text>
         <TextInput

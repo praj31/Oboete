@@ -9,20 +9,20 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
-import moment from 'moment'
-import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData } from '../api/storage';
+import moment from 'moment';
+import {useIsFocused} from '@react-navigation/native';
+import {getAllUpcoming, getData} from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
 import TabNavigation from '../components/TabNavigation';
-import { ActivityIndicator } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import {ActivityIndicator} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
-export default function Upcoming({ navigation }) {
+export default function Upcoming({navigation}) {
   const [reminders, setReminders] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const isFocused = useIsFocused();
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   React.useEffect(() => {
     async function getUpcomingReminders() {
       const data = await getAllUpcoming();
@@ -30,10 +30,18 @@ export default function Upcoming({ navigation }) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item, occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar() });
+          events.push({
+            id: entry,
+            ...item,
+            occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
+          });
         }
       }
-      events = events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
+      events = events.sort(
+        (a, b) =>
+          moment(a.datetime, 'YYYY-MM-DD LT') -
+          moment(b.datetime, 'YYYY-MM-DD LT'),
+      );
       setReminders(events);
       setIsLoading(false);
     }
@@ -41,7 +49,7 @@ export default function Upcoming({ navigation }) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', { id: id });
+    navigation.navigate('ListReminder', {id: id});
   };
 
   if (isLoading) {
@@ -53,17 +61,24 @@ export default function Upcoming({ navigation }) {
   return (
     <GestureRecognizer
       style={styles.container}
-      onSwipeRight={() => navigation.navigate('Home')}>
+      onSwipeRight={() => navigation.navigate('Today')}>
       {/* <Text style={styles.h1}>Upcoming</Text> */}
-      <TabNavigation navigation={navigation} screenName={'upcoming'} />
+      {/* <TabNavigation navigation={navigation} screenName={'upcoming'} /> */}
       {reminders.length !== 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
+          style={{height: '100%'}}>
           {reminders.map((event, idx) => (
             <View key={idx}>
-              {(idx == 0 || reminders[idx].occurs !== reminders[idx - 1].occurs) && <Text style={{ marginVertical: 8, marginLeft: 4, color: '#666' }} key={idx}>{moment(event.datetime, 'YYYY-MM-DD LT').calendar()}</Text>}
+              {(idx == 0 ||
+                reminders[idx].occurs !== reminders[idx - 1].occurs) && (
+                <Text
+                  style={{marginVertical: 8, marginLeft: 4, color: '#666'}}
+                  key={idx}>
+                  {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
+                </Text>
+              )}
               <TouchableOpacity
                 key={event.id}
                 onPress={() => onClickReminderCard(event.id)}>
@@ -85,7 +100,7 @@ export default function Upcoming({ navigation }) {
           <Text style={styles.prompt}>{t('HomeScreen:noEventsUpcoming')}</Text>
         </View>
       )}
-      <View style={styles.footer}>
+      {/* <View style={styles.footer}>
         <TouchableOpacity
           style={styles.addBtn}
           onPress={() => navigation.navigate('AddReminder')}>
@@ -93,7 +108,7 @@ export default function Upcoming({ navigation }) {
             <Icon name="add-outline" size={36} color="#fff" />
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </GestureRecognizer>
   );
 }

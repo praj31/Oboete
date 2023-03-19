@@ -11,4 +11,9 @@ export default {
   cancel: 'Annuler',
 
   changeLanguage: 'Changer de langue',
+
+  today: "Aujourd'hui",
+  upcoming: 'A venir',
+  addReminder: 'Ajouter un rappel',
+  add: 'Ajouter',
 };
