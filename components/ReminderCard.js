@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as React from 'react'
+import moment from 'moment';
 
 export default function ReminderCard({ event }) {
+  
   return (
     <View style={styles.r_card}>
       <View style={{ flex: 4 }}>

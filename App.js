@@ -8,7 +8,7 @@ import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
 import moment from 'moment';
 import {getAllKeys} from './api/storage';
-
+// import { NavigationActions } from 'react-navigation';
 import {clearAll} from './api/storage';
 
 import './constants/DCSLocalize';
@@ -25,7 +25,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Pressable, TouchableOpacity} from 'react-native';
 import LanguageModal from './components/LanguageModal';
 import {useTranslation} from 'react-i18next';
-import {UpcomingScreenNavigator, TodayScreenNavigator} from './utils/StackNav';
+import {UpcomingScreenNavigator, TodayScreenNavigator,ArchiveScreenNavigator} from './utils/StackNav';
+import ArchiveScreen from './screens/ArchiveScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -112,6 +113,17 @@ export default function App() {
             }}
           />
           <Tab.Screen
+            name="ArchiveScreen"
+            component={ArchiveScreenNavigator}
+            options={{
+              headerTitle: t('Global:Archive'),
+              tabBarIcon: ({focused}) => {
+                let iconName = focused ? 'archive' : 'archive-outline';
+                return <Icon name={iconName} size={20} />;
+              },
+            }}
+          />
+          <Tab.Screen
             name="AddReminder"
             component={AddReminder}
             options={{
@@ -124,6 +136,7 @@ export default function App() {
               },
             }}
           />
+          
         </Tab.Navigator>
         {/* <Stack.Navigator>
           <Stack.Screen
