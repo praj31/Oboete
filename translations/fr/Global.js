@@ -14,6 +14,6 @@ export default {
 
   today: "Aujourd'hui",
   upcoming: 'A venir',
-  addReminder: 'Ajouter un rappel',
+  addReminder: 'Nouvel évènement',
   add: 'Ajouter',
 };

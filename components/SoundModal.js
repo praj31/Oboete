@@ -1,12 +1,10 @@
 import Modal from 'react-native-modal';
-import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
-  Button,
   ScrollView,
   Pressable,
   TextInput,
@@ -14,6 +12,7 @@ import {
 
 import { useTranslation } from 'react-i18next';
 import SoundCard from './SoundCard';
+import { formStyles } from '../styles/form';
 
 const Sound = require('react-native-sound');
 Sound.setCategory('Playback');
@@ -79,10 +78,10 @@ function SoundModal({
   return (
     <View style={{ flex: 1 }}>
       <Pressable onPress={toggleModal}>
-        <Text style={styles.label}>{t('AddReminder:alarmSound')}</Text>
+        <Text style={formStyles.label}>{t('AddReminder:alarmSound')}</Text>
         <TextInput
           value={selectedSound}
-          style={styles.textinput}
+          style={formStyles.textinput}
           editable={false}
         />
       </Pressable>

@@ -1,5 +1,5 @@
 export default {
-  newReminder: 'Nouveau rappel',
+  newReminder: "Nouvel évènement",
   eventTitle: "Titre de l'événement",
   eventDescription: "Description de l'événement (facultatif)",
   eventDate: "Date de l'événement",

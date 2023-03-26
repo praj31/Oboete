@@ -1,5 +1,5 @@
 export default {
-  newReminder: 'New Reminder',
+  newReminder: 'New Event',
   eventTitle: 'Event Title',
   eventDescription: 'Event Description (optional)',
   eventDate: 'Event Date',
