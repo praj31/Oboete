@@ -39,7 +39,7 @@ export const formStyles = StyleSheet.create({
     smallFont: {
         marginVertical: 6,
         fontSize: 12,
-        opacity: 0.7
+        opacity: 0.9
     },
     fontWhite: {
         color: theme.color.white,

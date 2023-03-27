@@ -95,7 +95,7 @@ export default function HomeScreen({ navigation }) {
         style={{ height: '100%' }}>
         <View style={globalStyles.header}>
           <Text style={globalStyles.greetings}>{generateGreetings()}</Text>
-          <Text style={{ color: theme.color.white, marginTop: 12, marginLeft: 16, opacity: 0.75 }}>{reminders.length} event(s) due today.</Text>
+          <Text style={{ color: theme.color.white, marginTop: 12, marginLeft: 16, opacity: 0.9 }}>{reminders.length} event(s) due today.</Text>
         </View>
         <View style={globalStyles.inner}>
           {

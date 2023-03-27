@@ -9,13 +9,15 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-
+const Sound = require('react-native-sound');
+Sound.setCategory('Playback');
 import { useTranslation } from 'react-i18next';
 import SoundCard from './SoundCard';
 import { formStyles } from '../styles/form';
+import { theme } from '../utils/theme';
 
-const Sound = require('react-native-sound');
-Sound.setCategory('Playback');
+// const Sound = require('react-native-sound');
+// Sound.setCategory('Playback');
 
 function SoundModal({
   chosenSound,
@@ -88,27 +90,34 @@ function SoundModal({
 
       <Modal
         isVisible={isModalVisible}
-        animationInTiming={500}
-        animationOutTiming={600}
-        onBackButtonPress={cancelButtonClick}>
+        swipeDirection={'down'}
+        onSwipeComplete={() => cancelButtonClick()}
+        propagateSwipe={true}
+        animationInTiming={300}
+        animationOutTiming={300}
+        onBackButtonPress={cancelButtonClick}
+        style={{ margin: 0, justifyContent: 'flex-end' }}
+      >
         <View
           style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            // maxHeight: 400,
-            borderRadius: 12,
+            backgroundColor: theme.color.white,
+            borderRadius: 24,
+            height: '70%',
           }}>
+          <View style={{ flex: 1, alignItems: 'center', marginBottom: 16, marginTop: 12 }}>
+            <View style={{ width: 36, height: 8, backgroundColor: theme.color.gray, borderRadius: 12 }}></View>
+          </View>
           <ScrollView
             showsVerticalScrollIndicator={true}
             showsHorizontalScrollIndicator={true}
-            style={{ height: '80%', padding: 12 }}>
+            style={{ paddingHorizontal: 16, marginBottom: 12, height: '100%' }}>
             {soundList.map((sound, index) => {
               return (
                 <TouchableOpacity key={sound.id}>
                   <SoundCard
                     sound={sound}
                     index={index}
-                    selectedSound={selectedSound}
+                    selectedSound={chosenSound}
                     setSelectedSound={setSelectedSound}
                     chosenSound={chosenSound}
                     setChosenSound={setChosenSound}
@@ -118,45 +127,21 @@ function SoundModal({
               );
             })}
           </ScrollView>
-          <View style={styles.footer}>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.actionBtn, styles.primaryBtn]}
-                onPress={saveButtonClick}>
-                <Text style={{ color: '#fff', fontSize: 16 }}>
-                  {t('Global:save')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.actionBtn, styles.secondaryBtn]}
-                onPress={cancelButtonClick}>
-                <Text style={{ fontSize: 16, color: '#111' }}>
-                  {t('Global:cancel')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={{ paddingHorizontal: 16 }}>
+            <TouchableOpacity
+              style={[formStyles.actionBtn, formStyles.primaryBtn]}
+              onPress={saveButtonClick}>
+              <Text style={{ color: theme.color.white }}>
+                {t('Global:save')}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
+      </Modal >
+    </View >
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    top: 50,
-    // justifyContent: 'center',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#111',
-  },
   button: {
     flexDirection: 'row',
     alignItems: 'center',

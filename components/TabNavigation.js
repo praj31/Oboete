@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-export default function TabNavigation({navigation, screenName}) {
-  const {t} = useTranslation();
+export default function TabNavigation({ navigation, screenName }) {
+  const { t } = useTranslation();
 
   return (
     <View style={styles.buttonContainer}>

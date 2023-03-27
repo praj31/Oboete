@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import AddReminder from './screens/AddReminder';
 import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
+import { StatusBar } from 'react-native';
 import moment from 'moment';
 import { getAllKeys } from './api/storage';
 
@@ -22,7 +23,6 @@ import { WithSplashScreen } from './screens/Splash';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Pressable, TouchableOpacity } from 'react-native';
 import LanguageModal from './components/LanguageModal';
 import { useTranslation } from 'react-i18next';
 import { UpcomingScreenNavigator, TodayScreenNavigator } from './utils/StackNav';
@@ -76,6 +76,10 @@ export default function App() {
   return (
     <WithSplashScreen isAppReady={isAppReady}>
       <NavigationContainer>
+        <StatusBar
+          backgroundColor={theme.color.primary}
+          barStyle="light-content"
+        />
         <ToastManager position="bottom" />
         <Tab.Navigator
           screenOptions={{
@@ -88,14 +92,17 @@ export default function App() {
               backgroundColor: theme.color.primary,
             },
             headerTitleAlign: 'left',
+            headerTintColor: theme.color.white,
             headerTitleStyle: {
               color: theme.color.white,
               fontSize: 18
             },
+            headerRightContainerStyle: {
+              paddingRight: 16
+            },
             headerRight: () => {
               return <LanguageModal languageChange={languageChange} />;
             },
-            // headerShown: false,
             tabBarShowLabel: false,
             unmountOnBlur: true,
             tabBarStyle: { paddingBottom: 6, height: 60, elevation: 0, borderTopColor: '#dcdcdc' },
@@ -106,8 +113,7 @@ export default function App() {
             name="Today"
             component={TodayScreenNavigator}
             options={{
-              // tabBarLabel: t('Global:today'),
-              headerTitle: t('Global:today'),
+              headerShown: false,
               tabBarIcon: ({ focused, color }) => {
                 let iconName = focused ? 'today' : 'today-outline';
                 return <Icon color={color} name={iconName} size={24} />;
@@ -118,8 +124,8 @@ export default function App() {
             name="AddReminder"
             component={AddReminder}
             options={{
-              // tabBarLabel: t('Global:add'),
-              headerTitle: t('Global:addReminder'),
+              headerTitle: t("Global:addReminder"),
+              statusBarColor: theme.color.primary,
               tabBarIcon: ({ focused, color }) => {
                 let iconName = focused ? 'add-circle' : 'add-circle-outline';
                 return <Icon color={color} name={iconName} size={36} />;
@@ -130,8 +136,7 @@ export default function App() {
             name="UpcomingScreen"
             component={UpcomingScreenNavigator}
             options={{
-              // tabBarLabel: t('Global:upcoming'),
-              headerTitle: t('Global:upcoming'),
+              headerShown: false,
               tabBarIcon: ({ focused, color }) => {
                 let iconName = focused ? 'calendar' : 'calendar-outline';
                 return <Icon color={color} name={iconName} size={24} />;
@@ -140,35 +145,6 @@ export default function App() {
           />
 
         </Tab.Navigator>
-        {/* <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AddReminder"
-            component={AddReminder}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="EditReminder"
-            component={EditReminder}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Upcoming"
-            component={Upcoming}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="ListReminder"
-            component={ListReminder}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator> */}
       </NavigationContainer>
     </WithSplashScreen>
   );
