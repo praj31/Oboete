@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     margin: 24,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
