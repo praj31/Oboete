@@ -1,6 +1,6 @@
 export default {
   today: "Aujourd'hui",
-  noEventsToday: "Aucun événement aujourd'hui. Prenez votre journée de congé !",
+  noEventsToday: "Pas d'événements",
   upcoming: 'A venir',
-  noEventsUpcoming: 'Woohoo ! Vous êtes tous rattrapés !',
+  noEventsUpcoming: "Pas d'événements",
 };

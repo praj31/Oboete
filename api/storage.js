@@ -10,7 +10,7 @@ export const storeData = async value => {
     const jsonValue = JSON.stringify(value);
     // console.log("data to be saved in setItem",jsonValue);
     await AsyncStorage.setItem(key, jsonValue);
-    return true;
+    return { success: true, key };
   } catch (e) {
     return false;
   }

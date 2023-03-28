@@ -1,6 +1,6 @@
 export default {
   today: 'Today',
-  noEventsToday: 'No events today. Take your day off!',
+  noEventsToday: 'No events',
   upcoming: 'Upcoming',
-  noEventsUpcoming: 'Woohoo! You are all caught up!',
+  noEventsUpcoming: 'No events',
 };
