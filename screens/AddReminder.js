@@ -20,6 +20,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { globalStyles } from '../styles/global';
 import { formStyles } from '../styles/form';
 import { theme } from '../utils/theme';
+import AlarmTypeModal from '../components/AlarmTypeModal';
 
 export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
@@ -31,7 +32,6 @@ export default function AddReminder({ navigation }) {
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
   const [alarmType, setAlarmType] = React.useState('One-time');
-  const [showAlarmTypePicker, setShowAlarmTypePicker] = React.useState(false);
 
   const [selectedSound, setSelectedSound] = React.useState('sound1.mp3');
   const [chosenSound, setChosenSound] = React.useState(
@@ -104,6 +104,7 @@ export default function AddReminder({ navigation }) {
         <View style={globalStyles.inner}>
           <Text style={formStyles.label}>{t('AddReminder:eventTitle')}</Text>
           <TextInput
+            autoFocus
             value={title}
             style={formStyles.textinput}
             onChangeText={setTitle}
@@ -175,90 +176,7 @@ export default function AddReminder({ navigation }) {
               />
             </View>
           </View>
-          <Text style={formStyles.label}>{t('AddReminder:alarmType')}</Text>
-          <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
-            <TextInput
-              value={alarmType}
-              style={formStyles.textinput}
-              editable={false}
-            />
-          </Pressable>
-          {showAlarmTypePicker && (
-            <Modal
-              visible={showAlarmTypePicker}
-              onRequestClose={() => {
-                setShowAlarmTypePicker(!showAlarmTypePicker);
-              }}>
-              <ScrollView
-                style={{
-                  padding: 24,
-                  marginTop: 32,
-                  width: '100%',
-                }}>
-                <Text style={{ fontSize: 18, marginBottom: 20 }}>
-                  {t('AddReminder:selectAlarmType')}
-                </Text>
-                <Pressable
-                  style={[
-                    formStyles.actionBtn,
-                    alarmType === 'One-time'
-                      ? formStyles.primaryBtn
-                      : formStyles.secondaryBtn,
-                    formStyles.selectBtn,
-                  ]}
-                  onPress={() => {
-                    setAlarmType('One-time');
-                    setShowAlarmTypePicker(!showAlarmTypePicker);
-                  }}>
-                  <Text
-                    style={[
-                      alarmType === 'One-time'
-                        ? [formStyles.baseFont, formStyles.fontWhite]
-                        : [formStyles.baseFont, formStyles.fontBlack],
-                    ]}>
-                    {t('AddReminder:oneTime')}
-                  </Text>
-                  <Text
-                    style={[
-                      alarmType === 'One-time'
-                        ? [formStyles.smallFont, formStyles.fontWhite]
-                        : [formStyles.smallFont, formStyles.fontBlack],
-                    ]}>
-                    {t('AddReminder:oneTimeDescription')}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  style={[
-                    formStyles.actionBtn,
-                    alarmType === 'Meta'
-                      ? formStyles.primaryBtn
-                      : formStyles.secondaryBtn,
-                    formStyles.selectBtn,
-                  ]}
-                  onPress={() => {
-                    setAlarmType('Meta');
-                    setShowAlarmTypePicker(!showAlarmTypePicker);
-                  }}>
-                  <Text
-                    style={[
-                      alarmType === 'Meta'
-                        ? [formStyles.baseFont, formStyles.fontWhite]
-                        : [formStyles.baseFont, formStyles.fontBlack],
-                    ]}>
-                    {t('AddReminder:meta')}
-                  </Text>
-                  <Text
-                    style={[
-                      alarmType === 'Meta'
-                        ? [formStyles.smallFont, formStyles.fontWhite]
-                        : [formStyles.smallFont, formStyles.fontBlack],
-                    ]}>
-                    {t('AddReminder:metaDescription')}
-                  </Text>
-                </Pressable>
-              </ScrollView>
-            </Modal>
-          )}
+          <AlarmTypeModal alarmType={alarmType} setAlarmType={setAlarmType} />
           <SoundModal
             chosenSound={chosenSound}
             setChosenSound={setChosenSound}

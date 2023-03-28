@@ -47,4 +47,15 @@ export const formStyles = StyleSheet.create({
     fontBlack: {
         color: theme.color.black,
     },
+    searchbar: {
+        marginTop: 48,
+        alignSelf: 'center',
+        width: '90%',
+        backgroundColor: theme.color.white,
+        paddingVertical: 12,
+        paddingHorizontal: 8,
+        borderRadius: 8,
+        marginBottom: 16,
+        color: theme.color.black
+    }
 })

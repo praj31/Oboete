@@ -25,8 +25,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LanguageModal from './components/LanguageModal';
 import { useTranslation } from 'react-i18next';
-import { UpcomingScreenNavigator, TodayScreenNavigator } from './utils/StackNav';
+import { UpcomingScreenNavigator, TodayScreenNavigator, MetaScreenNavigator, SearchScreenNavigator } from './utils/StackNav';
 import { theme } from './utils/theme';
+import Search from './screens/Search';
+import Meta from './screens/Meta';
+import HeaderRight from './components/HeaderRight';
 
 const Stack = createNativeStackNavigator();
 
@@ -101,11 +104,10 @@ export default function App() {
               paddingRight: 16
             },
             headerRight: () => {
-              return <LanguageModal languageChange={languageChange} />;
+              return <HeaderRight />;
             },
-            tabBarShowLabel: false,
             unmountOnBlur: true,
-            tabBarStyle: { paddingBottom: 6, height: 60, elevation: 0, borderTopColor: '#dcdcdc' },
+            tabBarStyle: { paddingBottom: 12, height: 64, elevation: 0, borderTopColor: '#dcdcdc' },
             tabBarInactiveTintColor: theme.color.gray,
             tabBarActiveTintColor: theme.color.primary,
           }}>
@@ -114,8 +116,21 @@ export default function App() {
             component={TodayScreenNavigator}
             options={{
               headerShown: false,
+              tabBarLabel: "Today",
               tabBarIcon: ({ focused, color }) => {
                 let iconName = focused ? 'today' : 'today-outline';
+                return <Icon color={color} name={iconName} size={24} />;
+              },
+            }}
+          />
+          <Tab.Screen
+            name="UpcomingScreen"
+            component={UpcomingScreenNavigator}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Upcoming",
+              tabBarIcon: ({ focused, color }) => {
+                let iconName = focused ? 'calendar' : 'calendar-outline';
                 return <Icon color={color} name={iconName} size={24} />;
               },
             }}
@@ -125,25 +140,37 @@ export default function App() {
             component={AddReminder}
             options={{
               headerTitle: t("Global:addReminder"),
-              statusBarColor: theme.color.primary,
+              tabBarLabel: "New Event",
               tabBarIcon: ({ focused, color }) => {
                 let iconName = focused ? 'add-circle' : 'add-circle-outline';
-                return <Icon color={color} name={iconName} size={36} />;
+                return <Icon color={color} name={iconName} size={28} />;
               },
             }}
           />
           <Tab.Screen
-            name="UpcomingScreen"
-            component={UpcomingScreenNavigator}
+            name="MetaScreen"
+            component={MetaScreenNavigator}
             options={{
               headerShown: false,
+              tabBarLabel: "Meta",
               tabBarIcon: ({ focused, color }) => {
-                let iconName = focused ? 'calendar' : 'calendar-outline';
-                return <Icon color={color} name={iconName} size={24} />;
+                let iconName = focused ? 'alarm' : 'alarm-outline';
+                return <Icon color={color} name={iconName} size={28} />;
               },
             }}
           />
-
+          <Tab.Screen
+            name="SearchScreen"
+            component={SearchScreenNavigator}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Search",
+              tabBarIcon: ({ focused, color }) => {
+                let iconName = focused ? 'search' : 'search-outline';
+                return <Icon color={color} name={iconName} size={28} />;
+              },
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </WithSplashScreen>
