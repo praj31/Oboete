@@ -32,6 +32,7 @@ export default function IntervalModal({interval, setInterval}) {
                     value={interval}
                     style={formStyles.textinput}
                     editable={false}
+                    placeholder="0"
                     keyboardType="numeric"
                     onChangeText={setInterval}/>
             </Pressable>
@@ -74,8 +75,10 @@ export default function IntervalModal({interval, setInterval}) {
                         style={{
                         paddingHorizontal: 16,
                         marginBottom: 12,
+                        marginTop:12,
                         height: '100%'
                     }}>
+                        <Text style={formStyles.label}>Choose Interval</Text>
                         <Pressable 
                         onPress={() => setInterval("5")}
                         >
@@ -187,13 +190,14 @@ export default function IntervalModal({interval, setInterval}) {
                         <Pressable>
                 
             </Pressable>
-            <View style={{ flex: 1, marginLeft: 4 }}>
-              <Text style={formStyles.label}>Add Custom(max 60)</Text>
+            <View style={{ flex: 1, marginLeft: 4,marginTop: 12, }}>
+              <Text style={formStyles.label}>Custom(max 60)</Text>
               <TextInput
                 value={interval}
                 inputMode="numeric"
                 style={formStyles.textinput}
                 keyboardType="numeric"
+                
                 onChangeText={(i)=>{
                     if(i<=60){
                         setInterval(i)

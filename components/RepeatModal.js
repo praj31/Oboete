@@ -32,6 +32,7 @@ export default function RepeatModal({repeat, setRepeat}) {
                     value={repeat}
                     style={formStyles.textinput}
                     editable={false}
+                    placeholder="0"
                     keyboardType="numeric"
                     onChangeText={setRepeat}/>
             </Pressable>
@@ -74,8 +75,10 @@ export default function RepeatModal({repeat, setRepeat}) {
                         style={{
                         paddingHorizontal: 16,
                         marginBottom: 12,
+                        marginTop:12,
                         height: '100%'
                     }}>
+                        <Text style={formStyles.label}>Choose Frequency</Text>
                         <Pressable 
                         onPress={() => setRepeat("1")}
                         >
@@ -187,8 +190,8 @@ export default function RepeatModal({repeat, setRepeat}) {
                         <Pressable>
                 
             </Pressable>
-            <View style={{ flex: 1, marginLeft: 4 }}>
-              <Text style={formStyles.label}>Add Custom(max 10)</Text>
+            <View style={{ flex: 1, marginLeft: 4,marginTop: 12, }}>
+              <Text style={formStyles.label}>Custom(max 10)</Text>
               <TextInput
                 value={repeat}
                 inputMode="numeric"
