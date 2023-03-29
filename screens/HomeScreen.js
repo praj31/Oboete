@@ -58,10 +58,11 @@ export default function HomeScreen({ navigation }) {
               );
               updatedReminder = { ...updatedReminder, alarms };
               await storeData(updatedReminder);
-            } else {
-              await deleteAlarms(entry);
-              await removeKey(entry);
-            }
+            } 
+            // else {
+            //   await deleteAlarms(entry);
+            //   await removeKey(entry);
+            // }
           }
         }
       }
