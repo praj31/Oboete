@@ -1,5 +1,5 @@
 import Modal from 'react-native-modal';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 const Sound = require('react-native-sound');
 Sound.setCategory('Playback');
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import SoundCard from './SoundCard';
-import { formStyles } from '../styles/form';
-import { theme } from '../utils/theme';
+import {formStyles} from '../styles/form';
+import {theme} from '../utils/theme';
 
 // const Sound = require('react-native-sound');
 // Sound.setCategory('Playback');
@@ -25,7 +25,7 @@ function SoundModal({
   selectedSound,
   setSelectedSound,
 }) {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   // const [selectedSound, setSelectedSound] = useState('sound1');
   // const [chosenSound, setChosenSound] = useState(selectedSound || 'sound1');
@@ -78,7 +78,7 @@ function SoundModal({
   // });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Pressable onPress={toggleModal}>
         <Text style={formStyles.label}>{t('AddReminder:alarmSound')}</Text>
         <TextInput
@@ -96,21 +96,32 @@ function SoundModal({
         animationInTiming={300}
         animationOutTiming={300}
         onBackButtonPress={cancelButtonClick}
-        style={{ margin: 0, justifyContent: 'flex-end' }}
-      >
+        style={{margin: 0, justifyContent: 'flex-end'}}>
         <View
           style={{
             backgroundColor: theme.color.white,
             borderRadius: 24,
             height: '70%',
           }}>
-          <View style={{ flex: 1, alignItems: 'center', marginBottom: 16, marginTop: 12 }}>
-            <View style={{ width: 36, height: 8, backgroundColor: theme.color.gray, borderRadius: 12 }}></View>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              marginBottom: 16,
+              marginTop: 12,
+            }}>
+            <View
+              style={{
+                width: 36,
+                height: 8,
+                backgroundColor: theme.color.gray,
+                borderRadius: 12,
+              }}></View>
           </View>
           <ScrollView
             showsVerticalScrollIndicator={true}
             showsHorizontalScrollIndicator={true}
-            style={{ paddingHorizontal: 16, marginBottom: 12, height: '100%' }}>
+            style={{paddingHorizontal: 16, marginBottom: 12, height: '100%'}}>
             {soundList.map((sound, index) => {
               return (
                 <TouchableOpacity key={sound.id}>
@@ -121,24 +132,22 @@ function SoundModal({
                     setSelectedSound={setSelectedSound}
                     chosenSound={chosenSound}
                     setChosenSound={setChosenSound}
-                  // audioArray={audioArray}
+                    // audioArray={audioArray}
                   />
                 </TouchableOpacity>
               );
             })}
           </ScrollView>
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{paddingHorizontal: 16}}>
             <TouchableOpacity
               style={[formStyles.actionBtn, formStyles.primaryBtn]}
               onPress={saveButtonClick}>
-              <Text style={{ color: theme.color.white }}>
-                {t('Global:save')}
-              </Text>
+              <Text style={{color: theme.color.white}}>{t('Global:save')}</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </Modal >
-    </View >
+      </Modal>
+    </View>
   );
 }
 const styles = StyleSheet.create({

@@ -3,4 +3,6 @@ export default {
   noEventsToday: "Pas d'événements",
   upcoming: 'A venir',
   noEventsUpcoming: "Pas d'événements",
+
+  eventsDueToday: "événement(s) dû aujourd'hui.",
 };
