@@ -27,10 +27,14 @@ const ListReminder = props => {
 
   const { t } = useTranslation();
   const isFocused = useIsFocused();
-
+  const [isPast, setIsPast] = React.useState(false)
   React.useEffect(() => {
     async function fetchData() {
       let reminder = await getData(id);
+      let eventTime = moment(reminder.datetime, 'YYYY-MM-DD LT');
+      // console.log("reminder past or present: ",eventTime.isAfter(moment()));
+      setIsPast(eventTime.isBefore(moment()));
+
       let allAlarms = [];
       if (reminder.repeat && reminder.repeat > 0) {
         for (let i = 1; i <= reminder.repeat; i++) {
@@ -114,6 +118,7 @@ const ListReminder = props => {
             <View style={styles.footer}>
               <View style={{ flex: 1, marginRight: 2 }}>
                 <TouchableOpacity
+                  disabled={isPast}
                   style={[formStyles.actionBtn, formStyles.primaryBtn]}
                   onPress={() => navigation.navigate('EditReminder', { id: id })}>
                   <Text style={{ color: theme.color.white }}>
@@ -123,6 +128,7 @@ const ListReminder = props => {
               </View>
               <View style={{ flex: 1, marginLeft: 2 }}>
                 <TouchableOpacity
+
                   style={[formStyles.actionBtn, formStyles.primaryBtn]}
                   onPress={() => {
                     deleteEvent(id);

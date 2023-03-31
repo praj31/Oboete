@@ -10,22 +10,23 @@ import {
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import {useIsFocused} from '@react-navigation/native';
-import {getAllUpcoming, getData} from '../api/storage';
+import { useIsFocused } from '@react-navigation/native';
+import { getAllUpcoming, getData, removeKey } from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
+import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
-import {ActivityIndicator} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {globalStyles} from '../styles/global';
-import {generateGreetings} from '../utils/greeting';
-import {theme} from '../utils/theme';
+import { ActivityIndicator } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { globalStyles } from '../styles/global';
+import { generateGreetings } from '../utils/greeting';
+import { theme } from '../utils/theme';
 
-export default function Upcoming({navigation}) {
+export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const isFocused = useIsFocused();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   React.useEffect(() => {
     async function getUpcomingReminders() {
       const data = await getAllUpcoming();
@@ -33,26 +34,48 @@ export default function Upcoming({navigation}) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({
-            id: entry,
-            ...item,
-            occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
-          });
+          let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if (!eventTime.isAfter(moment())) {
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
+          else {
+            // console.log("upcoming events: ",item);
+            let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+            if (!eventTime.isAfter(moment())) {
+              await deleteAlarms(entry);
+              await removeKey(entry);
+            }
+            else {
+              // console.log("upcoming events: ",item);
+              events.push({
+                id: entry,
+                ...item,
+                occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
+              });
+            }
+
+
+          }
         }
+
+
       }
-      events = events.sort(
-        (a, b) =>
-          moment(a.datetime, 'YYYY-MM-DD LT') -
-          moment(b.datetime, 'YYYY-MM-DD LT'),
-      );
-      setReminders(events);
-      setIsLoading(false);
     }
+
+    events = events.sort(
+      (a, b) =>
+        moment(a.datetime, 'YYYY-MM-DD LT') -
+        moment(b.datetime, 'YYYY-MM-DD LT'),
+    );
+    setReminders(events);
+    setIsLoading(false);
+
     getUpcomingReminders();
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', {id: id});
+    navigation.navigate('ListReminder', { id: id });
   };
 
   if (isLoading) {
@@ -66,7 +89,7 @@ export default function Upcoming({navigation}) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         <View style={globalStyles.header}>
           <Text style={globalStyles.greetings}>
             {t(`Greetings:${generateGreetings()}`)}
@@ -87,16 +110,16 @@ export default function Upcoming({navigation}) {
               <View key={idx}>
                 {(idx == 0 ||
                   reminders[idx].occurs !== reminders[idx - 1].occurs) && (
-                  <Text
-                    style={{
-                      marginBottom: 16,
-                      marginLeft: 4,
-                      color: theme.color.gray,
-                    }}
-                    key={idx}>
-                    {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
-                  </Text>
-                )}
+                    <Text
+                      style={{
+                        marginBottom: 16,
+                        marginLeft: 4,
+                        color: theme.color.gray,
+                      }}
+                      key={idx}>
+                      {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
+                    </Text>
+                  )}
                 <TouchableOpacity
                   key={event.id}
                   onPress={() => onClickReminderCard(event.id)}>

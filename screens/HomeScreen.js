@@ -8,22 +8,22 @@ import {
   Image,
 } from 'react-native';
 import moment from 'moment';
-import {useIsFocused} from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import ReminderCard from '../components/ReminderCard';
-import {getAllToday, getData, removeKey, storeData} from '../api/storage';
-import {updateAlarms, deleteAlarms} from '../api/alarm';
-import {ActivityIndicator} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {theme} from '../utils/theme';
-import {globalStyles} from '../styles/global';
-import {generateGreetings} from '../utils/greeting';
+import { getAllToday, getData, removeKey, storeData } from '../api/storage';
+import { updateAlarms, deleteAlarms } from '../api/alarm';
+import { ActivityIndicator } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { theme } from '../utils/theme';
+import { globalStyles } from '../styles/global';
+import { generateGreetings } from '../utils/greeting';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     async function getTodayReminders() {
@@ -35,8 +35,8 @@ export default function HomeScreen({navigation}) {
           // console.log("inside item",item);
           let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
           if (eventTime.isAfter(moment())) {
-            // console.log("all alarms are: ", item);
-            events.push({id: entry, ...item});
+
+            events.push({ id: entry, ...item });
           } else {
             if (item.alarmType === 'Meta') {
               console.log(
@@ -56,12 +56,13 @@ export default function HomeScreen({navigation}) {
                 Number(updatedReminder.repeat),
                 entry,
               );
-              updatedReminder = {...updatedReminder, alarms};
+              updatedReminder = { ...updatedReminder, alarms };
               await storeData(updatedReminder);
-            } else {
-              await deleteAlarms(entry);
-              await removeKey(entry);
             }
+            // else {
+            //   await deleteAlarms(entry);
+            //   await removeKey(entry);
+            // }
           }
         }
       }
@@ -77,7 +78,7 @@ export default function HomeScreen({navigation}) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', {id: id});
+    navigation.navigate('ListReminder', { id: id });
   };
 
   if (isLoading) {
@@ -92,7 +93,7 @@ export default function HomeScreen({navigation}) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         <View style={globalStyles.header}>
           <Text style={globalStyles.greetings}>
             {t(`Greetings:${generateGreetings()}`)}

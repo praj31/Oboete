@@ -5,6 +5,7 @@ import { theme } from '../utils/theme';
 import moment from 'moment';
 
 export default function ReminderCard({ event }) {
+
   return (
     <View style={styles.card}>
       <View style={styles.fancy}></View>

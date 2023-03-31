@@ -1,7 +1,11 @@
 package com.oboete;
+import android.content.Intent;
+import android.os.Bundle;
 
+import com.emekalites.react.alarm.notification.BundleJSONConverter;
 import com.facebook.react.ReactActivity;
-
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import org.json.JSONObject;
 public class MainActivity extends ReactActivity {
 
   /**
@@ -12,4 +16,17 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "Oboete";
   }
+  @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        try {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                JSONObject data = BundleJSONConverter.convertToJSON(bundle);
+                getReactInstanceManager().getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("OnNotificationOpened", data.toString());
+            }
+        } catch (Exception err) {
+            System.err.println("Exception when handling notification opened. " + err);
+        }
+}
 }

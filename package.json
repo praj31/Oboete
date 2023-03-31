@@ -14,6 +14,7 @@
     "@kaistseo/react-native-alarm-notification": "^1.0.2",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/datetimepicker": "^6.7.4",
+    "@react-native-picker/picker": "^2.4.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "^6.9.9",
