@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import * as React from 'react'
+import * as React from 'react';
 import { theme } from '../utils/theme';
 import moment from 'moment';
 
@@ -12,7 +12,7 @@ export default function ReminderCard({ event }) {
       <View style={{ flex: 4, marginLeft: 12 }}>
         <Text style={styles.cardTitle}>{event.title}</Text>
         <Text style={styles.cardDatetime}>
-          {moment(event.datetime, 'YYYY-MM-DD LT').format("hh:mm A")}
+          {moment(event.datetime, 'YYYY-MM-DD LT').format('hh:mm A')}
         </Text>
       </View>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 9,
     padding: 16,
     backgroundColor: theme.color.white,
     borderWidth: 1,
     borderColor: theme.color.primary,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   cardTitle: {
     fontSize: 18,
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     width: 8,
     top: -12,
     height: 1200,
-    borderRadius: 8
+    borderRadius: 8,
   },
 });

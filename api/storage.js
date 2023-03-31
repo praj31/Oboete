@@ -10,7 +10,7 @@ export const storeData = async value => {
     const jsonValue = JSON.stringify(value);
     // console.log("data to be saved in setItem",jsonValue);
     await AsyncStorage.setItem(key, jsonValue);
-    return { success: true, key };
+    return {success: true, key};
   } catch (e) {
     return false;
   }
@@ -57,9 +57,32 @@ export const getAllUpcoming = async () => {
       keys = keys.filter(
         item => item.split('_')[1] !== moment().format('YYYY-MM-DD'),
       );
+
       return keys;
     }
     return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getAllMeta = async () => {
+  try {
+    let metaData = [];
+    let keys = await getAllKeys();
+    const result = await AsyncStorage.multiGet(keys);
+
+    try {
+      await result.map(data => {
+        if (data[1] && JSON.parse(data[1]).alarmType === 'Meta') {
+          metaData.push(data[0]);
+        }
+      });
+    } catch (error) {
+      // console.log(error);
+    }
+
+    return metaData;
   } catch (e) {
     return null;
   }
