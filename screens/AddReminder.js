@@ -13,7 +13,7 @@ import moment from 'moment-timezone';
 import {storeData} from '../api/storage';
 import {setupAlarms} from '../api/alarm';
 import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
+import {displayAlert, displayToast} from '../api/toast';
 import {useTranslation} from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 import {useIsFocused} from '@react-navigation/native';
@@ -71,7 +71,12 @@ export default function AddReminder({navigation}) {
         };
         console.log(reminder);
         if (moment(date) <= moment()) {
-          return alert(t('AddReminder:pastTimeAlert'));
+          return displayAlert(
+            'error',
+            t('Global:error'),
+            t('AddReminder:pastTimeAlert'),
+            t('Global:close'),
+          );
         }
         try {
           const alarms = await setupAlarms(
@@ -82,16 +87,32 @@ export default function AddReminder({navigation}) {
             selectedSound,
           );
           if (alarms.length === 0)
-            return alert(t('AddReminder:alarmConflictAlert'));
+            return displayAlert(
+              'error',
+              t('Global:error'),
+              t('AddReminder:alarmConflictAlert'),
+              t('Global:close'),
+            );
+
           reminder = {...reminder, alarms};
           await storeData(reminder);
-          // displayToast('success', t('Global:reminderAdded'));
+
+          displayToast(
+            'success',
+            t('Global:success'),
+            t('Global:reminderAdded'),
+          );
           navigation.goBack();
         } catch (err) {
-          alert(err);
+          // alert(err);
         }
       } else {
-        alert(t('AddReminder:allFieldError'));
+        displayAlert(
+          'error',
+          t('Global:error'),
+          t('AddReminder:allFieldError'),
+          t('Global:close'),
+        );
       }
     }
   };

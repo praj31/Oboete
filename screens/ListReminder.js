@@ -51,7 +51,12 @@ const ListReminder = props => {
       if (reminder) {
         setReminder(reminder);
       } else {
-        alert('Error in fetching the event data');
+        displayAlert(
+          'error',
+          t('Global:error'),
+          'Error in fetching the event data',
+          t('Global:close'),
+        );
         navigation.goBack();
       }
       setIsLoading(false);
@@ -62,7 +67,7 @@ const ListReminder = props => {
   const deleteEvent = async id => {
     await deleteAlarms(id);
     await removeKey(id);
-    // displayToast('success', t('Global:reminderDeleted'));
+    displayToast('success', t('Global:success'), t('Global:reminderDeleted'));
     navigation.goBack();
   };
   if (isLoading) {
