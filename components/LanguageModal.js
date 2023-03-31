@@ -1,36 +1,34 @@
 import Modal from 'react-native-modal';
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
+  ScrollView,
+  Pressable,
   Image,
-  Animated,
-  Button,
+  TextInput,
 } from 'react-native';
 
-import EnglishContent from '../translations/en/LanguageSelectionScreen';
-import FrenchContent from '../translations/fr/LanguageSelectionScreen';
+import {useTranslation} from 'react-i18next';
+
+import {formStyles} from '../styles/form';
+import {theme} from '../utils/theme';
+import SettingsCard from './SettingsCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
-import Icon from 'react-native-vector-icons/Ionicons';
-import { theme } from '../utils/theme';
-
-function LanguageModal({ languageChange }) {
-  const { i18n } = useTranslation();
+function LanguageModal({languageChange}) {
   const [isModalVisible, setModalVisible] = useState(false);
-
-  const [language, setLanguage] = useState(i18n.language || 'en'); // default language is English
-  const [currentChosenLanguage, setCurrentChosenLanguage] = useState('en');
-  const [fadeInAnim, setFadeInAnim] = useState(new Animated.Value(1));
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const {i18n} = useTranslation();
+
+  const [language, setLanguage] = useState(i18n.language || 'en'); // default language is English
+  const [currentChosenLanguage, setCurrentChosenLanguage] = useState('en');
 
   const langFunc = async () => {
     const lang = await AsyncStorage.getItem('user-language');
@@ -40,24 +38,6 @@ function LanguageModal({ languageChange }) {
   useEffect(() => {
     langFunc();
   }, []);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     Animated.timing(fadeInAnim, {
-  //       toValue: 0,
-  //       duration: 500,
-  //       useNativeDriver: true,
-  //     }).start(() => {
-  //       setLanguage(lang => (lang === 'en' ? 'fr' : 'en')); // toggle between English and French
-  //       Animated.timing(fadeInAnim, {
-  //         toValue: 1,
-  //         duration: 500,
-  //         useNativeDriver: true,
-  //       }).start();
-  //     });
-  //   }, 3500);
-  //   // return () => clearInterval(interval);
-  // }, []);
 
   const getText = () => {
     if (language === 'en') {
@@ -81,94 +61,124 @@ function LanguageModal({ languageChange }) {
     setModalVisible(!isModalVisible);
   };
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   return (
-    <View>
-      <Pressable>
-        <TouchableOpacity onPress={toggleModal}>
-          <Icon name="language" color={theme.color.white} size={20} />
-        </TouchableOpacity>
+    <View style={{}}>
+      <Pressable style={{padding: 15}} onPress={toggleModal}>
+        <SettingsCard title={t('Global:changeLanguage')} />
       </Pressable>
-      {/* <Pressable>
-        <TouchableOpacity
-          style={{backgroundColor: '#333', padding: 10, borderRadius: 8}}
-          onPress={toggleModal}>
-          <Text style={{color: '#fff'}}>{t('Global:changeLanguage')}</Text>
-        </TouchableOpacity>
-      </Pressable> */}
 
       <Modal
         isVisible={isModalVisible}
-        animationInTiming={500}
-        animationOutTiming={600}
-        onBackButtonPress={cancelButtonClick}>
+        swipeDirection={'down'}
+        onSwipeComplete={() => cancelButtonClick()}
+        propagateSwipe={true}
+        animationInTiming={300}
+        animationOutTiming={300}
+        onBackButtonPress={cancelButtonClick}
+        style={{margin: 0, justifyContent: 'flex-end'}}>
         <View
           style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            maxHeight: 400,
-            borderRadius: 12,
+            backgroundColor: theme.color.white,
+            borderRadius: 24,
+            height: '60%',
           }}>
-          <View style={styles.container}>
-            <Animated.Text style={[styles.header, { opacity: fadeInAnim }]}>
-              {/* {getText().title} */}
-              {t('LanguageSelectionScreen:title')}
-            </Animated.Text>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              marginBottom: 16,
+              marginTop: 12,
+            }}>
+            <View
+              style={{
+                width: 36,
+                height: 8,
+                backgroundColor: theme.color.gray,
+                borderRadius: 12,
+              }}></View>
+          </View>
+
+          <Text style={styles.header}>
+            {t('LanguageSelectionScreen:title')}
+          </Text>
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            showsHorizontalScrollIndicator={true}
+            style={{
+              paddingHorizontal: 16,
+              marginBottom: 12,
+              height: '100%',
+            }}>
             <TouchableOpacity
               onPress={() => changeLanguageFunc('en')}
-              style={
+              style={[
+                formStyles.actionBtn,
+                styles.button,
                 currentChosenLanguage == 'en'
-                  ? styles.activeButton
-                  : styles.button
-              }>
+                  ? formStyles.primaryBtn
+                  : formStyles.secondaryBtn,
+              ]}>
               <Image
                 style={styles.flagIcon}
                 source={require('../assets/eng_flag.png')}
               />
-              <Animated.Text style={[styles.buttonText, { opacity: fadeInAnim }]}>
-                {/* {getText().en} */}
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentChosenLanguage == 'en'
+                    ? formStyles.fontWhite
+                    : formStyles.fontBlack,
+                ]}>
                 {t('LanguageSelectionScreen:en')}
-              </Animated.Text>
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => changeLanguageFunc('fr')}
-              style={
+              style={[
+                formStyles.actionBtn,
+                styles.button,
                 currentChosenLanguage == 'fr'
-                  ? styles.activeButton
-                  : styles.button
-              }>
+                  ? formStyles.primaryBtn
+                  : formStyles.secondaryBtn,
+              ]}>
               <Image
                 style={styles.flagIcon}
                 source={require('../assets/france_flag.png')}
               />
-              <Animated.Text style={[styles.buttonText, { opacity: fadeInAnim }]}>
-                {/* {getText().fr} */}
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentChosenLanguage == 'fr'
+                    ? formStyles.fontWhite
+                    : formStyles.fontBlack,
+                ]}>
                 {t('LanguageSelectionScreen:fr')}
-              </Animated.Text>
+              </Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
+          <View style={{paddingHorizontal: 16}}>
+            <View style={styles.footer}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[formStyles.actionBtn, formStyles.primaryBtn]}
+                  onPress={saveButtonClick}>
+                  <Text style={{color: theme.color.white}}>
+                    {t('LanguageSelectionScreen:save')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          <View style={styles.footer}>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.actionBtn, styles.primaryBtn]}
-                onPress={saveButtonClick}>
-                <Text style={{ color: '#fff', fontSize: 16 }}>
-                  {/* {getText().save} */}
-                  {t('LanguageSelectionScreen:save')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.actionBtn, styles.secondaryBtn]}
-                onPress={cancelButtonClick}>
-                <Text style={{ fontSize: 16, color: '#111' }}>
-                  {/* {getText().cancel} */}
-                  {t('LanguageSelectionScreen:cancel')}
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[formStyles.actionBtn, formStyles.primaryBtn]}
+                  onPress={cancelButtonClick}>
+                  <Text style={{color: theme.color.white}}>
+                    {t('LanguageSelectionScreen:cancel')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -177,17 +187,9 @@ function LanguageModal({ languageChange }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    top: 50,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#111',
+  flagIcon: {
+    width: 40,
+    height: 30,
   },
   button: {
     flexDirection: 'row',
@@ -195,35 +197,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#ECECEC',
+
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 15,
   },
 
-  activeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#EEDD82',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
   buttonText: {
     fontSize: 18,
     marginLeft: 10,
-    color: '#111',
   },
-  flagIcon: {
-    width: 40,
-    height: 30,
-  },
-
   footer: {
-    position: 'absolute',
     width: '100%',
     bottom: 10,
+
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
@@ -233,17 +219,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 4,
   },
-  actionBtn: {
-    padding: 12,
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  primaryBtn: {
-    backgroundColor: '#333',
-  },
-  secondaryBtn: {
-    borderWidth: 1,
-    borderColor: '#333',
+
+  header: {
+    top: 15,
+
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 60,
+    textAlign: 'center',
+    color: '#111',
   },
 });
 export default LanguageModal;

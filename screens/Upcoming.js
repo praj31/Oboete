@@ -58,15 +58,19 @@ export default function Upcoming({ navigation }) {
 
           }
         }
+
+
       }
-      events = events.sort(
-        (a, b) =>
-          moment(a.datetime, 'YYYY-MM-DD LT') -
-          moment(b.datetime, 'YYYY-MM-DD LT'),
-      );
-      setReminders(events);
-      setIsLoading(false);
     }
+
+    events = events.sort(
+      (a, b) =>
+        moment(a.datetime, 'YYYY-MM-DD LT') -
+        moment(b.datetime, 'YYYY-MM-DD LT'),
+    );
+    setReminders(events);
+    setIsLoading(false);
+
     getUpcomingReminders();
   }, [isFocused]);
 
@@ -87,17 +91,31 @@ export default function Upcoming({ navigation }) {
         showsHorizontalScrollIndicator={false}
         style={{ height: '100%' }}>
         <View style={globalStyles.header}>
-          <Text style={globalStyles.greetings}>{generateGreetings()}</Text>
-          <Text style={{ color: theme.color.white, marginTop: 12, marginLeft: 16, opacity: 0.9 }}>{reminders.length} event(s) due soon.</Text>
+          <Text style={globalStyles.greetings}>
+            {t(`Greetings:${generateGreetings()}`)}
+          </Text>
+          <Text
+            style={{
+              color: theme.color.white,
+              marginTop: 12,
+              marginLeft: 16,
+              opacity: 0.9,
+            }}>
+            {reminders.length} event(s) due soon.
+          </Text>
         </View>
         <View style={globalStyles.inner}>
-          {reminders.length !== 0 && (
+          {reminders.length !== 0 &&
             reminders.map((event, idx) => (
               <View key={idx}>
                 {(idx == 0 ||
                   reminders[idx].occurs !== reminders[idx - 1].occurs) && (
                     <Text
-                      style={{ marginBottom: 16, marginLeft: 4, color: theme.color.gray }}
+                      style={{
+                        marginBottom: 16,
+                        marginLeft: 4,
+                        color: theme.color.gray,
+                      }}
                       key={idx}>
                       {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
                     </Text>
@@ -108,8 +126,7 @@ export default function Upcoming({ navigation }) {
                   <ReminderCard event={event} key={event.id} />
                 </TouchableOpacity>
               </View>
-            ))
-          )}
+            ))}
         </View>
         {reminders.length == 0 && (
           <View style={globalStyles.imgContainer}>
@@ -119,10 +136,11 @@ export default function Upcoming({ navigation }) {
               placeholder={'Relaxing'}
               contentFit="cover"
             />
-            <Text style={globalStyles.prompt}>{t('HomeScreen:noEventsUpcoming')}</Text>
+            <Text style={globalStyles.prompt}>
+              {t('HomeScreen:noEventsUpcoming')}
+            </Text>
           </View>
-        )
-        }
+        )}
       </ScrollView>
     </View>
   );

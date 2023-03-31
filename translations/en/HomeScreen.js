@@ -3,4 +3,5 @@ export default {
   noEventsToday: 'No events',
   upcoming: 'Upcoming',
   noEventsUpcoming: 'No events',
+  eventsDueToday: 'event(s) due today.',
 };
