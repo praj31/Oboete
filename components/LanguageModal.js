@@ -1,5 +1,5 @@
 import Modal from 'react-native-modal';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,21 +11,21 @@ import {
   TextInput,
 } from 'react-native';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import {formStyles} from '../styles/form';
-import {theme} from '../utils/theme';
+import { formStyles } from '../styles/form';
+import { theme } from '../utils/theme';
 import SettingsCard from './SettingsCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function LanguageModal({languageChange}) {
+function LanguageModal({ languageChange }) {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const {i18n} = useTranslation();
+  const { i18n } = useTranslation();
 
   const [language, setLanguage] = useState(i18n.language || 'en'); // default language is English
   const [currentChosenLanguage, setCurrentChosenLanguage] = useState('en');
@@ -61,11 +61,11 @@ function LanguageModal({languageChange}) {
     setModalVisible(!isModalVisible);
   };
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <View style={{}}>
-      <Pressable style={{padding: 15}} onPress={toggleModal}>
+      <Pressable style={{ padding: 15 }} onPress={toggleModal}>
         <SettingsCard title={t('Global:changeLanguage')} />
       </Pressable>
 
@@ -77,7 +77,7 @@ function LanguageModal({languageChange}) {
         animationInTiming={300}
         animationOutTiming={300}
         onBackButtonPress={cancelButtonClick}
-        style={{margin: 0, justifyContent: 'flex-end'}}>
+        style={{ margin: 0, justifyContent: 'flex-end' }}>
         <View
           style={{
             backgroundColor: theme.color.white,
@@ -158,13 +158,13 @@ function LanguageModal({languageChange}) {
               </Text>
             </TouchableOpacity>
           </ScrollView>
-          <View style={{paddingHorizontal: 16}}>
+          <View style={{ paddingHorizontal: 16 }}>
             <View style={styles.footer}>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={[formStyles.actionBtn, formStyles.primaryBtn]}
                   onPress={saveButtonClick}>
-                  <Text style={{color: theme.color.white}}>
+                  <Text style={{ color: theme.color.white }}>
                     {t('LanguageSelectionScreen:save')}
                   </Text>
                 </TouchableOpacity>
@@ -172,9 +172,9 @@ function LanguageModal({languageChange}) {
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={[formStyles.actionBtn, formStyles.primaryBtn]}
+                  style={[formStyles.actionBtn, formStyles.secondaryBtn]}
                   onPress={cancelButtonClick}>
-                  <Text style={{color: theme.color.white}}>
+                  <Text style={{ color: theme.color.black }}>
                     {t('LanguageSelectionScreen:cancel')}
                   </Text>
                 </TouchableOpacity>
