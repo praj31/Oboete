@@ -14,6 +14,6 @@ export default {
 
   today: 'Today',
   upcoming: 'Upcoming',
-  addReminder: 'Add Reminder',
+  addReminder: 'New Event',
   add: 'Add',
 };

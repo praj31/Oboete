@@ -12,17 +12,24 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {getData, storeData} from '../api/storage';
-import {checkAlarmValidity, updateAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { getData, storeData } from '../api/storage';
+import { checkAlarmValidity, updateAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
+import { formStyles } from '../styles/form';
+import { globalStyles } from '../styles/global';
+import { theme } from '../utils/theme';
+import AlarmTypeModal from '../components/AlarmTypeModal';
+import IntervalModal from '../components/intervalModal';
+import RepeatModal from '../components/RepeatModal';
+
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -31,7 +38,6 @@ export default function EditReminder(props) {
   const [interval, setInterval] = React.useState('0');
   const [repeat, setRepeat] = React.useState('0');
   const [alarmType, setAlarmType] = React.useState('');
-  const [showAlarmTypePicker, setShowAlarmTypePicker] = React.useState(false);
 
   const [selectedSound, setSelectedSound] = React.useState('sound1.mp3');
   const [chosenSound, setChosenSound] = React.useState(
@@ -46,7 +52,6 @@ export default function EditReminder(props) {
     async function fetchData() {
       let reminder = await getData(id);
       if (reminder) {
-        // // console.log("edit reminder is: ",reminder);
         setTitle(reminder.title);
         setNote(reminder.note);
         setInterval(reminder.interval.toString());
@@ -104,11 +109,10 @@ export default function EditReminder(props) {
               id,
               selectedSound,
             );
-            reminder = {...reminder, alarms};
-            await storeData(reminder);
+            reminder = { ...reminder, alarms };
+            const { key } = await storeData(reminder);
             displayToast('success', t('Global:reminderModified'));
-            navigation.navigate('UpcomingScreen');
-            navigation.navigate('Today');
+            navigation.navigate('ListReminder', { id: key });
           } catch (err) {
             console.log(err);
             alert(err);
@@ -130,195 +134,89 @@ export default function EditReminder(props) {
   }, [alarmType]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.h1}>{t('AddReminder:editReminder')}</Text>
-      <ScrollView>
-        <Text style={styles.label}>{t('AddReminder:eventTitle')}</Text>
-        <TextInput
-          value={title}
-          style={styles.textinput}
-          onChangeText={setTitle}
-          maxLength={40}
-        />
-        <Text style={styles.label}>{t('AddReminder:eventDescription')}</Text>
-        <TextInput
-          value={note}
-          style={styles.textinput}
-          onChangeText={setNote}
-          maxLength={140}
-        />
-        <Text style={styles.label}>{t('AddReminder:eventDate')}</Text>
-        <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
-          <TextInput
-            autoFocus={true}
-            autoCapitalize="sentences"
-            style={styles.textinput}
-            editable={false}
-            value={moment(date).format('LL')}
-          />
-        </Pressable>
-        {showDatePicker && (
-          <DateTimePicker
-            mode={'date'}
-            minimumDate={new Date()}
-            value={date}
-            is24Hour={true}
-            display="default"
-            onChange={onChangeDate}
-          />
-        )}
-        <Text style={styles.label}>{t('AddReminder:eventTime')}</Text>
-        <Pressable onPress={() => setShowTimePicker(!showTimePicker)}>
-          <TextInput
-            style={styles.textinput}
-            editable={false}
-            value={moment(date).format('LT')}
-          />
-        </Pressable>
-        {showTimePicker && (
-          <DateTimePicker
-            mode={'time'}
-            minimumDate={new Date()}
-            value={date}
-            is24Hour={false}
-            display="default"
-            onChange={onChangeTime}
-          />
-        )}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flex: 1, marginRight: 4}}>
-            <Text style={styles.label}>{t('AddReminder:interval')}</Text>
-            <TextInput
-              value={alarmType === 'Meta' ? '0' : interval}
-              editable={alarmType === 'One-time'}
-              style={styles.textinput}
-              keyboardType="numeric"
-              onChangeText={setInterval}
-            />
-          </View>
-          <View style={{flex: 1, marginLeft: 4}}>
-            <Text style={styles.label}>{t('AddReminder:repeat')}</Text>
-            <TextInput
-              value={alarmType === 'Meta' ? '0' : repeat}
-              editable={alarmType === 'One-time'}
-              inputMode="numeric"
-              style={styles.textinput}
-              keyboardType="numeric"
-              onChangeText={setRepeat}
-            />
-          </View>
-        </View>
-        <Text style={styles.label}>Alarm Type</Text>
-        <Pressable onPress={() => setShowAlarmTypePicker(!showAlarmTypePicker)}>
-          <TextInput
-            value={alarmType}
-            style={styles.textinput}
-            editable={false}
-          />
-        </Pressable>
-        <SoundModal
-          chosenSound={chosenSound}
-          setChosenSound={setChosenSound}
-          selectedSound={selectedSound}
-          setSelectedSound={setSelectedSound}
-        />
-        {showAlarmTypePicker && (
-          <Modal
-            visible={showAlarmTypePicker}
-            onRequestClose={() => {
-              setShowAlarmTypePicker(!showAlarmTypePicker);
-            }}>
-            <ScrollView
-              style={{
-                padding: 24,
-                marginTop: 32,
-                width: '100%',
-              }}>
-              <Text style={{fontSize: 18, marginBottom: 20}}>
-                Select an alarm type
-              </Text>
-              <Pressable
-                style={[
-                  styles.actionBtn,
-                  alarmType === 'One-time'
-                    ? styles.primaryBtn
-                    : styles.secondaryBtn,
-                  styles.selectBtn,
-                ]}
-                onPress={() => {
-                  setAlarmType('One-time');
-                  setShowAlarmTypePicker(!showAlarmTypePicker);
-                }}>
-                <Text
-                  style={[
-                    alarmType === 'One-time'
-                      ? [styles.baseFont, styles.fontWhite]
-                      : [styles.baseFont, styles.fontBlack],
-                  ]}>
-                  One-time
-                </Text>
-                <Text
-                  style={[
-                    alarmType === 'One-time'
-                      ? [styles.smallFont, styles.fontWhite]
-                      : [styles.smallFont, styles.fontBlack],
-                  ]}>
-                  Reminder which does not repeat regularly
-                </Text>
-              </Pressable>
-              <Pressable
-                style={[
-                  styles.actionBtn,
-                  alarmType === 'Meta'
-                    ? styles.primaryBtn
-                    : styles.secondaryBtn,
-                  styles.selectBtn,
-                ]}
-                onPress={() => {
-                  setAlarmType('Meta');
-                  setShowAlarmTypePicker(!showAlarmTypePicker);
-                }}>
-                <Text
-                  style={[
-                    alarmType === 'Meta'
-                      ? [styles.baseFont, styles.fontWhite]
-                      : [styles.baseFont, styles.fontBlack],
-                  ]}>
-                  Meta
-                </Text>
-                <Text
-                  style={[
-                    alarmType === 'Meta'
-                      ? [styles.smallFont, styles.fontWhite]
-                      : [styles.smallFont, styles.fontBlack],
-                  ]}>
-                  Reminder whose purpose is to remind you about adding reminders
-                </Text>
-              </Pressable>
-            </ScrollView>
-          </Modal>
-        )}
-      </ScrollView>
-      <View style={styles.footer}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.primaryBtn]}
-            onPress={editButtonClicked}>
-            <Text style={{color: '#fff', fontSize: 16}}>
-              {t('AddReminder:update')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.secondaryBtn]}
-            onPress={() => navigation.goBack()}>
-            <Text style={{fontSize: 16, color: '#111'}}>
-              {t('AddReminder:cancel')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+    <View style={globalStyles.container}>
+      <View style={{ marginBottom: 32 }}>
       </View>
+      <ScrollView showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ height: '100%' }}>
+        <View style={globalStyles.inner}>
+          <Text style={formStyles.label}>{t('AddReminder:eventTitle')}</Text>
+          <TextInput
+            autoFocus
+            value={title}
+            style={formStyles.textinput}
+            onChangeText={setTitle}
+            maxLength={40}
+          />
+          <Text style={formStyles.label}>{t('AddReminder:eventDescription')}</Text>
+          <TextInput
+            value={note}
+            style={formStyles.textinput}
+            onChangeText={setNote}
+            maxLength={140}
+          />
+          <Text style={formStyles.label}>{t('AddReminder:eventDate')}</Text>
+          <Pressable onPress={() => setShowDatePicker(!showDatePicker)}>
+            <TextInput
+              autoFocus={true}
+              autoCapitalize="sentences"
+              style={formStyles.textinput}
+              editable={false}
+              value={moment(date).format('LL')}
+            />
+          </Pressable>
+          {showDatePicker && (
+            <DateTimePicker
+              mode={'date'}
+              minimumDate={new Date()}
+              value={date}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeDate}
+            />
+          )}
+          <Text style={formStyles.label}>{t('AddReminder:eventTime')}</Text>
+          <Pressable onPress={() => setShowTimePicker(!showTimePicker)}>
+            <TextInput
+              style={formStyles.textinput}
+              editable={false}
+              value={moment(date).format('LT')}
+            />
+          </Pressable>
+          {showTimePicker && (
+            <DateTimePicker
+              mode={'time'}
+              minimumDate={new Date()}
+              value={date}
+              is24Hour={false}
+              display="default"
+              onChange={onChangeTime}
+            />
+          )}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+            <IntervalModal interval={interval} setInterval={setInterval} />
+            <RepeatModal repeat={repeat} setRepeat={setRepeat} />
+          </View>
+          <AlarmTypeModal alarmType={alarmType} setAlarmType={setAlarmType} />
+          <SoundModal
+            chosenSound={chosenSound}
+            setChosenSound={setChosenSound}
+            selectedSound={selectedSound}
+            setSelectedSound={setSelectedSound}
+          />
+          <View>
+            <TouchableOpacity
+              style={[formStyles.actionBtn, formStyles.primaryBtn]}
+              onPress={editButtonClicked}>
+              <Text style={{ color: theme.color.white }}>
+                {t('AddReminder:update')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView >
     </View>
   );
 }
@@ -356,13 +254,10 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 0,
     margin: 24,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  buttonContainer: {
-    flex: 1,
-    padding: 4,
   },
   actionBtn: {
     padding: 12,
