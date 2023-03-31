@@ -15,7 +15,7 @@ import moment from 'moment-timezone';
 import {getData, storeData} from '../api/storage';
 import {checkAlarmValidity, updateAlarms} from '../api/alarm';
 import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayToast} from '../api/toast';
+import {displayAlert, displayToast} from '../api/toast';
 import {useTranslation} from 'react-i18next';
 import SoundModal from '../components/SoundModal';
 import {formStyles} from '../styles/form';
@@ -61,7 +61,12 @@ export default function EditReminder(props) {
         setSelectedSound(reminder.sound_name || 'sound1.mp3');
         setChosenSound(reminder.sound_name || 'sound1.mp3');
       } else {
-        alert('Error in fetching the event data');
+        displayAlert(
+          'error',
+          t('Global:error'),
+          'Error in fetching the event data',
+          t('Global:close'),
+        );
         navigation.goBack();
       }
     }
@@ -95,7 +100,12 @@ export default function EditReminder(props) {
           sound_name: selectedSound,
         };
         if (moment(date) <= moment()) {
-          return alert(t('AddReminder:pastTimeAlert'));
+          return displayAlert(
+            'error',
+            t('Global:error'),
+            t('AddReminder:pastTimeAlert'),
+            t('Global:close'),
+          );
         }
         let status = await checkAlarmValidity(moment(date), interval, repeat);
         if (status) {
@@ -110,17 +120,31 @@ export default function EditReminder(props) {
             );
             reminder = {...reminder, alarms};
             const {key} = await storeData(reminder);
-            // displayToast('success', t('Global:reminderModified'));
+            displayToast(
+              'success',
+              t('Global:success'),
+              t('Global:reminderModified'),
+            );
             navigation.navigate('ListReminder', {id: key});
           } catch (err) {
             console.log(err);
-            alert(err);
+            // alert(err);
           }
         } else {
-          return alert(t('AddReminder:alarmConflictAlert'));
+          return displayAlert(
+            'error',
+            t('Global:error'),
+            t('AddReminder:alarmConflictAlert'),
+            t('Global:close'),
+          );
         }
       } else {
-        alert(t('AddReminder:allFieldError'));
+        displayAlert(
+          'error',
+          t('Global:error'),
+          t('AddReminder:allFieldError'),
+          t('Global:close'),
+        );
       }
     }
   };
