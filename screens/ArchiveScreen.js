@@ -35,7 +35,7 @@ export default function ArchiveScreen({navigation}) {
           moment(b.datetime, 'YYYY-MM-DD LT'),
       );
       setArchiveAlarms(events);
-
+      
     }getArchiveReminders();
   }, [isFocused]);
   const onClickReminderCard = id => {
@@ -45,7 +45,7 @@ export default function ArchiveScreen({navigation}) {
             style={styles.container}
             onSwipeLeft={() => navigation.navigate('UpcomingScreen')}>
             <Container position="top" />
-
+      
             {/* <TabNavigation navigation={navigation} screenName={'today'} /> */}
             {archiveAlarms.length !== 0 && (
               <ScrollView

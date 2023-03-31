@@ -15,7 +15,7 @@ import { updateAlarms, deleteAlarms } from '../api/alarm';
 import { ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../utils/theme';
-import { globalStyles } from '../styles/global'
+import { globalStyles } from '../styles/global';
 import { generateGreetings } from '../utils/greeting';
 
 export default function HomeScreen({ navigation }) {
@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }) {
           // console.log("inside item",item);
           let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
           if (eventTime.isAfter(moment())) {
-            // console.log("all alarms are: ", item);
+
             events.push({ id: entry, ...item });
           } else {
             if (item.alarmType === 'Meta') {
@@ -58,10 +58,11 @@ export default function HomeScreen({ navigation }) {
               );
               updatedReminder = { ...updatedReminder, alarms };
               await storeData(updatedReminder);
-            } else {
-              await deleteAlarms(entry);
-              await removeKey(entry);
             }
+            // else {
+            //   await deleteAlarms(entry);
+            //   await removeKey(entry);
+            // }
           }
         }
       }
@@ -94,36 +95,43 @@ export default function HomeScreen({ navigation }) {
         showsHorizontalScrollIndicator={false}
         style={{ height: '100%' }}>
         <View style={globalStyles.header}>
-          <Text style={globalStyles.greetings}>{generateGreetings()}</Text>
-          <Text style={{ color: theme.color.white, marginTop: 12, marginLeft: 16, opacity: 0.9 }}>{reminders.length} event(s) due today.</Text>
+          <Text style={globalStyles.greetings}>
+            {t(`Greetings:${generateGreetings()}`)}
+          </Text>
+          <Text
+            style={{
+              color: theme.color.white,
+              marginTop: 12,
+              marginLeft: 16,
+              opacity: 0.9,
+            }}>
+            {reminders.length} {t('HomeScreen:eventsDueToday')}
+          </Text>
         </View>
         <View style={globalStyles.inner}>
-          {
-            reminders.length !== 0 && (
-              reminders.map(event => (
-                <TouchableOpacity
-                  key={event.id}
-                  onPress={() => onClickReminderCard(event.id)}>
-                  <ReminderCard key={event.id} event={event} />
-                </TouchableOpacity>
-              ))
-            )
-          }
+          {reminders.length !== 0 &&
+            reminders.map(event => (
+              <TouchableOpacity
+                key={event.id}
+                onPress={() => onClickReminderCard(event.id)}>
+                <ReminderCard key={event.id} event={event} />
+              </TouchableOpacity>
+            ))}
         </View>
-        {
-          reminders.length == 0 && (
-            <View style={globalStyles.imgContainer}>
-              <Image
-                style={globalStyles.image}
-                source={require('../assets/calendar.png')}
-                placeholder={'Relaxing'}
-                contentFit="cover"
-              />
-              <Text style={globalStyles.prompt}>{t('HomeScreen:noEventsToday')}</Text>
-            </View>
-          )
-        }
+        {reminders.length == 0 && (
+          <View style={globalStyles.imgContainer}>
+            <Image
+              style={globalStyles.image}
+              source={require('../assets/calendar.png')}
+              placeholder={'Relaxing'}
+              contentFit="cover"
+            />
+            <Text style={globalStyles.prompt}>
+              {t('HomeScreen:noEventsToday')}
+            </Text>
+          </View>
+        )}
       </ScrollView>
-    </View >
+    </View>
   );
 }

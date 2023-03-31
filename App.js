@@ -107,7 +107,7 @@ export default function App() {
               return <HeaderRight />;
             },
             unmountOnBlur: true,
-            tabBarStyle: { paddingBottom: 12, height: 64, elevation: 0, borderTopColor: '#dcdcdc' },
+            tabBarStyle: { paddingBottom: 12, height: 64, elevation: 0, borderTopColor: theme.color.border },
             tabBarInactiveTintColor: theme.color.gray,
             tabBarActiveTintColor: theme.color.primary,
           }}>
@@ -147,6 +147,7 @@ export default function App() {
               },
             }}
           />
+
           <Tab.Screen
             name="MetaScreen"
             component={MetaScreenNavigator}

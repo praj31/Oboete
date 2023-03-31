@@ -1,29 +1,26 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native';
+import { View, Text } from 'react-native';
+import { globalStyles } from '../styles/global';
+import { generateGreetings } from '../utils/greeting';
+import { theme } from '../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
-import {useIsFocused} from '@react-navigation/native';
-import {getAllMeta, getAllUpcoming, getData} from '../api/storage';
+import { useIsFocused } from '@react-navigation/native';
+import { getAllMeta, getAllUpcoming, getData } from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
-import {ActivityIndicator} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {globalStyles} from '../styles/global';
-import {generateGreetings} from '../utils/greeting';
-import {theme} from '../utils/theme';
+import { ActivityIndicator } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { globalStyles } from '../styles/global';
+import { generateGreetings } from '../utils/greeting';
+import { theme } from '../utils/theme';
 
-export default function Meta({navigation}) {
+export default function Meta({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const isFocused = useIsFocused();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   React.useEffect(() => {
     async function getMetaReminders() {
       const data = await getAllMeta();
@@ -50,7 +47,7 @@ export default function Meta({navigation}) {
   }, [isFocused]);
 
   const onClickReminderCard = id => {
-    navigation.navigate('ListReminder', {id: id});
+    navigation.navigate('ListReminder', { id: id });
   };
 
   if (isLoading) {
@@ -64,7 +61,7 @@ export default function Meta({navigation}) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         <View style={globalStyles.header}>
           <Text style={globalStyles.greetings}>{generateGreetings()}</Text>
           <Text
@@ -83,16 +80,16 @@ export default function Meta({navigation}) {
               <View key={idx}>
                 {(idx == 0 ||
                   reminders[idx].occurs !== reminders[idx - 1].occurs) && (
-                  <Text
-                    style={{
-                      marginBottom: 6,
-                      marginLeft: 4,
-                      color: theme.color.gray,
-                    }}
-                    key={idx}>
-                    {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
-                  </Text>
-                )}
+                    <Text
+                      style={{
+                        marginBottom: 6,
+                        marginLeft: 4,
+                        color: theme.color.gray,
+                      }}
+                      key={idx}>
+                      {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
+                    </Text>
+                  )}
                 <TouchableOpacity
                   key={event.id}
                   onPress={() => onClickReminderCard(event.id)}>

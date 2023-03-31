@@ -68,7 +68,7 @@ export const Splash = ({ isAppReady }) => {
       style={[style.container, { opacity: containerOpacity }]}
     >
       <Animated.Image
-        source={require("./Oboete_Logo_Black.png")}
+        source={require("../assets/Oboete_Logo_Black.png")}
         fadeDuration={0}
         onLoad={() => {
           setState(FADE_IN_IMAGE);
