@@ -1,8 +1,9 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import * as React from 'react';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { theme } from '../utils/theme';
 const Sound = require('react-native-sound');
 Sound.setCategory('Playback');
 export default function SoundCard({
@@ -70,16 +71,16 @@ export default function SoundCard({
         style={
           chosenSound == sound.url ? styles.r_card_selected : styles.r_card
         }>
-        <View style={{flex: 4}}>
-          <Text style={styles.r_title}>{sound.name}</Text>
+        <View style={{ flex: 6 }}>
+          <Text style={chosenSound == sound.url ? styles.selected_r_title : styles.r_title}>{sound.name}</Text>
         </View>
 
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>
             <Ionicons
               name={playing ? 'pause-circle-outline' : 'play-circle-outline'}
               size={30}
-              color={'#111'}
+              color={chosenSound == sound.url ? theme.color.white : theme.color.black}
             />
           </Text>
         </View>
@@ -93,25 +94,28 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 4,
     padding: 16,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: theme.color.light,
   },
   r_card_selected: {
     width: '100%',
     borderRadius: 8,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 4,
     padding: 16,
-    backgroundColor: '#EEDD82',
+    backgroundColor: theme.color.primary,
+  },
+  selected_r_title: {
+    fontSize: 16,
+    color: theme.color.white,
   },
   r_title: {
-    fontSize: 18,
-    color: '#333',
-    paddingBottom: 2,
-  },
-  r_datetime: {
-    fontSize: 14,
-    color: '#666',
-  },
+    fontSize: 16,
+    color: theme.color.black,
+  }
 });

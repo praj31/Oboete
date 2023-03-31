@@ -1,6 +1,6 @@
 import Modal from 'react-native-modal';
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -14,10 +14,14 @@ import {
 import EnglishContent from '../translations/en/LanguageSelectionScreen';
 import FrenchContent from '../translations/fr/LanguageSelectionScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
-function LanguageModal({languageChange}) {
-  const {i18n} = useTranslation();
+import Icon from 'react-native-vector-icons/Ionicons';
+import { theme } from '../utils/theme';
+
+function LanguageModal({ languageChange }) {
+  const { i18n } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [language, setLanguage] = useState(i18n.language || 'en'); // default language is English
@@ -37,23 +41,23 @@ function LanguageModal({languageChange}) {
     langFunc();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      Animated.timing(fadeInAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start(() => {
-        setLanguage(lang => (lang === 'en' ? 'fr' : 'en')); // toggle between English and French
-        Animated.timing(fadeInAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }).start();
-      });
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     Animated.timing(fadeInAnim, {
+  //       toValue: 0,
+  //       duration: 500,
+  //       useNativeDriver: true,
+  //     }).start(() => {
+  //       setLanguage(lang => (lang === 'en' ? 'fr' : 'en')); // toggle between English and French
+  //       Animated.timing(fadeInAnim, {
+  //         toValue: 1,
+  //         duration: 500,
+  //         useNativeDriver: true,
+  //       }).start();
+  //     });
+  //   }, 3500);
+  //   // return () => clearInterval(interval);
+  // }, []);
 
   const getText = () => {
     if (language === 'en') {
@@ -77,9 +81,22 @@ function LanguageModal({languageChange}) {
     setModalVisible(!isModalVisible);
   };
 
+  const { t } = useTranslation();
+
   return (
-    <View style={{flex: 1}}>
-      <Button title="Change Language" onPress={toggleModal} />
+    <View>
+      <Pressable>
+        <TouchableOpacity onPress={toggleModal}>
+          <Icon name="language" color={theme.color.white} size={20} />
+        </TouchableOpacity>
+      </Pressable>
+      {/* <Pressable>
+        <TouchableOpacity
+          style={{backgroundColor: '#333', padding: 10, borderRadius: 8}}
+          onPress={toggleModal}>
+          <Text style={{color: '#fff'}}>{t('Global:changeLanguage')}</Text>
+        </TouchableOpacity>
+      </Pressable> */}
 
       <Modal
         isVisible={isModalVisible}
@@ -94,8 +111,9 @@ function LanguageModal({languageChange}) {
             borderRadius: 12,
           }}>
           <View style={styles.container}>
-            <Animated.Text style={[styles.header, {opacity: fadeInAnim}]}>
-              {getText().title}
+            <Animated.Text style={[styles.header, { opacity: fadeInAnim }]}>
+              {/* {getText().title} */}
+              {t('LanguageSelectionScreen:title')}
             </Animated.Text>
             <TouchableOpacity
               onPress={() => changeLanguageFunc('en')}
@@ -108,8 +126,9 @@ function LanguageModal({languageChange}) {
                 style={styles.flagIcon}
                 source={require('../assets/eng_flag.png')}
               />
-              <Animated.Text style={[styles.buttonText, {opacity: fadeInAnim}]}>
-                {getText().en}
+              <Animated.Text style={[styles.buttonText, { opacity: fadeInAnim }]}>
+                {/* {getText().en} */}
+                {t('LanguageSelectionScreen:en')}
               </Animated.Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -123,8 +142,9 @@ function LanguageModal({languageChange}) {
                 style={styles.flagIcon}
                 source={require('../assets/france_flag.png')}
               />
-              <Animated.Text style={[styles.buttonText, {opacity: fadeInAnim}]}>
-                {getText().fr}
+              <Animated.Text style={[styles.buttonText, { opacity: fadeInAnim }]}>
+                {/* {getText().fr} */}
+                {t('LanguageSelectionScreen:fr')}
               </Animated.Text>
             </TouchableOpacity>
           </View>
@@ -134,8 +154,9 @@ function LanguageModal({languageChange}) {
               <TouchableOpacity
                 style={[styles.actionBtn, styles.primaryBtn]}
                 onPress={saveButtonClick}>
-                <Text style={{color: '#fff', fontSize: 16}}>
-                  {getText().save}
+                <Text style={{ color: '#fff', fontSize: 16 }}>
+                  {/* {getText().save} */}
+                  {t('LanguageSelectionScreen:save')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -143,8 +164,9 @@ function LanguageModal({languageChange}) {
               <TouchableOpacity
                 style={[styles.actionBtn, styles.secondaryBtn]}
                 onPress={cancelButtonClick}>
-                <Text style={{fontSize: 16, color: '#111'}}>
-                  {getText().cancel}
+                <Text style={{ fontSize: 16, color: '#111' }}>
+                  {/* {getText().cancel} */}
+                  {t('LanguageSelectionScreen:cancel')}
                 </Text>
               </TouchableOpacity>
             </View>

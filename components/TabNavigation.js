@@ -1,16 +1,16 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-export default function TabNavigation({navigation, screenName}) {
-  const {t} = useTranslation();
+export default function TabNavigation({ navigation, screenName }) {
+  const { t } = useTranslation();
 
   return (
     <View style={styles.buttonContainer}>
       <TouchableOpacity
         style={screenName === 'today' ? styles.activeButton : styles.button}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.navigate('Today');
         }}>
         <Text
           style={
@@ -22,7 +22,7 @@ export default function TabNavigation({navigation, screenName}) {
       <TouchableOpacity
         style={screenName === 'upcoming' ? styles.activeButton : styles.button}
         onPress={() => {
-          navigation.navigate('Upcoming');
+          navigation.navigate('UpcomingScreen');
         }}>
         <Text
           style={

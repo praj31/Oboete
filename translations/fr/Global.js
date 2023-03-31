@@ -9,4 +9,11 @@ export default {
   selectSound: 'Sélectionnez Son :',
   save: 'Sauvegarder',
   cancel: 'Annuler',
+
+  changeLanguage: 'Changer de langue',
+
+  today: "Aujourd'hui",
+  upcoming: 'A venir',
+  addReminder: 'Nouvel évènement',
+  add: 'Ajouter',
 };

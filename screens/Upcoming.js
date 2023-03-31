@@ -9,13 +9,17 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
-import moment from 'moment'
+import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData } from '../api/storage';
+import { getAllUpcoming, getData,removeKey } from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
+import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
 import { ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { globalStyles } from '../styles/global';
+import { generateGreetings } from '../utils/greeting';
+import { theme } from '../utils/theme';
 
 export default function Upcoming({ navigation }) {
   const [reminders, setReminders] = React.useState([]);
@@ -30,10 +34,26 @@ export default function Upcoming({ navigation }) {
       for (let entry of data) {
         const item = await getData(entry);
         if (item) {
-          events.push({ id: entry, ...item, occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar() });
+          let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+          if (!eventTime.isAfter(moment())) {
+              await deleteAlarms(entry);
+              await removeKey(entry);
+          }
+          else{
+            // console.log("upcoming events: ",item);
+            events.push({
+              id: entry,
+              ...item,
+              occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
+            });
+          }
         }
       }
-      events = events.sort((a, b) => moment(a.datetime, 'YYYY-MM-DD LT') - moment(b.datetime, 'YYYY-MM-DD LT'))
+      events = events.sort(
+        (a, b) =>
+          moment(a.datetime, 'YYYY-MM-DD LT') -
+          moment(b.datetime, 'YYYY-MM-DD LT'),
+      );
       setReminders(events);
       setIsLoading(false);
     }
@@ -45,56 +65,56 @@ export default function Upcoming({ navigation }) {
   };
 
   if (isLoading) {
-    <View style={styles.horizontal}>
+    <View style={globalStyles.loader}>
       <ActivityIndicator size="large" color="#333" />
     </View>;
   }
 
   return (
-    <GestureRecognizer
-      style={styles.container}
-      onSwipeRight={() => navigation.navigate('Home')}>
-      {/* <Text style={styles.h1}>Upcoming</Text> */}
-      <TabNavigation navigation={navigation} screenName={'upcoming'} />
-      {reminders.length !== 0 && (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ height: '100%' }}>
-          {reminders.map((event, idx) => (
-            <View key={idx}>
-              {(idx == 0 || reminders[idx].occurs !== reminders[idx - 1].occurs) && <Text style={{ marginVertical: 8, marginLeft: 4, color: '#666' }} key={idx}>{moment(event.datetime, 'YYYY-MM-DD LT').calendar()}</Text>}
-              <TouchableOpacity
-                key={event.id}
-                onPress={() => onClickReminderCard(event.id)}>
-                <ReminderCard event={event} key={event.id} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </ScrollView>
-      )}
-
-      {reminders.length == 0 && (
-        <View style={styles.imgContainer}>
-          <Image
-            style={styles.image}
-            source={require('../assets/checklist.png')}
-            placeholder={'Relaxing'}
-            contentFit="cover"
-          />
-          <Text style={styles.prompt}>{t('HomeScreen:noEventsUpcoming')}</Text>
+    <View style={globalStyles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ height: '100%' }}>
+        <View style={globalStyles.header}>
+          <Text style={globalStyles.greetings}>{generateGreetings()}</Text>
+          <Text style={{ color: theme.color.white, marginTop: 12, marginLeft: 16, opacity: 0.9 }}>{reminders.length} event(s) due soon.</Text>
         </View>
-      )}
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => navigation.navigate('AddReminder')}>
-          <Text>
-            <Icon name="add-outline" size={36} color="#fff" />
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </GestureRecognizer>
+        <View style={globalStyles.inner}>
+          {reminders.length !== 0 && (
+            reminders.map((event, idx) => (
+              <View key={idx}>
+                {(idx == 0 ||
+                  reminders[idx].occurs !== reminders[idx - 1].occurs) && (
+                    <Text
+                      style={{ marginBottom: 16, marginLeft: 4, color: theme.color.gray }}
+                      key={idx}>
+                      {moment(event.datetime, 'YYYY-MM-DD LT').calendar()}
+                    </Text>
+                  )}
+                <TouchableOpacity
+                  key={event.id}
+                  onPress={() => onClickReminderCard(event.id)}>
+                  <ReminderCard event={event} key={event.id} />
+                </TouchableOpacity>
+              </View>
+            ))
+          )}
+        </View>
+        {reminders.length == 0 && (
+          <View style={globalStyles.imgContainer}>
+            <Image
+              style={globalStyles.image}
+              source={require('../assets/calendar.png')}
+              placeholder={'Relaxing'}
+              contentFit="cover"
+            />
+            <Text style={globalStyles.prompt}>{t('HomeScreen:noEventsUpcoming')}</Text>
+          </View>
+        )
+        }
+      </ScrollView>
+    </View>
   );
 }
 
