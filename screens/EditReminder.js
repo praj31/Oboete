@@ -22,6 +22,9 @@ import { formStyles } from '../styles/form';
 import { globalStyles } from '../styles/global';
 import { theme } from '../utils/theme';
 import AlarmTypeModal from '../components/AlarmTypeModal';
+import IntervalModal from '../components/intervalModal';
+import RepeatModal from '../components/RepeatModal';
+
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
@@ -192,25 +195,9 @@ export default function EditReminder(props) {
             />
           )}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1, marginRight: 4 }}>
-              <Text style={formStyles.label}>{t('AddReminder:interval')}</Text>
-              <TextInput
-                value={interval}
-                style={formStyles.textinput}
-                keyboardType="numeric"
-                onChangeText={setInterval}
-              />
-            </View>
-            <View style={{ flex: 1, marginLeft: 4 }}>
-              <Text style={formStyles.label}>{t('AddReminder:repeat')}</Text>
-              <TextInput
-                value={repeat}
-                inputMode="numeric"
-                style={formStyles.textinput}
-                keyboardType="numeric"
-                onChangeText={setRepeat}
-              />
-            </View>
+            
+            <IntervalModal interval={interval} setInterval={setInterval}/>
+            <RepeatModal repeat={repeat} setRepeat={setRepeat}/>
           </View>
           <AlarmTypeModal alarmType={alarmType} setAlarmType={setAlarmType} />
           <SoundModal
