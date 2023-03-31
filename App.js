@@ -1,32 +1,38 @@
 import * as React from 'react';
-import { LogBox } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {LogBox} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import AddReminder from './screens/AddReminder';
 import Upcoming from './screens/Upcoming';
 import ListReminder from './screens/ListReminder';
-import { StatusBar } from 'react-native';
+import {StatusBar} from 'react-native';
 import moment from 'moment';
-import { getAllKeys } from './api/storage';
+import {getAllKeys} from './api/storage';
 
-import { clearAll } from './api/storage';
+import {clearAll} from './api/storage';
 
 import './constants/DCSLocalize';
 
 //for alarm
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
-import { loadAlarmListeners } from './api/alarm';
-import ToastManager from 'toastify-react-native';
-import EditReminder from './screens/EditReminder';
-import { WithSplashScreen } from './screens/Splash';
+import {loadAlarmListeners} from './api/alarm';
+// import ToastManager from 'toastify-react-native';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import EditReminder from './screens/EditReminder';
+import {WithSplashScreen} from './screens/Splash';
+
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LanguageModal from './components/LanguageModal';
-import { useTranslation } from 'react-i18next';
-import { UpcomingScreenNavigator, TodayScreenNavigator, MetaScreenNavigator, SearchScreenNavigator } from './utils/StackNav';
-import { theme } from './utils/theme';
+import {useTranslation} from 'react-i18next';
+import {
+  UpcomingScreenNavigator,
+  TodayScreenNavigator,
+  MetaScreenNavigator,
+  SearchScreenNavigator,
+} from './utils/StackNav';
+import {theme} from './utils/theme';
 import Search from './screens/Search';
 import Meta from './screens/Meta';
 import HeaderRight from './components/HeaderRight';
@@ -38,7 +44,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   moment.updateLocale('en', {
     calendar: {
-      lastDay: '[Yesterday]',
+      lastDay: '[ ]',
       sameDay: '[Today]',
       nextDay: '[Tomorrow]',
       lastWeek: '[Last] dddd',
@@ -46,8 +52,9 @@ export default function App() {
       sameElse: 'LL',
     },
   });
+
   const [isAppReady, setIsAppReady] = React.useState(false);
-  const { i18n, t } = useTranslation();
+  const {i18n, t} = useTranslation();
   React.useEffect(() => {
     ReactNativeAN.stopAlarmSound();
     loadAlarmListeners();
@@ -83,13 +90,14 @@ export default function App() {
           backgroundColor={theme.color.primary}
           barStyle="light-content"
         />
-        <ToastManager position="bottom" />
+        {/* <ToastManager position="bottom" /> */}
+
         <Tab.Navigator
           screenOptions={{
             headerShadowVisible: false,
             headerBackgroundContainerStyle: {
               backgroundColor: theme.color.white,
-              height: 60
+              height: 60,
             },
             headerStyle: {
               backgroundColor: theme.color.primary,
@@ -98,16 +106,21 @@ export default function App() {
             headerTintColor: theme.color.white,
             headerTitleStyle: {
               color: theme.color.white,
-              fontSize: 18
+              fontSize: 18,
             },
             headerRightContainerStyle: {
-              paddingRight: 16
+              paddingRight: 16,
             },
             headerRight: () => {
               return <HeaderRight />;
             },
             unmountOnBlur: true,
-            tabBarStyle: { paddingBottom: 12, height: 64, elevation: 0, borderTopColor: theme.color.border },
+            tabBarStyle: {
+              paddingBottom: 12,
+              height: 64,
+              elevation: 0,
+              borderTopColor: theme.color.border,
+            },
             tabBarInactiveTintColor: theme.color.gray,
             tabBarActiveTintColor: theme.color.primary,
           }}>
@@ -116,8 +129,8 @@ export default function App() {
             component={TodayScreenNavigator}
             options={{
               headerShown: false,
-              tabBarLabel: "Today",
-              tabBarIcon: ({ focused, color }) => {
+              tabBarLabel: t('BottomNav:today'),
+              tabBarIcon: ({focused, color}) => {
                 let iconName = focused ? 'today' : 'today-outline';
                 return <Icon color={color} name={iconName} size={24} />;
               },
@@ -128,8 +141,8 @@ export default function App() {
             component={UpcomingScreenNavigator}
             options={{
               headerShown: false,
-              tabBarLabel: "Upcoming",
-              tabBarIcon: ({ focused, color }) => {
+              tabBarLabel: t('BottomNav:upcoming'),
+              tabBarIcon: ({focused, color}) => {
                 let iconName = focused ? 'calendar' : 'calendar-outline';
                 return <Icon color={color} name={iconName} size={24} />;
               },
@@ -139,9 +152,9 @@ export default function App() {
             name="AddReminder"
             component={AddReminder}
             options={{
-              headerTitle: t("Global:addReminder"),
-              tabBarLabel: "New Event",
-              tabBarIcon: ({ focused, color }) => {
+              headerTitle: t('BottomNav:newEvent'),
+              tabBarLabel: t('BottomNav:newEvent'),
+              tabBarIcon: ({focused, color}) => {
                 let iconName = focused ? 'add-circle' : 'add-circle-outline';
                 return <Icon color={color} name={iconName} size={28} />;
               },
@@ -153,8 +166,8 @@ export default function App() {
             component={MetaScreenNavigator}
             options={{
               headerShown: false,
-              tabBarLabel: "Meta",
-              tabBarIcon: ({ focused, color }) => {
+              tabBarLabel: t('BottomNav:meta'),
+              tabBarIcon: ({focused, color}) => {
                 let iconName = focused ? 'alarm' : 'alarm-outline';
                 return <Icon color={color} name={iconName} size={28} />;
               },
@@ -165,8 +178,8 @@ export default function App() {
             component={SearchScreenNavigator}
             options={{
               headerShown: false,
-              tabBarLabel: "Search",
-              tabBarIcon: ({ focused, color }) => {
+              tabBarLabel: t('BottomNav:search'),
+              tabBarIcon: ({focused, color}) => {
                 let iconName = focused ? 'search' : 'search-outline';
                 return <Icon color={color} name={iconName} size={28} />;
               },

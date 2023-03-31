@@ -16,4 +16,7 @@ export default {
   upcoming: 'Upcoming',
   addReminder: 'New Event',
   add: 'Add',
+
+  settings: 'Settings',
+  archive: 'Archive',
 };

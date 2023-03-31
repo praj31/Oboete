@@ -1,5 +1,5 @@
 export default {
-  newReminder: "Nouvel évènement",
+  newReminder: 'Nouvel évènement',
   eventTitle: "Titre de l'événement",
   eventDescription: "Description de l'événement (facultatif)",
   eventDate: "Date de l'événement",
@@ -27,4 +27,10 @@ export default {
   editReminder: 'Modifier le rappel',
   update: 'Mise à jour',
   reminderModifiedAlert: 'Rappel modifié !',
+
+  chooseInterval: "Choisissez l'intervalle",
+  customInterval: 'Personnalisé (max 60)',
+
+  chooseFrequency: 'Choisissez la fréquence',
+  customRepeat: 'Personnalisé (max 10)',
 };
