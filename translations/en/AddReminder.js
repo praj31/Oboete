@@ -26,4 +26,10 @@ export default {
   editReminder: 'Edit Reminder',
   update: 'Update',
   reminderModifiedAlert: 'Reminder Modified!',
+
+  chooseInterval: 'Choose Interval',
+  customInterval: 'Custom (max 60)',
+
+  chooseFrequency: 'Choose Frequency',
+  customRepeat: 'Custom (max 10)',
 };

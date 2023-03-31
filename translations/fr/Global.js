@@ -16,4 +16,7 @@ export default {
   upcoming: 'A venir',
   addReminder: 'Nouvel évènement',
   add: 'Ajouter',
+
+  settings: 'Paramètres',
+  archive: 'Archive',
 };
