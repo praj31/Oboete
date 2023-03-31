@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }) {
           // console.log("inside item",item);
           let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
           if (eventTime.isAfter(moment())) {
-            // console.log("all alarms are: ", item);
+
             events.push({ id: entry, ...item });
           } else {
             if (item.alarmType === 'Meta') {
@@ -58,7 +58,7 @@ export default function HomeScreen({ navigation }) {
               );
               updatedReminder = { ...updatedReminder, alarms };
               await storeData(updatedReminder);
-            } 
+            }
             // else {
             //   await deleteAlarms(entry);
             //   await removeKey(entry);

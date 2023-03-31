@@ -11,7 +11,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
-import { getAllUpcoming, getData,removeKey } from '../api/storage';
+import { getAllUpcoming, getData, removeKey } from '../api/storage';
 import ReminderCard from '../components/ReminderCard';
 import { deleteAlarms } from '../api/alarm';
 import TabNavigation from '../components/TabNavigation';
@@ -36,16 +36,26 @@ export default function Upcoming({ navigation }) {
         if (item) {
           let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
           if (!eventTime.isAfter(moment())) {
+            await deleteAlarms(entry);
+            await removeKey(entry);
+          }
+          else {
+            // console.log("upcoming events: ",item);
+            let eventTime = moment(item.datetime, 'YYYY-MM-DD LT');
+            if (!eventTime.isAfter(moment())) {
               await deleteAlarms(entry);
               await removeKey(entry);
-          }
-          else{
-            // console.log("upcoming events: ",item);
-            events.push({
-              id: entry,
-              ...item,
-              occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
-            });
+            }
+            else {
+              // console.log("upcoming events: ",item);
+              events.push({
+                id: entry,
+                ...item,
+                occurs: moment(item.datetime, 'YYYY-MM-DD LT').calendar(),
+              });
+            }
+
+
           }
         }
       }
