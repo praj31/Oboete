@@ -5,6 +5,8 @@ import { theme } from '../utils/theme';
 import moment from 'moment';
 
 export default function ReminderCard({ event }) {
+  // console.log("event details: ",event);
+  const repeat = event.repeat;
   return (
     <View style={styles.card}>
       <View style={styles.fancy}></View>

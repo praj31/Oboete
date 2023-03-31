@@ -159,9 +159,9 @@ export default function AddReminder({ navigation }) {
             />
           )}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            
-            <IntervalModal interval={interval} setInterval={setInterval}/>
-            <RepeatModal repeat={repeat} setRepeat={setRepeat}/>
+
+            <IntervalModal interval={interval} setInterval={setInterval} />
+            <RepeatModal repeat={repeat} setRepeat={setRepeat} />
           </View>
           <AlarmTypeModal alarmType={alarmType} setAlarmType={setAlarmType} />
           <SoundModal
