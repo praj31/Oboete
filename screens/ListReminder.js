@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,15 +8,15 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getData, removeKey} from '../api/storage';
-import {deleteAlarms} from '../api/alarm';
-import {displayToast} from '../api/toast';
+import { getData, removeKey } from '../api/storage';
+import { deleteAlarms } from '../api/alarm';
+import { displayToast } from '../api/toast';
 import moment from 'moment';
-import {useTranslation} from 'react-i18next';
-import {useIsFocused} from '@react-navigation/native';
-import {globalStyles} from '../styles/global';
-import {formStyles} from '../styles/form';
-import {theme} from '../utils/theme';
+import { useTranslation } from 'react-i18next';
+import { useIsFocused } from '@react-navigation/native';
+import { globalStyles } from '../styles/global';
+import { formStyles } from '../styles/form';
+import { theme } from '../utils/theme';
 
 const ListReminder = props => {
   const [reminder, setReminder] = useState({});
@@ -25,7 +25,7 @@ const ListReminder = props => {
   const id = props.route.params.id;
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const isFocused = useIsFocused();
   const [isPast, setIsPast] = React.useState(false);
   React.useEffect(() => {
@@ -79,11 +79,11 @@ const ListReminder = props => {
   }
   return (
     <View style={globalStyles.container}>
-      <View style={{marginBottom: 32}}></View>
+      <View style={{ marginBottom: 32 }}></View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         {reminder && (
           <View style={globalStyles.inner}>
             <Text style={styles.title}>{t('ListReminder:title')}</Text>
@@ -124,23 +124,23 @@ const ListReminder = props => {
               </View>
             )}
             <View style={styles.footer}>
-              <View style={{flex: 1, marginRight: 2}}>
+              <View style={{ flex: 1, marginRight: 2 }}>
                 <TouchableOpacity
                   disabled={isPast}
                   style={[formStyles.actionBtn, formStyles.primaryBtn]}
-                  onPress={() => navigation.navigate('EditReminder', {id: id})}>
-                  <Text style={{color: theme.color.white}}>
+                  onPress={() => navigation.navigate('EditReminder', { id: id })}>
+                  <Text style={{ color: theme.color.white }}>
                     {t('ListReminder:edit')}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{flex: 1, marginLeft: 2}}>
+              <View style={{ flex: 1, marginLeft: 2 }}>
                 <TouchableOpacity
-                  style={[formStyles.actionBtn, formStyles.primaryBtn]}
+                  style={[formStyles.actionBtn, formStyles.secondaryBtn]}
                   onPress={() => {
                     deleteEvent(id);
                   }}>
-                  <Text style={{color: theme.color.white}}>
+                  <Text style={{ color: theme.color.black }}>
                     {t('ListReminder:delete')}
                   </Text>
                 </TouchableOpacity>
