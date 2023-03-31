@@ -19,4 +19,9 @@ export default {
 
   settings: 'Settings',
   archive: 'Archive',
+
+  success: 'Success',
+  error: 'Error',
+  warning: 'Warning',
+  close: 'Close',
 };

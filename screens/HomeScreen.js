@@ -18,6 +18,7 @@ import {useTranslation} from 'react-i18next';
 import {theme} from '../utils/theme';
 import {globalStyles} from '../styles/global';
 import {generateGreetings} from '../utils/greeting';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
