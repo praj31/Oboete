@@ -10,7 +10,7 @@ export const storeData = async value => {
     const jsonValue = JSON.stringify(value);
     // console.log("data to be saved in setItem",jsonValue);
     await AsyncStorage.setItem(key, jsonValue);
-    return { success: true, key };
+    return {success: true, key};
   } catch (e) {
     return false;
   }
@@ -37,12 +37,25 @@ export const getAllKeys = async () => {
 
 export const getAllToday = async () => {
   try {
+    let todayData = [];
     let keys = await getAllKeys();
     if (keys) {
       keys = keys.filter(
         item => item.split('_')[1] === moment().format('YYYY-MM-DD'),
       );
-      return keys;
+
+      const result = await AsyncStorage.multiGet(keys);
+
+      try {
+        await result.map(data => {
+          if (data[1] && JSON.parse(data[1]).alarmType !== 'Meta') {
+            todayData.push(data[0]);
+          }
+        });
+      } catch (error) {
+        // console.log(error);
+      }
+      return todayData;
     }
     return null;
   } catch (e) {
@@ -52,13 +65,24 @@ export const getAllToday = async () => {
 
 export const getAllUpcoming = async () => {
   try {
+    let upcomingData = [];
     let keys = await getAllKeys();
     if (keys) {
       keys = keys.filter(
         item => item.split('_')[1] !== moment().format('YYYY-MM-DD'),
       );
+      const result = await AsyncStorage.multiGet(keys);
 
-      return keys;
+      try {
+        await result.map(data => {
+          if (data[1] && JSON.parse(data[1]).alarmType !== 'Meta') {
+            upcomingData.push(data[0]);
+          }
+        });
+      } catch (error) {
+        // console.log(error);
+      }
+      return upcomingData;
     }
     return null;
   } catch (e) {
@@ -74,13 +98,16 @@ export const getAllMeta = async () => {
 
     try {
       await result.map(data => {
-        if (data[1] && JSON.parse(data[1]).alarmType === 'Meta') {
-          metaData.push(data[0]);
+        if (data[1]) {
+          try {
+            const parsedData = JSON.parse(data[1]);
+            if (parsedData.alarmType === 'Meta') {
+              metaData.push(data[0]);
+            }
+          } catch (error) {}
         }
       });
-    } catch (error) {
-      // console.log(error);
-    }
+    } catch (error) {}
 
     return metaData;
   } catch (e) {
