@@ -76,7 +76,7 @@ export default function Meta({navigation}) {
               marginLeft: 16,
               opacity: 0.9,
             }}>
-            {reminders.length} {t('HomeScreen:eventsDueToday')}
+            {t('HomeScreen:reminderAboutReminder')}
           </Text>
         </View>
         <View style={globalStyles.inner}>
