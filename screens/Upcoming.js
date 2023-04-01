@@ -94,7 +94,7 @@ export default function Upcoming({navigation}) {
               marginLeft: 16,
               opacity: 0.9,
             }}>
-            {reminders.length} {t('HomeScreen:eventsDueToday')}
+            {reminders.length} {t('HomeScreen:eventsDue')}
           </Text>
         </View>
         <View style={globalStyles.inner}>

@@ -3,7 +3,7 @@ import {
   cancelScheduledPushNotification,
 } from './notification';
 // import { useNavigation } from '@react-navigation/native';
-import {getData,getAllToday, removeKey} from './storage';
+import {getData, getAllToday, removeKey} from './storage';
 import moment from 'moment';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import ReactNativeAN from '@kaistseo/react-native-alarm-notification';
@@ -17,28 +17,27 @@ export const loadAlarmListeners = async () => {
   });
 
   //OnNotificationOpened event
-  // RNAlarmEmitter.addListener('OnNotificationOpened', data => {    
-  //   console.log('opened', JSON.parse(data)), ReactNativeAN.stopAlarmSound();
-  // });
-  RNAlarmEmitter.addListener(
-    'OnNotificationOpened', async(data) => {
-      // const navigation = useNavigation()
-      console.log("open subs",JSON.parse(data))
-      
-      const allAlarms = await getAllToday();
-      for (let entry of allAlarms) {
-        const item = await getData(entry);
-        if (item && item.alarms.find((a)=>a==JSON.parse(data).id)) {
-          const item = await getData(entry);
-          console.log("inside alarm item ",item);
-          navigation.navigate('ListReminder', {id: entry});
-        }
-      }
-      
-      ReactNativeAN.stopAlarmSound()
-    }
-);
+  RNAlarmEmitter.addListener('OnNotificationOpened', data => {
+    console.log('opened', JSON.parse(data)), ReactNativeAN.stopAlarmSound();
+  });
+  //   RNAlarmEmitter.addListener(
+  //     'OnNotificationOpened', async(data) => {
+  //       // const navigation = useNavigation()
+  //       console.log("open subs",JSON.parse(data))
 
+  //       const allAlarms = await getAllToday();
+  //       for (let entry of allAlarms) {
+  //         const item = await getData(entry);
+  //         if (item && item.alarms.find((a)=>a==JSON.parse(data).id)) {
+  //           const item = await getData(entry);
+  //           console.log("inside alarm item ",item);
+  //           navigation.navigate('ListReminder', {id: entry});
+  //         }
+  //       }
+
+  //       ReactNativeAN.stopAlarmSound()
+  //     }
+  // );
 };
 
 export const setupAlarms = async (
@@ -64,7 +63,7 @@ export const setupAlarms = async (
     }
 
     console.log('====================================');
-    console.log("alarms id",alarms);
+    console.log('alarms id', alarms);
     console.log('====================================');
     return alarms;
   } catch (err) {

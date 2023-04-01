@@ -19,6 +19,7 @@ import {theme} from '../utils/theme';
 import {globalStyles} from '../styles/global';
 import {generateGreetings} from '../utils/greeting';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import PushNotification from 'react-native-push-notification';
 
 export default function HomeScreen({navigation}) {
   const [reminders, setReminders] = React.useState([]);
@@ -81,6 +82,25 @@ export default function HomeScreen({navigation}) {
   const onClickReminderCard = id => {
     navigation.navigate('ListReminder', {id: id});
   };
+
+  const randomNotification = async () => {
+    await PushNotification.cancelAllLocalNotifications();
+    await PushNotification.localNotificationSchedule({
+      channelId: 'my_channel_id',
+      title: 'Forgetting something?',
+      message: 'Write it in app !',
+      date: new Date(Date.now() + 3 * 60 * 60 * 1000),
+      allowWhileIdle: false,
+      repeatType: 'hour',
+      repeatTime: 3,
+    });
+  };
+
+  React.useEffect(() => {
+    try {
+      randomNotification();
+    } catch (error) {}
+  }, []);
 
   if (isLoading) {
     return (

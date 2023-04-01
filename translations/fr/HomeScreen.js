@@ -4,5 +4,7 @@ export default {
   upcoming: 'A venir',
   noEventsUpcoming: "Pas d'événements",
 
-  eventsDueToday: "événement(s) dû aujourd'hui.",
+  eventsDueToday: "éévénement(s) prévu(s) aujourd'hui.",
+  eventsDue: 'événement(s) prévu(s).',
+  reminderAboutReminder: 'Rappels sur le rappel.',
 };
