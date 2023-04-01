@@ -2,10 +2,7 @@ import * as React from 'react';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
-import AddReminder from './screens/AddReminder';
-import Upcoming from './screens/Upcoming';
-import ListReminder from './screens/ListReminder';
+
 import { StatusBar } from 'react-native';
 import moment from 'moment';
 import { getAllKeys } from './api/storage';
@@ -34,27 +31,48 @@ import {
   AddScreenNavigator,
 } from './utils/StackNav';
 import { theme } from './utils/theme';
-import Search from './screens/Search';
-import Meta from './screens/Meta';
 import HeaderRight from './components/HeaderRight';
 
 import { AlertNotificationRoot } from 'react-native-alert-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  moment.updateLocale('en', {
-    calendar: {
-      lastDay: '[ ]',
-      sameDay: '[Today]',
-      nextDay: '[Tomorrow]',
-      lastWeek: '[Last] dddd',
-      nextWeek: 'dddd',
-      sameElse: 'LL',
-    },
-  });
+  AsyncStorage.getItem('user-language', (_, lang) => {
+    if (lang === 'fr') {
+      moment.updateLocale('fr', {
+        months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+        monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+        monthsParseExact: true,
+        weekdays: 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+        weekdaysShort: 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+        weekdaysMin: 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
+        weekdaysParseExact: true,
+        calendar: {
+          lastDay: '[Hier à]',
+          sameDay: '[Aujourd’hui à]',
+          nextDay: '[Demain à]',
+          lastWeek: 'dddd [dernier à]',
+          nextWeek: 'dddd [à]',
+          sameElse: 'LL',
+        },
+      });
+    } else {
+      moment.updateLocale('en', {
+        calendar: {
+          lastDay: '[Yesterday]',
+          sameDay: '[Today]',
+          nextDay: '[Tomorrow]',
+          lastWeek: '[Last] dddd',
+          nextWeek: 'dddd',
+          sameElse: 'LL',
+        },
+      });
+    }
+  })
 
   const [isAppReady, setIsAppReady] = React.useState(false);
   const { i18n, t } = useTranslation();
@@ -81,9 +99,7 @@ export default function App() {
 
   // to delete all alarms
   // clearAll();
-  const languageChange = lang => {
-    i18n.changeLanguage(lang);
-  };
+
   LogBox.ignoreLogs(['Warning: ...']);
 
   return (

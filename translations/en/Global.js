@@ -1,5 +1,5 @@
 export default {
-  reminderAdded: 'Reminded Added!',
+  reminderAdded: 'Reminder Added!',
   reminderDeleted: 'Reminder deleted!',
   reminderModified: 'Reminder Modified!',
 

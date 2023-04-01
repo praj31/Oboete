@@ -12,23 +12,23 @@ import {
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {getData, storeData} from '../api/storage';
-import {checkAlarmValidity, updateAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayAlert, displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { getData, storeData } from '../api/storage';
+import { checkAlarmValidity, updateAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayAlert, displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
-import {formStyles} from '../styles/form';
-import {globalStyles} from '../styles/global';
-import {theme} from '../utils/theme';
+import { formStyles } from '../styles/form';
+import { globalStyles } from '../styles/global';
+import { theme } from '../utils/theme';
 import AlarmTypeModal from '../components/AlarmTypeModal';
-import IntervalModal from '../components/intervalModal';
+import IntervalModal from '../components/IntervalModal';
 import RepeatModal from '../components/RepeatModal';
 
 export default function EditReminder(props) {
   moment.tz.setDefault();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
   const [date, setDate] = React.useState(moment().toDate());
@@ -118,14 +118,14 @@ export default function EditReminder(props) {
               id,
               selectedSound,
             );
-            reminder = {...reminder, alarms};
-            const {key} = await storeData(reminder);
+            reminder = { ...reminder, alarms };
+            const { key } = await storeData(reminder);
             displayToast(
               'success',
               t('Global:success'),
               t('Global:reminderModified'),
             );
-            navigation.navigate('ListReminder', {id: key});
+            navigation.navigate('ListReminder', { id: key });
           } catch (err) {
             console.log(err);
             // alert(err);
@@ -158,11 +158,11 @@ export default function EditReminder(props) {
 
   return (
     <View style={globalStyles.container}>
-      <View style={{marginBottom: 32}}></View>
+      <View style={{ marginBottom: 32 }}></View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         <View style={globalStyles.inner}>
           <Text style={formStyles.label}>{t('AddReminder:eventTitle')}</Text>
           <TextInput
@@ -219,7 +219,7 @@ export default function EditReminder(props) {
               onChange={onChangeTime}
             />
           )}
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <IntervalModal interval={interval} setInterval={setInterval} />
             <RepeatModal repeat={repeat} setRepeat={setRepeat} />
           </View>
@@ -234,7 +234,7 @@ export default function EditReminder(props) {
             <TouchableOpacity
               style={[formStyles.actionBtn, formStyles.primaryBtn]}
               onPress={editButtonClicked}>
-              <Text style={{color: theme.color.white}}>
+              <Text style={{ color: theme.color.white }}>
                 {t('AddReminder:update')}
               </Text>
             </TouchableOpacity>
