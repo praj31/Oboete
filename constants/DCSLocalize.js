@@ -1,9 +1,10 @@
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
-import {getLanguages} from 'react-native-i18n';
+import { getLanguages } from 'react-native-i18n';
 import LANGUAGES from '../translations';
+import moment from 'moment';
 
 const LANG_CODES = Object.keys(LANGUAGES);
 
@@ -19,8 +20,8 @@ const LANGUAGE_DETECTOR = {
           (languages && languages[0].substring(0, 2) == 'fr'
             ? 'fr'
             : languages[0].substring(0, 2) == 'en'
-            ? 'en'
-            : 'en') || 'en';
+              ? 'en'
+              : 'en') || 'en';
       });
       if (err || !language) {
         if (err) {
@@ -39,7 +40,7 @@ const LANGUAGE_DETECTOR = {
       AsyncStorage.setItem('user-language', language);
     });
   },
-  init: () => {},
+  init: () => { },
   cacheUserLanguage: language => {
     AsyncStorage.setItem('user-language', language);
   },

@@ -10,21 +10,21 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
-import {storeData} from '../api/storage';
-import {setupAlarms} from '../api/alarm';
-import {checkNotificationPermissionFunc} from '../api/notification';
-import {displayAlert, displayToast} from '../api/toast';
-import {useTranslation} from 'react-i18next';
+import { storeData } from '../api/storage';
+import { setupAlarms } from '../api/alarm';
+import { checkNotificationPermissionFunc } from '../api/notification';
+import { displayAlert, displayToast } from '../api/toast';
+import { useTranslation } from 'react-i18next';
 import SoundModal from '../components/SoundModal';
-import {useIsFocused} from '@react-navigation/native';
-import {globalStyles} from '../styles/global';
-import {formStyles} from '../styles/form';
-import {theme} from '../utils/theme';
+import { useIsFocused } from '@react-navigation/native';
+import { globalStyles } from '../styles/global';
+import { formStyles } from '../styles/form';
+import { theme } from '../utils/theme';
 import AlarmTypeModal from '../components/AlarmTypeModal';
-import IntervalModal from '../components/intervalModal';
+import IntervalModal from '../components/IntervalModal';
 import RepeatModal from '../components/RepeatModal';
 
-export default function AddReminder({navigation}) {
+export default function AddReminder({ navigation }) {
   moment.tz.setDefault();
   const [title, setTitle] = React.useState('');
   const [note, setNote] = React.useState('');
@@ -40,7 +40,7 @@ export default function AddReminder({navigation}) {
     selectedSound || 'sound1.mp3',
   );
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const isFocused = useIsFocused();
 
@@ -94,7 +94,7 @@ export default function AddReminder({navigation}) {
               t('Global:close'),
             );
 
-          reminder = {...reminder, alarms};
+          reminder = { ...reminder, alarms };
           await storeData(reminder);
 
           displayToast(
@@ -119,11 +119,11 @@ export default function AddReminder({navigation}) {
 
   return (
     <View style={globalStyles.container}>
-      <View style={{marginBottom: 32}}></View>
+      <View style={{ marginBottom: 32 }}></View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        style={{height: '100%'}}>
+        style={{ height: '100%' }}>
         <View style={globalStyles.inner}>
           <Text style={formStyles.label}>{t('AddReminder:eventTitle')}</Text>
           <TextInput
@@ -180,7 +180,7 @@ export default function AddReminder({navigation}) {
               onChange={onChangeTime}
             />
           )}
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <IntervalModal interval={interval} setInterval={setInterval} />
             <RepeatModal repeat={repeat} setRepeat={setRepeat} />
           </View>
@@ -195,7 +195,7 @@ export default function AddReminder({navigation}) {
             <TouchableOpacity
               style={[formStyles.actionBtn, formStyles.primaryBtn]}
               onPress={addEventClicked}>
-              <Text style={{color: theme.color.white}}>
+              <Text style={{ color: theme.color.white }}>
                 {t('AddReminder:add')}
               </Text>
             </TouchableOpacity>

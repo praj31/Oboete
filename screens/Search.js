@@ -30,7 +30,7 @@ export default function Search({ navigation }) {
   }, [])
 
   React.useEffect(() => {
-    if (query === "") setEvents([])
+    if (query === "" || query === " ") setEvents([])
     else {
       const results = reminders.filter(reminder => {
         const words = query.split(" ").join("|")
